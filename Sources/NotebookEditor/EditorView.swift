@@ -10,7 +10,7 @@ import NotebookCore
     static let secondary = Color(red: 0.322, green: 0.396, blue: 0.486)
 }
 
-public struct EditorView: View {
+@MainActor public struct EditorView: View {
     @ObservedObject public var session: NotebookSession
     public init(session: NotebookSession) { self.session = session }
 
@@ -40,7 +40,7 @@ public struct EditorView: View {
     private func sidebar(_ notebook: Notebook) -> some View {
         VStack(alignment: .leading, spacing: 20) {
             Label("OpenOneNote", systemImage: "book.closed").font(.system(size: 19, weight: .semibold))
-            TextField("Notebook name", text: Binding(get: { session.notebook?.title ?? "" }, set: session.renameNotebook))
+            TextField("Notebook name", text: Binding(get: { session.notebook?.title ?? "" }, set: { session.renameNotebook($0) }))
                 .textFieldStyle(.plain).font(.system(size: 22, weight: .semibold))
                 .accessibilityLabel("Notebook name")
             VStack(spacing: 6) {
@@ -58,7 +58,7 @@ public struct EditorView: View {
                         .contentShape(Rectangle())
                     }.buttonStyle(.plain)
                 }
-                Button(action: session.addSection) { Label("New Section", systemImage: "plus").frame(maxWidth: .infinity, alignment: .leading).padding(12) }
+                Button(action: { session.addSection() }) { Label("New Section", systemImage: "plus").frame(maxWidth: .infinity, alignment: .leading).padding(12) }
                     .buttonStyle(.plain).font(.system(size: 15))
             }
             Spacer()
@@ -70,10 +70,10 @@ public struct EditorView: View {
     private var pageList: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                TextField("Section name", text: Binding(get: { session.selectedSection?.title ?? "" }, set: session.renameSection))
+                TextField("Section name", text: Binding(get: { session.selectedSection?.title ?? "" }, set: { session.renameSection($0) }))
                     .textFieldStyle(.plain).font(.system(size: 18, weight: .semibold)).accessibilityLabel("Section name")
                 Spacer()
-                Button(action: session.addPage) { Image(systemName: "square.and.pencil") }
+                Button(action: { session.addPage() }) { Image(systemName: "square.and.pencil") }
                     .buttonStyle(.plain).help("New Page (⌘N)").accessibilityLabel("New Page")
                     .disabled(session.selectedSection == nil)
             }.padding(.horizontal, 20).padding(.top, 22)
@@ -100,7 +100,7 @@ public struct EditorView: View {
     private var pageContent: some View {
         VStack(spacing: 0) {
             HStack(spacing: 16) {
-                Button(action: session.addContainer) { Label("Add Text", systemImage: "text.badge.plus") }.disabled(session.selectedPage == nil)
+                Button(action: { session.addContainer() }) { Label("Add Text", systemImage: "text.badge.plus") }.disabled(session.selectedPage == nil)
                 Button { NSApp.sendAction(NSSelectorFromString("toggleBoldface:"), to: nil, from: nil) } label: { Image(systemName: "bold") }
                     .accessibilityLabel("Bold").help("Bold (⌘B)").focusable(false)
                 Button { NSApp.sendAction(NSSelectorFromString("toggleItalics:"), to: nil, from: nil) } label: { Image(systemName: "italic") }
@@ -137,7 +137,7 @@ public struct EditorView: View {
     }
 }
 
-private struct TextContainerView: View {
+@MainActor private struct TextContainerView: View {
     @ObservedObject var session: NotebookSession
     let pageID: UUID
     let block: NoteBlock
@@ -157,7 +157,7 @@ private struct TextContainerView: View {
                 drag = .zero
             })
             RichTextEditor(text: block.text, richText: block.richText, undoManager: session.undoManager,
-                onChange: { session.editText(pageID: pageID, blockID: block.id, text: $0, richText: $1) }, onError: session.reportError)
+                onChange: { session.editText(pageID: pageID, blockID: block.id, text: $0, richText: $1) }, onError: { session.reportError($0) })
         }
         .frame(width: max(240, block.width + resize.width), height: max(140, (block.height ?? 260) + resize.height))
         .background(.white)

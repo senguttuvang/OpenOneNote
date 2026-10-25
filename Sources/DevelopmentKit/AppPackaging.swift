@@ -20,8 +20,8 @@ extension DevelopmentWorkflow {
         try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNoteMac"), to: contents.appendingPathComponent("MacOS/OpenOneNoteMac"))
         let plist: [String: Any] = [
             "CFBundleName": "OpenOneNote", "CFBundleDisplayName": "OpenOneNote", "CFBundleIdentifier": "dev.senguttuvang.OpenOneNote",
-            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.0",
-            "CFBundleVersion": "1", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
+            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.1",
+            "CFBundleVersion": "2", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
             "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication"
         ]
         try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0).write(to: contents.appendingPathComponent("Info.plist"))
