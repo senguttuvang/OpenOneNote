@@ -179,7 +179,7 @@ func summarize(extraction: URL, output: URL) throws {
     ]
     let data = try JSONSerialization.data(withJSONObject: summary, options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
     try data.write(to: output, options: .atomic)
-    print("Summarized \(entries.count) entries and \(classesAndProtocols.count) Objective-C class/protocol names")
+    print("Summarized \(entries.count) entries and \(classesAndProtocols.count) Objective-C metadata names (including properties)")
 }
 
 do {

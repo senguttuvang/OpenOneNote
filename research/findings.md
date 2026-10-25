@@ -10,7 +10,7 @@ This report assesses the captured OneNote 16.114.1 (16.114.26102031) using stati
 
 - **20,441 file/link entries:** 20,288 regular files and 153 symlinks; 1,363,426,896 regular-file bytes.
 - **124 Mach-O candidates:** magic-byte classified; this count is not a count of independent features or unique frameworks.
-- **1,854 distinct Objective-C class/protocol names** recovered from the main executable's runtime metadata. This is not a whole-application class count or language-percentage measurement.
+- **1,854 distinct Objective-C metadata names**, including classes, protocols, and properties, recovered from the main executable. This is not a class count or language-percentage measurement.
 - **Preserved architectures:** x86_64 and arm64. Detailed instruction and pseudocode analysis concentrates on arm64.
 - **Observed minimum OS:** the main arm64 `LC_BUILD_VERSION` declares macOS 14.0; SDK 26.4. This pertains to this captured executable, not all historical OneNote releases.
 
