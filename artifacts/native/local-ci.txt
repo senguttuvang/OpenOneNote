@@ -1,0 +1,38 @@
+Building for debugging...
+[Starting]
+[3 / 24]
+[4 / 23] NotebookCore
+[7 / 23] NotebookPersistence
+Build complete! (0.96 secs)
+Test Suite 'All tests' started at 2026-10-25 15:57:32.777.
+Test Suite 'All tests' passed at 2026-10-25 15:57:32.778.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Test corruptMissingAndFutureFilesFailWithoutReplacement() started.
+◇ Test architectureRuleRejectsUIAndOutwardImports() started.
+◇ Test invalidGeometryCannotOverwriteExistingNotebook() started.
+◇ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() started.
+◇ Test coreAndPersistenceKeepDependenciesInward() started.
+◇ Test invalidCoordinatesAreRejected() started.
+◇ Test duplicateIDsAreRejectedAcrossHierarchy() started.
+✔ Test architectureRuleRejectsUIAndOutwardImports() passed after 0.001 seconds.
+✔ Test duplicateIDsAreRejectedAcrossHierarchy() passed after 0.001 seconds.
+✔ Test invalidCoordinatesAreRejected() passed after 0.001 seconds.
+✔ Test coreAndPersistenceKeepDependenciesInward() passed after 0.003 seconds.
+✔ Test invalidGeometryCannotOverwriteExistingNotebook() passed after 0.005 seconds.
+✔ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() passed after 0.006 seconds.
+✔ Test corruptMissingAndFutureFilesFailWithoutReplacement() passed after 0.012 seconds.
+✔ Test run with 7 tests in 0 suites passed after 0.012 seconds.
+Building for production...
+[2 / 12] NotebookPersistence
+[4 / 15] NotebookCore
+[6 / 16] NotebookCore
+[9 / 17] NotebookPersistence
+[11 / 18] NotebookPersistence
+Build complete! (1.30 secs)
+Created and verified notebook.json
+OpenOneNote: 1 sections, 1 pages
+Verified 1 captured files and symlinks against SHA-256 inventory
+Swift tests, release build, CLI paths, and whitespace checks passed.
