@@ -33,7 +33,7 @@ import CryptoKit
         guard duplicate.exitCode != 0 else { throw DevelopmentError.invalidArguments("Demo creation overwrote an existing file") }
         let native = bin.appendingPathComponent("OpenOneNoteMac").path
         try run(native, ["--self-test", temporary.appendingPathComponent("native/notebook.json").path])
-        for width in [1280, 960] { try run(native, ["--render-preview", temporary.appendingPathComponent("preview-\(width).png").path, "\(width)"]) }
+        for width in [1728, 1280, 960] { try run(native, ["--render-preview", temporary.appendingPathComponent("preview-\(width).png").path, "\(width)"]) }
         guard try run(native, ["--notebook"], allowFailure: true).exitCode != 0,
               try run(native, ["--render-preview", temporary.appendingPathComponent("invalid.png").path, "invalid"], allowFailure: true).exitCode != 0 else {
             throw DevelopmentError.invalidArguments("Native app accepted invalid arguments")

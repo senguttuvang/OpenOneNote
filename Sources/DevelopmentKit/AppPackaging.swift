@@ -20,8 +20,8 @@ extension DevelopmentWorkflow {
         try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNoteMac"), to: contents.appendingPathComponent("MacOS/OpenOneNoteMac"))
         let plist: [String: Any] = [
             "CFBundleName": "OpenOneNote", "CFBundleDisplayName": "OpenOneNote", "CFBundleIdentifier": "dev.senguttuvang.OpenOneNote",
-            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.1.1",
-            "CFBundleVersion": "2", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
+            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.2.0",
+            "CFBundleVersion": "3", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
             "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication"
         ]
         try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0).write(to: contents.appendingPathComponent("Info.plist"))
@@ -57,14 +57,14 @@ extension DevelopmentWorkflow {
         try run(binary, ["--self-test", fixture.path])
         let previews = root.appendingPathComponent("artifacts/previews")
         try FileManager.default.createDirectory(at: previews, withIntermediateDirectories: true)
-        for width in [1280, 960] {
+        for width in [1728, 1280, 960] {
             try run(binary, ["--render-preview", previews.appendingPathComponent("native-\(width).png").path, "\(width)"])
         }
         let metadata = try Data(contentsOf: app.appendingPathComponent("Contents/Resources/build.json"))
         var verification = try JSONSerialization.jsonObject(with: metadata) as? [String: String] ?? [:]
         verification["signature"] = "Ad-hoc deep/strict verification passed"
-        verification["nativeEditing"] = "Text, bold, undo/redo, save and reopen passed"
-        verification["renderScope"] = "Real native views in hidden windows at 1280pt and 960pt; prohibited activation policy"
+        verification["nativeEditing"] = "Packaged binary: text, bold, undo/redo, save and reopen passed; expanded ribbon/RTF cases run in the local check suite"
+        verification["renderScope"] = "Real native views in hidden windows at 1728x1088, 1280x800 and 960x800; one pixel per point; prohibited activation policy"
         verification["limits"] = "No full desktop keyboard/VoiceOver automation or Microsoft OneNote parity claim"
         try JSONSerialization.data(withJSONObject: verification, options: [.prettyPrinted, .sortedKeys]).write(to: previews.appendingPathComponent("verification.json"))
         print("Verified app and saved native previews to \(previews.path)")

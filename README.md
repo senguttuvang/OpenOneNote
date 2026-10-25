@@ -32,7 +32,7 @@ swift run openonenote-dev verify-app
 open dist/OpenOneNote.app
 ```
 
-The alpha supports notebook/section/page navigation and naming, positioned/resizable rich-text containers, bold/italic, the Mac font panel, native text undo/redo, and debounced atomic local saves. Normal launch stores its notebook at `~/Library/Application Support/OpenOneNote/notebook.json`; an explicit file can be selected with `OpenOneNoteMac --notebook /path/to/notebook.json`.
+The dark native alpha supports notebook/section/page navigation and naming, positioned/resizable rich-text containers, ribbon font/size and character formatting, headings, list paragraph styles, selected-text links, bordered native table insertion, the Mac font panel, undo/redo, and debounced atomic local saves. Normal launch stores its notebook at `~/Library/Application Support/OpenOneNote/notebook.json`; an explicit file can be selected with `OpenOneNoteMac --notebook /path/to/notebook.json`.
 
 **Local-first is the confirmed priority.** Import, OneNote cloud synchronization, ink, attachments, search, section groups, and complete OneNote feature parity are later milestones. The current store is single-writer JSON with an RTF payload for native text formatting. Undo history is scoped to the active page and resets on navigation. Corrupt files are preserved; save failures retain in-memory edits for retry. This is a development alpha, not a production replacement for valuable notebooks.
 
@@ -44,10 +44,14 @@ All project-owned build, verification, packaging, and capture orchestration is S
 swift run openonenote create-demo /tmp/openonenote-demo.json
 swift run openonenote inspect /tmp/openonenote-demo.json
 swift run openonenote-dev package-app
+swift run openonenote-dev source-index
+swift run openonenote-dev source-query "ONPageView"
 swift run openonenote-dev help
 ```
 
 `create-demo` refuses to overwrite existing data. Packaging requires committed program sources and refuses to overwrite an existing archive. See [the native build guide](artifacts/native/README.md), [design](DESIGN.md), and [existing Swift project references](reconstruction/swift-foundation-references.md).
+
+The [offline source index](reconstruction/indexing.md) covers authored Swift and static extracted/decompiled research text with hashes and provenance. It never uploads content or reads account stores. It is lexical search, not a semantic embedding index. Wide and compact native previews document a close layout reconstruction, not exact OneNote parity.
 
 ## Retrieve Research Archives
 

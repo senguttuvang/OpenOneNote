@@ -44,3 +44,11 @@ Milestones after the initial editor remain proposed scope, not delivery-date com
 - No formal source recovery, full OneNote parity, or private cloud backend reconstruction is promised by this research pass.
 - RTF is the initial native formatting representation; production storage, richer document semantics, import fidelity, and sync contracts require further evidence.
 - Native owned-view renders and text-control integration checks have run. Complete Microsoft OneNote UI/capability parity is not claimed.
+
+## Dark fidelity and context indexing slice
+
+Use the supplied private OneNote Mac screenshot as the geometry/color reference while retaining OpenOneNote identity. Deliver a dark native ribbon, app rail, notebook/section/page hierarchy and positioned text containers. Every actionable ribbon control must reach the selected NSTextView or notebook command; unsupported capabilities must be explicit. Preserve existing saved files and stored RTF/geometry.
+
+Acceptance: native selection formatting and undo; font family/size; paragraph/list styles; selected-text links; editable bordered table insertion with RTF reopen; page/section creation; independent document scrolling; wide/reference/compact hidden renders. Record observed differences and untested interactions in DESIGN.md and visual evidence. Full OneNote parity is not an acceptance claim.
+
+Index authored code and static extracted/decompiled text locally with file hashes, source revision, path/line query results and provenance. Exclude original archives, compressed assembly, binaries, assets, account stores, screenshot and client content. Reject stale queries rather than presenting changed source as current. JetBrains has no local-main baseline and its installed index command exposes no exclusion flag; do not upload this mixed-ownership checkout without a separately verified provider boundary. The offline lexical index does not claim semantic embeddings or recovery of original source.

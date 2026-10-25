@@ -1,9 +1,39 @@
 import AppKit
 import SwiftUI
+import NotebookCore
+import NotebookPersistence
 
 public enum EditorVerificationError: Error { case failed(String) }
 
 @MainActor public enum NativeVerification {
+    public static func fixture(at url: URL) throws -> NotebookSession {
+        let content = NSMutableAttributedString(string: "Field Notes is a place for the team’s technical knowledge and delivery roadmap.\n", attributes: [.font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground])
+        let table = NotebookTextView(); table.insertTable()
+        content.append(table.attributedString())
+        for (heading, body) in [
+            ("Working together", "Keep decisions close to the work. Capture the context, explore the options, and agree on a small next step.\n"),
+            ("Knowledge ownership", "Use this notebook for shared findings and practical guidance. Keep confidential information in the appropriate private workspace. Original references remain attached to their source.\n"),
+            ("Learning and discovery", "Build a useful catalog of questions, experiments, and observations. Review what changed and record the evidence behind each decision.\n"),
+            ("Related pages", "Goals and outcomes\nDelivery milestones\nResearch and findings\nDecisions and next steps\nOperating model\n")
+        ] {
+            content.append(NSAttributedString(string: heading + "\n", attributes: [.font: NSFont.systemFont(ofSize: 20), .foregroundColor: EditorTheme.link]))
+            let style = NSMutableParagraphStyle(); style.paragraphSpacing = 10
+            content.append(NSAttributedString(string: body, attributes: [.font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground, .paragraphStyle: style]))
+        }
+        let related = (content.string as NSString).range(of: "Goals and outcomes")
+        content.addAttribute(.link, value: URL(string: "https://example.com/notes")!, range: related)
+        let listStart = related.location
+        let fixtureList = NotebookTextView(); fixtureList.textStorage?.setAttributedString(content)
+        fixtureList.setSelectedRange(NSRange(location: listStart, length: content.length - listStart))
+        fixtureList.toggleList(numbered: false)
+        let rich = fixtureList.attributedString()
+        let page = NotePage(title: "Field Notes — Project Home", blocks: [NoteBlock(x: 72, y: 32, width: 914, text: rich.string, height: 820, richText: try RichTextCodec.encode(rich))])
+        let notebook = Notebook(title: "Field Notes", sections: [NoteSection(title: "Project Home", pages: [page]), NoteSection(title: "Research"), NoteSection(title: "Backlog"), NoteSection(title: "Learning")])
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try JSONNotebookRepository(url: url).save(notebook)
+        return NotebookSession(url: url)
+    }
+
     public static func exerciseEditor(at url: URL) throws {
         let session = NotebookSession(url: url)
         guard let page = session.selectedPage, let block = page.blocks.first else { throw EditorVerificationError.failed("No initial page") }
@@ -53,7 +83,8 @@ public enum EditorVerificationError: Error { case failed(String) }
         host.layoutSubtreeIfNeeded()
         RunLoop.main.run(until: Date().addingTimeInterval(0.5))
         window.display()
-        guard let bitmap = host.bitmapImageRepForCachingDisplay(in: host.bounds) else { throw EditorVerificationError.failed("Cannot allocate native preview") }
+        guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(width), pixelsHigh: Int(height), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0) else { throw EditorVerificationError.failed("Cannot allocate native preview") }
+        bitmap.size = NSSize(width: width, height: height)
         host.cacheDisplay(in: host.bounds, to: bitmap)
         guard let png = bitmap.representation(using: .png, properties: [:]) else { throw EditorVerificationError.failed("Cannot encode native preview") }
         try png.write(to: url, options: .atomic)
