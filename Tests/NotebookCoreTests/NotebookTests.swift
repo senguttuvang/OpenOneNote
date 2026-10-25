@@ -68,3 +68,21 @@ private func temporaryURL() throws -> URL {
         }
     }
 }
+
+@Test func plainFoundationNotebookRemainsReadableWithoutRichTextFields() throws {
+    let block = "{\"id\":\"00000000-0000-0000-0000-000000000004\",\"x\":48,\"y\":32,\"width\":600,\"text\":\"Legacy text\"}"
+    let json = "{\"id\":\"00000000-0000-0000-0000-000000000001\",\"title\":\"Original\",\"sections\":[{\"id\":\"00000000-0000-0000-0000-000000000002\",\"title\":\"Notes\",\"pages\":[{\"id\":\"00000000-0000-0000-0000-000000000003\",\"title\":\"Page\",\"blocks\":[\(block)]}]}]}"
+    let notebook = try JSONDecoder().decode(Notebook.self, from: Data(json.utf8))
+    try notebook.validate()
+    #expect(notebook.sections[0].pages[0].blocks[0].text == "Legacy text")
+    #expect(notebook.sections[0].pages[0].blocks[0].richText == nil)
+    #expect(notebook.sections[0].pages[0].blocks[0].height == nil)
+}
+
+@Test func invalidContainerHeightIsRejected() throws {
+    for height in [0.0, -1.0, .infinity, .nan] {
+        let block = NoteBlock(height: height)
+        let value = Notebook(title: "Invalid", sections: [NoteSection(title: "Section", pages: [NotePage(title: "Page", blocks: [block])])])
+        #expect(throws: NotebookError.invalidGeometry(block.id)) { try value.validate() }
+    }
+}

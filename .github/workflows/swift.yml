@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           lfs: false
-      - run: sh Tools/check.sh
+      - run: swift run openonenote-dev check

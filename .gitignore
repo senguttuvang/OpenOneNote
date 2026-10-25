@@ -9,6 +9,8 @@ scratch/
 .codex/
 *.xcuserstate
 xcuserdata/
+*.partial
+*.partial.gz
 .beads/issues.jsonl
 .beads/interactions.jsonl
 .beads/events.jsonl

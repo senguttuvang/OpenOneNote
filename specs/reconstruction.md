@@ -26,7 +26,7 @@ This specification defines the private research deliverable and staged independe
 
 ## Proposed Next Milestones
 
-**Native editor slice:** graphical notebook/section/page navigation; editable text container; UndoManager integration; edit/save/reopen; accessible keyboard focus. Decide local-first, existing-cloud-notebook-first, or canvas-parity-first sequencing with the user.
+**Native editor slice:** local-first priority confirmed. Graphical notebook/section/page navigation and naming, positioned/resizable native rich-text containers, formatting, active-page undo, autosave and reopen are implemented. Background native renders and programmatic AppKit edit/format/undo/reopen checks pass. Manual keyboard/VoiceOver review and direct OneNote parity comparisons remain separate validation work.
 
 **Canvas and rich text:** document/viewport transform model; positioning/resizing; semantic runs/lists; text tables and attachments; input/accessibility and paste fixtures.
 
@@ -36,11 +36,11 @@ This specification defines the private research deliverable and staged independe
 
 **Sync and packaging:** delegated account setup, retries/idempotency, conflicts, offline edits, signing/notarization, release/rollback validation.
 
-These milestones are proposed scope, not completed features or delivery-date commitments. Beads owns live tasks and dependencies; this file is the behavior/acceptance contract.
+Milestones after the initial editor remain proposed scope, not delivery-date commitments. Beads owns live tasks and dependencies; this file is the behavior/acceptance contract. Project-owned CLI/CI/build/verification/capture orchestration is Swift.
 
 ## Constraints And Open Decisions
 
 - Windows source overlap remains unquantified until a Windows artifact is compared.
 - No formal source recovery, full OneNote parity, or private cloud backend reconstruction is promised by this research pass.
-- Rich-text serialization, production storage library, packaging identity, initial feature priority, import fidelity targets, and sync expectations require prototype evidence or user decisions.
-- The present graphical design is proposed; no UI parity or GUI verification is claimed.
+- RTF is the initial native formatting representation; production storage, richer document semantics, import fidelity, and sync contracts require further evidence.
+- Native owned-view renders and text-control integration checks have run. Complete Microsoft OneNote UI/capability parity is not claimed.
