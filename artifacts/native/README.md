@@ -4,7 +4,7 @@ This directory retains independent native Swift app/tool builds alongside reprod
 
 `openonenote-app-arm64-<revision>.tar.gz` contains `OpenOneNote.app`. Extract it to a new directory and open the app. Requires Apple Silicon and targets macOS 14 or newer; Intel builds have not been verified. The app's resource manifest records the committed source revision. The earlier `openonenote-foundation-*` archives preserve the initial CLI-only milestones, including a synthetic notebook and original build metadata.
 
-The first graphical build is [openonenote-app-arm64-51d9805.tar.gz](openonenote-app-arm64-51d9805.tar.gz), built from source tag `native-alpha-0.1.0-source`. Its adjacent checksum and the native [preview verification](../previews/verification.json) record the preserved build and test scope.
+The recommended build is [openonenote-app-arm64-2d0f768.tar.gz](openonenote-app-arm64-2d0f768.tar.gz), version 0.1.1 from source tag `native-alpha-0.1.1-source`. Its adjacent checksum and the native [preview verification](../previews/verification.json) record the preserved build and test scope. The earlier 0.1.0 graphical build is also retained. Version 0.1.1 wraps actor callbacks explicitly to avoid a Swift 6.1 compiler crash; it was verified with Swift 6.1.2 and 6.4 before Actions was disabled.
 
 Retrieve the archive with `git lfs pull`, validate its adjacent `.sha256` file, extract to a new directory, and run `openonenote inspect example-notebook.json` from that directory. The executables do not need the original Microsoft archives.
 

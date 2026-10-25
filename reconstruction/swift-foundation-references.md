@@ -18,7 +18,7 @@ Current repository instructions explicitly park `CheckInKit` outside the active 
 - **Swift package modules:** notebook domain, storage, editor, and development capabilities have explicit ownership/dependencies.
 - **Typed native process boundary:** the DevelopmentKit process runner follows Maintenance's `ProcessClient`/`ProcessResult` pattern: literal argument arrays, structured exit results, typed failures, and deadlines. The maintenance implementation was inspected; its unrelated system services and dormant dependency graph were not imported.
 - **Native lifecycle and UI:** SwiftUI composition with AppKit integration, separate app assembly/signing, and explicit development/runtime verification. OpenOneNote uses a document-window lifecycle; Maintenance's menu-bar and automatic login-item behavior remain specific to that application.
-- **Swift-only project automation:** `openonenote-dev` owns CI, verification, build/sign/package, and research capture. Platform tools are invoked through `Foundation.Process`; no authored shell workflows remain.
+- **Swift-only project automation:** `openonenote-dev` owns local CI-equivalent checks, verification, build/sign/package, and research capture. Platform tools are invoked through `Foundation.Process`; no authored shell workflows remain. GitHub Actions is disabled under the user's explicit credit policy.
 
 ## Workspace Inventory Coverage
 

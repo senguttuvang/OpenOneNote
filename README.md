@@ -36,7 +36,7 @@ The alpha supports notebook/section/page navigation and naming, positioned/resiz
 
 **Local-first is the confirmed priority.** Import, OneNote cloud synchronization, ink, attachments, search, section groups, and complete OneNote feature parity are later milestones. The current store is single-writer JSON with an RTF payload for native text formatting. Undo history is scoped to the active page and resets on navigation. Corrupt files are preserved; save failures retain in-memory edits for retry. This is a development alpha, not a production replacement for valuable notebooks.
 
-All project-owned build, CI, verification, packaging, and capture orchestration is Swift. `openonenote-dev` invokes native tools with separate argument arrays. GitHub Actions calls that same CLI; there are no maintained shell workflow scripts. Ghidra's exporter remains Java because it runs inside Ghidra's scripting API.
+All project-owned build, verification, packaging, and capture orchestration is Swift. `openonenote-dev` invokes native tools with separate argument arrays. The local check command is the CI-equivalent gate. **GitHub Actions is disabled and its workflow removed to avoid Actions-credit consumption.** There are no maintained shell workflow scripts. Ghidra's exporter remains Java because it runs inside Ghidra's scripting API.
 
 ## Foundation And Research Tools
 

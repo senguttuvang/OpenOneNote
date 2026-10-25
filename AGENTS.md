@@ -19,6 +19,8 @@ Private OneNote Mac research and an independent native Swift reconstruction.
 
 Use a fresh feature worktree, direct self-review, `swift run openonenote-dev check`, and a GitHub PR. This repository opts into the team-maintainer Beads profile for authorized commit/push/merge delivery; global safety rules still apply.
 
+GitHub Actions is disabled by explicit user instruction to avoid Actions-credit consumption. Keep it disabled, do not add workflows or dispatch Actions, and do not use paid CI runners. The local Swift check command is the full CI-equivalent merge gate. A new authorization is required before enabling credit-consuming GitHub automation.
+
 Beads owns live work: `bd prime`, `bd ready`, `bd show <id>`, then `bd update <id> --claim`. Initial task: `oon-0hm`. Discover the authoritative database with `bd where`; remote task synchronization is unverified and remains local-only until proven.
 
 ## Verification

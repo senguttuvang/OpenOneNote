@@ -1,101 +1,86 @@
 Building for debugging...
-[1 / 7] DevelopmentKit
-[3 / 13] DevelopmentKit
-[5 / 15] DevelopmentKit
-[8 / 11] DevelopmentKit
-[10 / 11] DevelopmentKit
-[11 / 12] openonenote-dev-product
-Build complete! (2.51 secs)
+[1 / 1]
+Build complete! (0.38 secs)
 Building for debugging...
 [Computing dependencies]
-[1 / 38] NotebookCore
-[6 / 40]
-[9 / 39] NotebookCore
-[14 / 32] NotebookEditor
-[16 / 33] NotebookEditor
-[19 / 23] OpenOneNoteMac-product
-[21 / 25] OpenOneNoteMac-product
-[22 / 25] OpenOneNoteMac-product
-[24 / 25] OpenOneNoteMac-product
+[5 / 34] NotebookCore
+[8 / 34] NotebookPersistence
+[11 / 27] NotebookEditor
+[13 / 28] NotebookEditor
 Build complete! (3.00 secs)
-Test Suite 'All tests' started at 2026-10-25 17:20:55.117.
-Test Suite 'All tests' passed at 2026-10-25 17:20:55.118.
+Test Suite 'All tests' started at 2026-10-25 17:55:39.249.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.250.
 	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
-Test Suite 'All tests' started at 2026-10-25 17:20:55.232.
-Test Suite 'All tests' passed at 2026-10-25 17:20:55.233.
+Test Suite 'All tests' started at 2026-10-25 17:55:39.370.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.371.
 	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
-Test Suite 'All tests' started at 2026-10-25 17:20:55.365.
-Test Suite 'All tests' passed at 2026-10-25 17:20:55.366.
+Test Suite 'All tests' started at 2026-10-25 17:55:39.494.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.496.
 	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
 ◇ Test run started.
 ↳ Testing Library Version: 2084
 ↳ Target Platform: arm64e-apple-macos14.0
 ◇ Suite EditorTests started.
 ◇ Test realNativeTextViewEditUndoRedoAndReopen() started.
-✔ Test realNativeTextViewEditUndoRedoAndReopen() passed after 0.122 seconds.
+✔ Test realNativeTextViewEditUndoRedoAndReopen() passed after 0.145 seconds.
 ◇ Test boldUnicodeRichTextSurvivesSaveAndReopen() started.
 ✔ Test boldUnicodeRichTextSurvivesSaveAndReopen() passed after 0.005 seconds.
 ◇ Test sectionAndGeometryCommandsSupportUndoAndPersist() started.
-✔ Test sectionAndGeometryCommandsSupportUndoAndPersist() passed after 0.002 seconds.
+✔ Test sectionAndGeometryCommandsSupportUndoAndPersist() passed after 0.003 seconds.
 ◇ Test corruptNotebookCannotBeReplacedOnOpenOrSave() started.
 ✔ Test corruptNotebookCannotBeReplacedOnOpenOrSave() passed after 0.003 seconds.
 ◇ Test saveFailureRetainsInMemoryEditsForRetry() started.
-✔ Test saveFailureRetainsInMemoryEditsForRetry() passed after 0.005 seconds.
+✔ Test saveFailureRetainsInMemoryEditsForRetry() passed after 0.006 seconds.
 ◇ Test invalidRichTextDoesNotOverwriteAValidNotebookContainer() started.
 ✔ Test invalidRichTextDoesNotOverwriteAValidNotebookContainer() passed after 0.002 seconds.
 ◇ Test navigatingToAnotherPageClearsInvisibleTextUndoTargets() started.
 ✔ Test navigatingToAnotherPageClearsInvisibleTextUndoTargets() passed after 0.001 seconds.
-✔ Suite EditorTests passed after 0.143 seconds.
-✔ Test run with 7 tests in 1 suite passed after 0.143 seconds.
+✔ Suite EditorTests passed after 0.168 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.168 seconds.
 ◇ Test run started.
 ↳ Testing Library Version: 2084
 ↳ Target Platform: arm64e-apple-macos14.0
-◇ Test invalidGeometryCannotOverwriteExistingNotebook() started.
-◇ Test invalidContainerHeightIsRejected() started.
-◇ Test plainFoundationNotebookRemainsReadableWithoutRichTextFields() started.
-◇ Test invalidCoordinatesAreRejected() started.
-◇ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() started.
-◇ Test coreAndPersistenceKeepDependenciesInward() started.
-◇ Test corruptMissingAndFutureFilesFailWithoutReplacement() started.
 ◇ Test architectureRuleRejectsUIAndOutwardImports() started.
+◇ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() started.
+◇ Test invalidContainerHeightIsRejected() started.
 ◇ Test duplicateIDsAreRejectedAcrossHierarchy() started.
+◇ Test corruptMissingAndFutureFilesFailWithoutReplacement() started.
+◇ Test coreAndPersistenceKeepDependenciesInward() started.
+◇ Test invalidCoordinatesAreRejected() started.
+◇ Test invalidGeometryCannotOverwriteExistingNotebook() started.
+◇ Test plainFoundationNotebookRemainsReadableWithoutRichTextFields() started.
 ✔ Test architectureRuleRejectsUIAndOutwardImports() passed after 0.001 seconds.
 ✔ Test plainFoundationNotebookRemainsReadableWithoutRichTextFields() passed after 0.001 seconds.
 ✔ Test duplicateIDsAreRejectedAcrossHierarchy() passed after 0.001 seconds.
 ✔ Test invalidContainerHeightIsRejected() passed after 0.001 seconds.
 ✔ Test invalidCoordinatesAreRejected() passed after 0.001 seconds.
-✔ Test coreAndPersistenceKeepDependenciesInward() passed after 0.003 seconds.
-✔ Test invalidGeometryCannotOverwriteExistingNotebook() passed after 0.004 seconds.
+✔ Test coreAndPersistenceKeepDependenciesInward() passed after 0.002 seconds.
+✔ Test invalidGeometryCannotOverwriteExistingNotebook() passed after 0.003 seconds.
 ✔ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() passed after 0.005 seconds.
-✔ Test corruptMissingAndFutureFilesFailWithoutReplacement() passed after 0.012 seconds.
-✔ Test run with 9 tests in 0 suites passed after 0.012 seconds.
+✔ Test corruptMissingAndFutureFilesFailWithoutReplacement() passed after 0.011 seconds.
+✔ Test run with 9 tests in 0 suites passed after 0.011 seconds.
 ◇ Test run started.
 ↳ Testing Library Version: 2084
 ↳ Target Platform: arm64e-apple-macos14.0
+◇ Test subprocessDeadlineFailsAndTerminatesOwnedChild() started.
 ◇ Test authoredAutomationContainsNoShellScripts() started.
 ◇ Test processArgumentsAreLiteralAndExitFailuresPropagate() started.
 ◇ Test versionLabelsCannotEscapeEvidenceDirectories() started.
-◇ Test subprocessDeadlineFailsAndTerminatesOwnedChild() started.
 ✔ Test versionLabelsCannotEscapeEvidenceDirectories() passed after 0.001 seconds.
 ✔ Test authoredAutomationContainsNoShellScripts() passed after 0.004 seconds.
-✔ Test subprocessDeadlineFailsAndTerminatesOwnedChild() passed after 0.154 seconds.
-✔ Test processArgumentsAreLiteralAndExitFailuresPropagate() passed after 0.199 seconds.
-✔ Test run with 4 tests in 0 suites passed after 0.199 seconds.
+✔ Test subprocessDeadlineFailsAndTerminatesOwnedChild() passed after 0.158 seconds.
+✔ Test processArgumentsAreLiteralAndExitFailuresPropagate() passed after 0.196 seconds.
+✔ Test run with 4 tests in 0 suites passed after 0.196 seconds.
 Building for production...
+[Using on-disk description]
 [7 / 27] NotebookCore
 [10 / 29] NotebookCore
 [13 / 30] NotebookCore
 [14 / 30]
-[18 / 34] NotebookPersistence
+[18 / 34] NotebookEditor
 [19 / 34] DevelopmentKit
-[25 / 32] openonenote-dev-product
-[25 / 32] NotebookEditor
-[29 / 31] openonenote-dev-product
-[30 / 33] OpenOneNoteMac-product
-[31 / 34] OpenOneNoteMac-product
-[33 / 34] OpenOneNoteMac-product
-[34 / 34] OpenOneNoteMac-product
-Build complete! (4.62 secs)
+[23 / 30] NotebookEditor
+Build complete! (3.53 secs)
 Created and verified notebook.json
 OpenOneNote: 1 sections, 1 pages
 OpenOneNote failed: destinationExists
