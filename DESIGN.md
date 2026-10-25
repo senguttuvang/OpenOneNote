@@ -12,7 +12,7 @@ The running OneNote Mac 16.114.1 interface and the user's 25 October 2026 screen
 
 ## Complete observed controls
 
-`InterfaceCatalog` owns labels and hierarchy; `NotebookMenus` builds actual NSMenus; `RibbonView` composes all four native ribbon tabs. `EditorCommands` shares local actions and view state between them. `specs/observed-menu-labels.json` is the sanitized reference acceptance fixture. Every observed native menu label must remain in its matching menu family, including unavailable actions.
+`InterfaceCatalog` owns labels and hierarchy; `NotebookMenus` builds actual NSMenus; `RibbonView` composes Home/Insert/Draw/View plus the contextual Table tab. `EditorCommands` shares local actions and view state between them. `specs/observed-menu-labels.json` is the sanitized reference acceptance fixture. Every observed native menu label must remain in its matching menu family, including unavailable actions. Independently drawn popovers retain the observed bullet/numbering, table-dimension, colour and paper-style galleries. `EditorFormatting.inTable` derives contextual visibility from native paragraph metadata.
 
 Home retains clipboard/format painter, fonts/sizes, list/indent/clear controls, character formatting, subscript/superscript, colour and alignment menus, style/tag galleries and Dictate. Insert retains table, file/printout/picture/screenshot, link/equation, date/time, shapes, audio, meetings and stickers. Draw retains selection/space/eraser/pen/marker/highlighter/colour/thickness. View retains window, background, history/deleted notes, zoom, protection, paper and title/author controls. Tell me, sync status, Share and quick-access choices remain visible.
 

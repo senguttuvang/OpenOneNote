@@ -1,6 +1,6 @@
 import AppKit
 import Testing
-import NotebookEditor
+@testable import NotebookEditor
 
 @Suite(.serialized) @MainActor struct InterfaceTests {
     private func session() -> NotebookSession {
@@ -64,6 +64,23 @@ import NotebookEditor
         var tableCells = 0
         view.attributedString().enumerateAttribute(.paragraphStyle, in: view.selectedRange()) { value, _, _ in tableCells += (value as? NSParagraphStyle)?.textBlocks.count ?? 0 }
         #expect(tableCells >= 6)
+        withExtendedLifetime(coordinator) {}
+    }
+    @Test func tableGridDimensionsSurviveRTFAndDriveContextualRibbon() throws {
+        let model = session()
+        let editor = RichTextEditor(text: "", richText: nil, undoManager: model.undoManager, onChange: { _, _ in }, onError: { Issue.record("\($0)") })
+        let coordinator = editor.makeCoordinator(); let view = try #require(editor.makeTextView(coordinator: coordinator) as? NotebookTextView)
+        let formatting = EditorFormatting(); view.formatting = formatting; formatting.attach(view)
+        model.undoManager.beginUndoGrouping(); view.insertTable(rows: 4, columns: 5); model.undoManager.endUndoGrouping()
+        let roundTrip = try RichTextCodec.decode(RichTextCodec.encode(view.attributedString()))
+        let style = try #require(roundTrip.attribute(.paragraphStyle, at: 0, effectiveRange: nil) as? NSParagraphStyle)
+        let cell = try #require(style.textBlocks.first as? NSTextTableBlock)
+        #expect(cell.table.numberOfColumns == 5)
+        view.setSelectedRange(NSRange(location: 0, length: 1)); formatting.refresh(view)
+        #expect(formatting.inTable)
+        model.undoManager.undo(); #expect(view.string.isEmpty)
+        formatting.clear(); #expect(!formatting.inTable)
+        #expect(ListGalleryCatalog.bullets.count == 10 && ListGalleryCatalog.numbering.count == 20)
         withExtendedLifetime(coordinator) {}
     }
 }

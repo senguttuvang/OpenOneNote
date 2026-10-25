@@ -11,9 +11,10 @@ import Combine
     @Published public private(set) var italic = false
     @Published public private(set) var underline = false
     @Published public private(set) var available = false
+    @Published public private(set) var inTable = false
 
     public func attach(_ view: NotebookTextView) { target = view; refresh(view) }
-    public func clear() { target = nil; available = false }
+    public func clear() { target = nil; available = false; inTable = false }
     public func refresh(_ view: NotebookTextView) {
         guard target === view else { return }
         available = true
@@ -26,6 +27,7 @@ import Combine
         bold = NSFontManager.shared.traits(of: font).contains(.boldFontMask)
         italic = NSFontManager.shared.traits(of: font).contains(.italicFontMask)
         underline = (attributes[.underlineStyle] as? Int ?? 0) != 0
+        inTable = (attributes[.paragraphStyle] as? NSParagraphStyle)?.textBlocks.contains { $0 is NSTextTableBlock } == true
     }
     public func perform(_ action: String) {
         guard let target else { return }

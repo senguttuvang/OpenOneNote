@@ -21,6 +21,7 @@ import Combine
     public var newWindow: (() -> Void)?
     public var viewportWidth = 760.0
     private var copiedFormat: [NSAttributedString.Key: Any]?
+    private static let pasteAliases = ["Keep Source Formatting": "Paste", "Match Formatting": "Paste and Match Formatting", "Keep Text Only": "Paste and Keep Text Only"]
     public init(session: NotebookSession) { self.session = session }
 
     public static let nativeSelectors: [String: String] = [
@@ -28,6 +29,7 @@ import Combine
     ]
     private var viewCommands: Set<String> { Set(["Ribbon", "Hide Section and Page Lists", "Switch Background", "Hide Page Title", "Hide Authors", "Zoom In", "Zoom Out", "Reset Zoom", "Zoom to Page Width", "Page Width", "Increase Navigation Pane Width", "Decrease Navigation Pane Width", "New Page", "New Section", "Save", "Search This Page", "Search This Section", "Search This Notebook", "Search All Notebooks", "Text Mode", "Window Centre"] + InterfaceCatalog.paperStyles) }
     public func canPerform(_ title: String) -> Bool {
+        if let alias = Self.pasteAliases[title] { return canPerform(alias) }
         if title == "Undo" { return session.undoManager.canUndo }
         if title == "Redo" { return session.undoManager.canRedo }
         if title == "New Window" { return newWindow != nil }
@@ -40,6 +42,7 @@ import Combine
     public func validateMenuItem(_ menuItem: NSMenuItem) -> Bool { canPerform(menuItem.representedObject as? String ?? menuItem.title) }
     @objc public func menuAction(_ sender: NSMenuItem) { perform(sender.representedObject as? String ?? sender.title) }
     public func perform(_ title: String) {
+        if let alias = Self.pasteAliases[title] { perform(alias); return }
         guard canPerform(title) else { return }
         if let selector = Self.nativeSelectors[title] { formatting.perform(selector); return }
         switch title {

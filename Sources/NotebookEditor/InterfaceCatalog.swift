@@ -37,6 +37,7 @@ public enum InterfaceCatalog {
         "Home": ["Paste", "Cut", "Copy", "Format", "Font:", "Font Size:", "Bulletpoints", "Numbering", "Decrease Indent", "Increase Indent", "Clear Formatting", "Bold", "Italic", "Underline", "Strikethrough", "Subscript and Superscript", "Text Highlight Colour", "Font Colour", "Paragraph Alignment", "Delete", "Styles", "Tags", "Dictate"],
         "Insert": ["Table", "File", "Printout", "Picture", "Screenshot", "Link", "Equation", "Date", "Date & Time", "Shapes", "Audio Recording", "Meeting Details", "Stickers"],
         "Draw": ["Text Mode", "Lasso Select", "Insert Space", "Eraser", "Pen", "Marker", "Highlighter", "Suggested colours", "Ink Colour", "Thickness"],
-        "View": ["New Window", "Switch Background", "Page Versions", "Deleted Notes", "Zoom Out", "Zoom In", "Zoom", "Reset Zoom", "Page Width", "Password Protection", "Paper Colour", "Paper Style", "Hide Page Title", "Hide Authors"]
+        "View": ["New Window", "Switch Background", "Page Versions", "Deleted Notes", "Zoom Out", "Zoom In", "Zoom", "Reset Zoom", "Page Width", "Password Protection", "Paper Colour", "Paper Style", "Hide Page Title", "Hide Authors"],
+        "Table": ["Select Cell", "Select Rows", "Select Columns", "Select Table", "Delete Rows", "Delete Columns", "Delete Table", "Insert Row Above", "Insert Row Below", "Insert Column Left", "Insert Column Right", "Merge Cells", "Split Cells", "Hide Borders", "Shading", "Sort"]
     ]
 }

@@ -7,6 +7,7 @@ import SwiftUI
     @State private var link = "https://"
     @State private var linkOpen = false
     @State private var quickAccess = Set(["Undo", "Redo"])
+    @State private var galleryOpen: String?
     init(commands: EditorCommands) { self.commands = commands; formatting = commands.formatting }
     var body: some View {
         VStack(spacing: 0) {
@@ -18,7 +19,7 @@ import SwiftUI
             }.padding(.leading, 104).padding(.trailing, 12).frame(height: 36)
                 .overlay { Text("OpenOneNote").font(.system(size: 12)) }
             HStack(spacing: 23) {
-                ForEach(["Home", "Insert", "Draw", "View"], id: \.self) { title in
+                ForEach(["Home", "Insert", "Draw", "View"] + (formatting.inTable || commands.tab == "Table" ? ["Table"] : []), id: \.self) { title in
                     Button { if commands.tab == title { commands.ribbonCollapsed.toggle() } else { commands.tab = title; commands.ribbonCollapsed = false } } label: {
                         Text(title).font(.system(size: 13, weight: commands.tab == title ? .bold : .medium)).padding(.vertical, 8)
                             .overlay(alignment: .bottom) { if commands.tab == title { Capsule().fill(.white).frame(height: 3) } }
@@ -36,12 +37,14 @@ import SwiftUI
                         case "Home": home
                         case "Insert": insert
                         case "Draw": draw
+                        case "Table": tableTools
                         default: view
                         }
                     }.padding(.horizontal, 16).frame(height: 76)
                 }.scrollIndicators(.hidden)
             }
         }.buttonStyle(.plain).background(PaperPalette.ribbon)
+            .onChange(of: formatting.inTable) { _, inside in if !inside && commands.tab == "Table" { commands.tab = "Home" } }
             .overlay(alignment: .bottom) { PaperPalette.line.frame(height: 1) }
             .popover(isPresented: $linkOpen) {
                 VStack(alignment: .leading, spacing: 12) {
@@ -55,7 +58,7 @@ import SwiftUI
         Group {
             HStack(spacing: 5) {
                 VStack(spacing: 3) {
-                    HStack(spacing: 0) { Button { commands.perform("Paste") } label: { Image(systemName: "doc.on.clipboard").font(.system(size: 28)) }.disabled(!commands.canPerform("Paste")); dropdown("Paste", items: ["Paste", "Paste and Match Formatting", "Paste and Keep Text Only"]) }
+                    HStack(spacing: 0) { Button { commands.perform("Paste") } label: { Image(systemName: "doc.on.clipboard").font(.system(size: 28)) }.disabled(!commands.canPerform("Paste")); dropdown("Paste", items: ["Keep Source Formatting", "Match Formatting", "Keep Text Only"]) }
                     Text("Paste").font(.system(size: 11))
                 }.frame(width: 37)
                 VStack(alignment: .leading, spacing: 3) { small("Cut", "scissors"); small("Copy", "doc.on.doc"); small("Format", "paintbrush", command: "Copy Format") }.frame(width: 64, alignment: .leading)
@@ -66,8 +69,8 @@ import SwiftUI
                     RibbonCombo(label: "Font:", value: formatting.fontName, choices: NSFontManager.shared.availableFontFamilies.sorted()) { formatting.font(name: $0) }.frame(width: 99, height: 24)
                     RibbonCombo(label: "Font Size:", value: (formatting.fontSize * 0.75).formatted(.number.precision(.fractionLength(0...1))), choices: ["8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "48", "72"]) { if let size = Double($0), (6...72).contains(size) { formatting.font(size: size / 0.75) } }.frame(width: 54, height: 24)
                     Spacer(minLength: 3)
-                    splitIcon("Bulletpoints", "list.bullet", options: ["Bulletpoints", "Numbering"])
-                    splitIcon("Numbering", "list.number", options: ["Numbering", "Bulletpoints"])
+                    listControl(numbered: false)
+                    listControl(numbered: true)
                     Spacer(minLength: 3)
                     icon("Decrease Indent", "decrease.indent")
                     icon("Increase Indent", "increase.indent")
@@ -96,7 +99,7 @@ import SwiftUI
     }
     private var insert: some View {
         Group {
-            VStack(spacing: 3) { Button { commands.perform("Table") } label: { Image(systemName: "tablecells").font(.system(size: 28)) }.disabled(!commands.canPerform("Table")); Menu("Table") { Button("Insert Table (3 × 2)") { commands.perform("Table") }.disabled(!formatting.available) }.fixedSize() }.frame(width: 42)
+            Button { galleryOpen = "table" } label: { tile("Table", "tablecells", width: 42) }.popover(isPresented: galleryBinding("table")) { TableGrid(formatting: formatting) { galleryOpen = nil } }
             separator
             HStack(spacing: 0) {
                 large("File", "paperclip", width: 34, command: "File…")
@@ -136,7 +139,7 @@ import SwiftUI
             }
             separator
             HStack(spacing: 13) { ForEach([Color.gray, .blue, .green, .red], id: \.self) { color in Button {} label: { Circle().fill(color).frame(width: 21, height: 21) }.disabled(true) } }.frame(width: 172, height: 58).background(Color.white.opacity(0.085)).clipShape(RoundedRectangle(cornerRadius: 3)).accessibilityLabel("Suggested colours")
-            largeMenu("Ink Colour", "pencil.tip", width: 40, choices: ["Automatic", "Blue", "Green", "Red", "More Colours…"])
+            Button { galleryOpen = "ink" } label: { tile("Ink Colour", "pencil.tip", width: 40) }.popover(isPresented: galleryBinding("ink")) { ColourGallery(kind: "ink") { _ in }.disabled(true) }.help("Ink Colour • ink editing unavailable")
             separator
             HStack(spacing: 0) { ForEach([0.25, 0.35, 0.5, 0.7, 1.0], id: \.self) { thickness in
                 Button {} label: { VStack(spacing: 5) { StrokeSample().stroke(Color.primary.opacity(0.6), style: StrokeStyle(lineWidth: thickness * 4, lineCap: .round)).frame(width: 48, height: 26); Text("\(thickness.formatted()) mm").font(.system(size: 11)) }.frame(width: 61) }.disabled(true).help("\(thickness.formatted()) mm").accessibilityLabel("\(thickness.formatted()) mm")
@@ -148,7 +151,7 @@ import SwiftUI
             HStack(spacing: 0) { large("New Window", "macwindow.badge.plus", width: 48); large("Switch Background", "sun.max", width: 64) }.padding(.leading, -8)
             separator
             HStack(spacing: 0) {
-                largeMenu("Page Versions", "doc.on.doc", width: 50, choices: ["Page Versions", "Delete All Versions in Section"])
+                largeMenu("Page Versions", "doc.on.doc", width: 50, choices: ["Page Versions", "Delete All Versions in Section", "Delete All Versions in Section Group", "Delete All Versions in Notebook", "Disable History for This Notebook"])
                 largeMenu("Deleted Notes", "trash", width: 44, choices: ["View Deleted Notes", "Empty Deleted Notes", "Disable History for This Notebook"])
             }
             separator
@@ -163,13 +166,34 @@ import SwiftUI
             largeMenu("Password Protection", "lock", width: 60, choices: ["Protect Current Section", "Lock All Protected Sections"])
             separator
             HStack(spacing: 0) {
-                largeMenu("Paper Colour", "paintpalette", width: 50, choices: ["Automatic", "White", "Blue", "Yellow", "Green", "More Colours…"])
-                largeMenu("Paper Style", "list.bullet.rectangle", width: 50, choices: InterfaceCatalog.paperStyles + ["Always Create Pages with Rule Lines"])
+                Button { galleryOpen = "paper" } label: { tile("Paper Colour", "paintpalette", width: 50) }.popover(isPresented: galleryBinding("paper")) { ColourGallery(kind: "paper") { _ in }.disabled(true) }.help("Paper Colour • custom page colours unavailable")
+                Button { galleryOpen = "paperStyle" } label: { tile("Paper Style", "list.bullet.rectangle", width: 50) }.popover(isPresented: galleryBinding("paperStyle")) { PaperGallery(commands: commands) { galleryOpen = nil } }
                 large("Hide Page Title", "doc.text", width: 56); large("Hide Authors", "person.text.rectangle", width: 50)
             }
         }
     }
     private var chevron: some View { Image(systemName: "chevron.down").font(.system(size: 7)) }
+    private func galleryBinding(_ name: String) -> Binding<Bool> { Binding(get: { galleryOpen == name }, set: { if !$0 { galleryOpen = nil } }) }
+    private func listControl(numbered: Bool) -> some View {
+        let title = numbered ? "Numbering" : "Bulletpoints"
+        return HStack(spacing: 0) { icon(title, numbered ? "list.number" : "list.bullet"); Button { galleryOpen = title } label: { chevron }.help(title + " options").accessibilityLabel(title + " options").popover(isPresented: galleryBinding(title)) { ListGallery(numbered: numbered, formatting: formatting) { galleryOpen = nil } } }
+    }
+    private var tableTools: some View {
+        Group {
+            HStack(spacing: 0) { large("Select Cell", "tablecells", width: 40); large("Select Rows", "tablecells", width: 42); large("Select Columns", "tablecells", width: 46); large("Select Table", "tablecells.fill", width: 42) }
+            separator
+            HStack(spacing: 0) { large("Delete Rows", "tablecells", width: 40); large("Delete Columns", "tablecells", width: 48); large("Delete Table", "tablecells", width: 42) }
+            separator
+            HStack(spacing: 0) { large("Insert Row Above", "arrow.up.to.line", width: 60); large("Insert Row Below", "arrow.down.to.line", width: 60); large("Insert Column Left", "arrow.left.to.line", width: 70); large("Insert Column Right", "arrow.right.to.line", width: 70) }
+            separator
+            HStack(spacing: 0) { large("Merge Cells", "rectangle.split.1x2", width: 45); large("Split Cells", "rectangle.split.2x2", width: 45) }
+            separator
+            large("Hide Borders", "rectangle.dashed", width: 45)
+            Button { galleryOpen = "shading" } label: { tile("Shading", "paintbrush", width: 50) }.popover(isPresented: galleryBinding("shading")) { ColourGallery(kind: "ink") { _ in }.disabled(true) }
+            separator
+            largeMenu("Sort", "arrow.down", width: 45, choices: ["Sort Ascending", "Sort Descending", "Include Header"])
+        }
+    }
     private var separator: some View { Rectangle().fill(Color.white.opacity(0.18)).frame(width: 1, height: 64) }
     private func icon(_ title: String, _ symbol: String, active: Bool = false) -> some View {
         Button { commands.perform(title) } label: {
@@ -184,7 +208,9 @@ import SwiftUI
     }
     private func tile(_ title: String, _ symbol: String, width: Double) -> some View {
         let split: [String: String] = ["Text Mode": "Text\nMode", "Lasso Select": "Lasso\nSelect", "Insert Space": "Insert\nSpace", "Audio Recording": "Audio\nRecording", "Meeting Details": "Meeting\nDetails", "New Window": "New\nWindow", "Switch Background": "Switch\nBackground", "Page Versions": "Page\nVersions", "Deleted Notes": "Deleted\nNotes", "Zoom Out": "Zoom\nOut", "Zoom In": "Zoom\nIn", "Password Protection": "Password\nProtection", "Paper Colour": "Paper\nColour", "Paper Style": "Paper\nStyle", "Hide Page Title": "Hide\nPage Title", "Hide Authors": "Hide\nAuthors", "Ink Colour": "Ink\nColour"]
-        return VStack(spacing: 4) { Image(systemName: symbol).font(.system(size: 28)).frame(height: 30); Text(split[title] ?? title).font(.system(size: 11)).lineLimit(split[title] == nil ? 1 : 2).minimumScaleFactor(0.85).multilineTextAlignment(.center).frame(width: width).fixedSize(horizontal: false, vertical: true) }.frame(width: width, height: 64, alignment: .top)
+        let tableLabels = ["Select Cell": "Select\nCell", "Select Rows": "Select\nRows", "Select Columns": "Select\nColumns", "Select Table": "Select\nTable", "Delete Rows": "Delete\nRows", "Delete Columns": "Delete\nColumns", "Delete Table": "Delete\nTable", "Insert Row Above": "Insert Row\nAbove", "Insert Row Below": "Insert Row\nBelow", "Insert Column Left": "Insert\nColumn Left", "Insert Column Right": "Insert\nColumn Right", "Merge Cells": "Merge\nCells", "Split Cells": "Split\nCells", "Hide Borders": "Hide\nBorders"]
+        let label = split[title] ?? tableLabels[title] ?? title
+        return VStack(spacing: 4) { Image(systemName: symbol).font(.system(size: 28)).frame(height: 30); Text(label).font(.system(size: 11)).lineLimit(label.contains("\n") ? 2 : 1).minimumScaleFactor(0.85).multilineTextAlignment(.center).frame(width: width).fixedSize(horizontal: false, vertical: true) }.frame(width: width, height: 64, alignment: .top)
     }
     private func large(_ title: String, _ symbol: String, width: Double = 48, command: String? = nil) -> some View {
         Button { commands.perform(command ?? title) } label: { tile(title, symbol, width: width) }.disabled(!commands.canPerform(command ?? title)).help(commands.canPerform(command ?? title) ? title : title + " • unavailable in the local editor").accessibilityLabel(title)
@@ -214,19 +240,16 @@ import SwiftUI
         }.disabled(!commands.canPerform(title)).accessibilityLabel(title)
     }
     private func colorMenu(_ title: String, symbol: String, key: NSAttributedString.Key?) -> some View {
-        Menu {
-            ForEach(["Automatic", "White", "Black", "Blue", "Red", "Green", "Yellow", "Purple", "No Colour"], id: \.self) { name in
-                Button(name) {
-                    guard let key else { return }
-                    let colors: [String: NSColor] = ["Automatic": EditorTheme.foreground, "White": .white, "Black": .black, "Blue": EditorTheme.link, "Red": .systemRed, "Green": .systemGreen, "Yellow": NSColor(srgbRed: 0.3, green: 0.3, blue: 0, alpha: 1), "Purple": .systemPurple, "No Colour": key == .foregroundColor ? EditorTheme.foreground : .clear]
-                    formatting.attribute(key, value: colors[name]!, action: title)
-                }.disabled(key == nil || !formatting.available)
-            }
-        } label: { HStack(spacing: 2) {
+        Button { galleryOpen = title } label: { HStack(spacing: 2) {
             if title == "Font Colour" { Text("A").font(.system(size: 15, weight: .semibold)).overlay(alignment: .bottom) { Rectangle().fill(Color.white).frame(height: 2).offset(y: 3) } }
             else { Image(systemName: symbol) }
             chevron
-        } }.menuIndicator(.hidden).fixedSize().help(title).accessibilityLabel(title)
+        } }.fixedSize().help(title).accessibilityLabel(title).popover(isPresented: galleryBinding(title)) {
+            ColourGallery(kind: key == .backgroundColor ? "highlight" : "font") { color in
+                if let key { formatting.attribute(key, value: color ?? (key == .backgroundColor ? .clear : EditorTheme.foreground), action: title) }
+                galleryOpen = nil
+            }.disabled(!formatting.available)
+        }
     }
 }
 

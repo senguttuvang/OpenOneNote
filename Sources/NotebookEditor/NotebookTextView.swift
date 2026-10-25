@@ -51,11 +51,12 @@ import AppKit
         formatting?.refresh(self)
     }
 
-    public func insertTable() {
-        let table = NSTextTable(); table.numberOfColumns = 2
+    public func insertTable(rows: Int = 3, columns: Int = 2) {
+        guard (1...8).contains(rows), (1...10).contains(columns) else { return }
+        let table = NSTextTable(); table.numberOfColumns = columns
         let content = NSMutableAttributedString()
-        for row in 0..<3 {
-            for column in 0..<2 {
+        for row in 0..<rows {
+            for column in 0..<columns {
                 let cell = NSTextTableBlock(table: table, startingRow: row, rowSpan: 1, startingColumn: column, columnSpan: 1)
                 cell.setBorderColor(.gray); cell.setWidth(0.5, type: .absoluteValueType, for: .border)
                 cell.setWidth(5, type: .absoluteValueType, for: .padding)
