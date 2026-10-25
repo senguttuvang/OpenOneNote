@@ -60,7 +60,7 @@ import AppKit
                 let cell = NSTextTableBlock(table: table, startingRow: row, rowSpan: 1, startingColumn: column, columnSpan: 1)
                 cell.setBorderColor(.gray); cell.setWidth(0.5, type: .absoluteValueType, for: .border)
                 cell.setWidth(5, type: .absoluteValueType, for: .padding)
-                cell.setContentWidth(220, type: .absoluteValueType)
+                cell.setContentWidth(440 / Double(columns), type: .absoluteValueType)
                 let style = NSMutableParagraphStyle(); style.textBlocks = [cell]
                 content.append(NSAttributedString(string: row == 0 ? "Column \(column + 1)\n" : "Cell\n", attributes: [
                     .font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground, .paragraphStyle: style
