@@ -82,7 +82,7 @@ enum RibbonPalette {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             if kind == "highlight" || kind == "paper" || kind == "font" {
-                Button(kind == "font" ? "Automatic" : kind == "paper" ? "No Color" : "No Colour") { choose(nil) }.frame(maxWidth: .infinity).buttonStyle(.bordered)
+                Button(kind == "font" ? "Automatic" : kind == "paper" ? "No Color" : "No Colour") { choose(nil) }.buttonStyle(.plain).frame(maxWidth: .infinity).padding(.vertical, 3).overlay(Rectangle().stroke(.primary.opacity(0.7)))
             }
             if kind == "highlight" { grid(RibbonPalette.highlight, columns: 5, size: 24) }
             else if kind == "paper" { grid(zip(RibbonPalette.paperNames, RibbonPalette.paperHex).map { PaletteSwatch(name: $0, hex: $1) }, columns: 4, size: 40) }
@@ -92,8 +92,8 @@ enum RibbonPalette {
                 Text("Standard Colours").padding(.top, 6)
                 grid(RibbonPalette.standardHex.enumerated().map { PaletteSwatch(name: ["Rose", "Red", "Brown", "Dark Yellow", "Dark Green", "Dark Green", "Dark Teal", "Blue", "Light Blue", "Lavender"][$0], hex: $1) }, columns: 10, size: 16)
                 Divider()
-                Button("More Colours…") {}.disabled(true).help("Custom colour dialog is not available yet")
+                Button("More Colours…") {}.buttonStyle(.plain).disabled(true).help("Custom colour dialog is not available yet")
             }
-        }.padding(10).background(PaperPalette.canvas)
+        }.font(.system(size: 13)).padding(10).background(PaperPalette.canvas)
     }
 }

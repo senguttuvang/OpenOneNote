@@ -96,8 +96,9 @@ public enum EditorVerificationError: Error { case failed(String) }
 
     private static func gallery<V: View>(_ view: V, name: String, width: Double, height: Double, directory: URL) throws {
         let host = NSHostingView(rootView: view.preferredColorScheme(.dark))
-        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: width, height: height), styleMask: [.borderless], backing: .buffered, defer: false)
-        host.frame = NSRect(x: 0, y: 0, width: width, height: height); window.contentView = host
+        let size = NSSize(width: max(width, host.fittingSize.width), height: max(height, host.fittingSize.height))
+        let window = NSWindow(contentRect: NSRect(origin: .zero, size: size), styleMask: [.borderless], backing: .buffered, defer: false)
+        host.frame = NSRect(origin: .zero, size: size); window.contentView = host
         host.layoutSubtreeIfNeeded(); window.display()
         guard let bitmap = host.bitmapImageRepForCachingDisplay(in: host.bounds) else { throw EditorVerificationError.failed("Gallery bitmap allocation failed") }
         host.cacheDisplay(in: host.bounds, to: bitmap)
