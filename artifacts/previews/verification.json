@@ -5,6 +5,6 @@
   "renderScope" : "Real native views in hidden windows at 1728x1088, 1280x800 and 960x800; one pixel per point; prohibited activation policy",
   "scope" : "Local-first editor alpha; import and sync not implemented",
   "signature" : "Ad-hoc deep\/strict verification passed",
-  "sourceRevision" : "a15f431004eb4753a25e6bb16a707cb65e2c8b57",
+  "sourceRevision" : "044891b9854121215dea354d670b95ee5b566d69",
   "sourceState" : "committed"
 }
