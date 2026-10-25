@@ -72,12 +72,27 @@ public enum EditorVerificationError: Error { case failed(String) }
         withExtendedLifetime(coordinator) {}
     }
 
-    public static func render(session: NotebookSession, to url: URL, width: Double, height: Double) throws {
+    public static func renderInterface(session: NotebookSession, directory: URL) throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let commands = EditorCommands(session: session)
+        NotebookMenus.install(commands: commands)
+        for tab in ["Home", "Insert", "Draw", "View"] {
+            commands.tab = tab
+            try render(session: session, to: directory.appendingPathComponent("\(tab.lowercased())-1728.png"), width: 1728, height: 1088, commands: commands)
+        }
+        commands.tab = "Home"
+        try render(session: session, to: directory.appendingPathComponent("home-960.png"), width: 960, height: 800, commands: commands)
+        guard let native = NSApp.mainMenu else { throw EditorVerificationError.failed("Native menus missing") }
+        let inventory = NotebookMenus.inventory(native)
+        try JSONSerialization.data(withJSONObject: ["nativeMenuTitles": inventory, "ribbon": InterfaceCatalog.ribbon], options: [.prettyPrinted, .sortedKeys]).write(to: directory.appendingPathComponent("interface-inventory.json"))
+    }
+
+    public static func render(session: NotebookSession, to url: URL, width: Double, height: Double, commands: EditorCommands? = nil) throws {
         guard width.isFinite, height.isFinite, width >= 960, width <= 2560, height >= 600, height <= 2000 else {
             throw EditorVerificationError.failed("Preview dimensions are outside the supported window range")
         }
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: width, height: height), styleMask: [.borderless], backing: .buffered, defer: false)
-        let host = NSHostingView(rootView: EditorView(session: session))
+        let host = NSHostingView(rootView: EditorView(session: session, commands: commands))
         host.frame = NSRect(x: 0, y: 0, width: width, height: height)
         window.contentView = host
         host.layoutSubtreeIfNeeded()

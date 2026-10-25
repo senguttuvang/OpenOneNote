@@ -67,8 +67,14 @@ import AppKit
             }
         }
         let updated = NSMutableAttributedString(attributedString: attributedString())
-        let range = selectedRange(); updated.replaceCharacters(in: range, with: content)
-        replaceRichText(updated, selection: NSRange(location: range.location, length: content.length))
+        let range = selectedRange()
+        // A table cell must start a paragraph; otherwise TextKit adopts the preceding
+        // prose paragraph's style and silently discards the first cell boundary.
+        let prefix = range.location > 0 && (string as NSString).substring(with: NSRange(location: range.location - 1, length: 1)) != "\n" ? "\n" : ""
+        let insertion = NSMutableAttributedString(string: prefix, attributes: [.font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground])
+        insertion.append(content)
+        updated.replaceCharacters(in: range, with: insertion)
+        replaceRichText(updated, selection: NSRange(location: range.location + prefix.utf16.count, length: content.length))
         undoManager?.setActionName("Insert Table")
     }
 

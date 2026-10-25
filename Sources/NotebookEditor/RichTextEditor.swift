@@ -8,6 +8,7 @@ public struct RichTextEditor: NSViewRepresentable {
     public let onChange: (String, Data) -> Void
     public let onError: (Error) -> Void
     public var formatting: EditorFormatting?
+    public var lightCanvas = false
 
     public init(text: String, richText: Data?, undoManager: UndoManager, onChange: @escaping (String, Data) -> Void, onError: @escaping (Error) -> Void) {
         self.text = text; self.richText = richText; self.undoManager = undoManager; self.onChange = onChange; self.onError = onError
@@ -18,7 +19,7 @@ public struct RichTextEditor: NSViewRepresentable {
     public func makeNSView(context: Context) -> NSScrollView {
         let scroll = NSScrollView()
         scroll.borderType = .noBorder; scroll.hasVerticalScroller = true; scroll.autohidesScrollers = true
-        scroll.drawsBackground = true; scroll.backgroundColor = EditorTheme.background
+        scroll.drawsBackground = false
         scroll.documentView = makeTextView(coordinator: context.coordinator)
         return scroll
     }
@@ -40,6 +41,9 @@ public struct RichTextEditor: NSViewRepresentable {
         view.setAccessibilityLabel("Note text")
         view.delegate = coordinator
         coordinator.install(in: view, from: self)
+        Task { @MainActor [weak view, weak formatting] in
+            if let view, let formatting, formatting.target == nil { formatting.attach(view) }
+        }
         return view
     }
 
@@ -48,6 +52,17 @@ public struct RichTextEditor: NSViewRepresentable {
         guard let view = scroll.documentView as? NSTextView, !view.hasMarkedText() else { return }
         if context.coordinator.lastText != text || context.coordinator.lastRichText != richText {
             context.coordinator.install(in: view, from: self)
+        }
+        view.drawsBackground = false
+        view.insertionPointColor = lightCanvas ? .black : EditorTheme.foreground
+        if let manager = view.layoutManager {
+            let all = NSRange(location: 0, length: view.attributedString().length)
+            manager.removeTemporaryAttribute(.foregroundColor, forCharacterRange: all)
+            if lightCanvas {
+                view.attributedString().enumerateAttribute(.foregroundColor, in: all) { value, span, _ in
+                    if let color = value as? NSColor, color.isEqual(EditorTheme.foreground) || color.isEqual(NSColor.white) { manager.addTemporaryAttribute(.foregroundColor, value: NSColor.black, forCharacterRange: span) }
+                }
+            }
         }
     }
 
