@@ -33,3 +33,5 @@ swift run openonenote-dev inspection-app
 ```
 
 Inspection refuses an existing notebook path, uses a separate bundle identifier, orders its owned window behind the user's work and does not activate. Close only that agent-owned process after review. Normal app packaging remains separate.
+
+Paired actual screenshots were subsequently captured for Insert, Draw, View and Home, restoring Home afterward. They exposed additional grouping differences: vertical file/media tools, an abbreviated shape strip, dot-only thickness previews and compact View controls. The follow-up source uses the reference's horizontal file/media row, all14 shape previews in two rows, five labelled stroke samples, and large View tiles with the zoom field above Reset Zoom/Page Width. Unsupported controls remain disabled. Original artwork, font availability and unobserved dropdown internals remain differences; these changes do not establish full-match acceptance.

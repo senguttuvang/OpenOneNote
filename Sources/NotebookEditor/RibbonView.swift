@@ -96,61 +96,77 @@ import SwiftUI
     }
     private var insert: some View {
         Group {
-            VStack(spacing: 3) { Button { commands.perform("Table") } label: { Image(systemName: "tablecells").font(.system(size: 25)) }.disabled(!commands.canPerform("Table")); Menu("Table") { Button("Insert Table (3 × 2)") { commands.perform("Table") }.disabled(!formatting.available) }.fixedSize() }.frame(width: 48)
+            VStack(spacing: 3) { Button { commands.perform("Table") } label: { Image(systemName: "tablecells").font(.system(size: 28)) }.disabled(!commands.canPerform("Table")); Menu("Table") { Button("Insert Table (3 × 2)") { commands.perform("Table") }.disabled(!formatting.available) }.fixedSize() }.frame(width: 42)
             separator
-            VStack(alignment: .leading, spacing: 4) { small("File", "doc", command: "File…"); small("Printout", "doc.richtext", command: "Printout…"); small("Picture", "photo", command: "Picture…") }
-            Menu { Button("Screen Clipping") {}.disabled(true); Button("Screenshot") {}.disabled(true) } label: { VStack(spacing: 5) { Image(systemName: "camera.viewfinder").font(.system(size: 24)); Text("Screenshot").font(.system(size: 11)) } }.fixedSize().help("Screenshot • unavailable")
+            HStack(spacing: 0) {
+                large("File", "paperclip", width: 34, command: "File…")
+                large("Printout", "doc.text", width: 46, command: "Printout…")
+                large("Picture", "photo", width: 44, command: "Picture…")
+                largeMenu("Screenshot", "camera.viewfinder", width: 66, choices: ["Screen Clipping", "Screenshot"])
+            }
             separator
-            Button { linkOpen = true } label: { VStack(spacing: 5) { Image(systemName: "link").font(.system(size: 25)); Text("Link").font(.system(size: 11)) } }.disabled(!formatting.available)
-            large("Equation", "function")
+            Button { linkOpen = true } label: { tile("Link", "link", width: 36) }.disabled(!formatting.available)
             separator
-            VStack(alignment: .leading, spacing: 10) { small("Date", "calendar"); small("Date & Time", "calendar.badge.clock") }
+            large("Equation", "function", width: 46)
             separator
-            Menu { RibbonMenuContents(items: InterfaceCatalog.shapes.map { InterfaceItem($0) }, commands: commands) } label: {
-                VStack(spacing: 5) { HStack(spacing: 13) { Image(systemName: "line.diagonal"); Image(systemName: "arrow.up.right"); Image(systemName: "rectangle"); Image(systemName: "oval"); Image(systemName: "triangle") }; Text("Shapes").font(.system(size: 11)) }.frame(width: 180)
-            }.fixedSize().help("Shapes • unavailable")
+            VStack(alignment: .leading, spacing: 10) { small("Date", "calendar"); small("Date & Time", "calendar.badge.clock") }.frame(width: 94, alignment: .leading)
             separator
-            large("Audio Recording", "mic")
-            VStack(alignment: .leading, spacing: 9) { small("Meeting Details", "calendar", command: "Meeting Details…"); small("Stickers", "face.smiling", command: "Stickers…") }
+            VStack(spacing: 2) {
+                ForEach(0..<2, id: \.self) { row in HStack(spacing: 2) {
+                    ForEach(0..<7, id: \.self) { column in
+                        let index = [0, 1, 2, 3, 4, 5, 6, 7, 9, 8, 10, 11, 12, 13][row * 7 + column]
+                        let name = InterfaceCatalog.shapes[index]
+                        Button {} label: { ShapeSample(kind: index).stroke(Color(nsColor: EditorTheme.link).opacity(0.7), lineWidth: 1.2).frame(width: 20, height: 18).frame(width: 24, height: 24) }.disabled(true).help(name + " • unavailable").accessibilityLabel(name)
+                    }
+                } }
+            }.padding(.horizontal, 5).frame(width: 190, height: 58).background(Color.white.opacity(0.085)).clipShape(RoundedRectangle(cornerRadius: 3))
+            separator
+            large("Audio Recording", "mic", width: 55)
+            separator
+            HStack(spacing: 0) { large("Meeting Details", "calendar", width: 52, command: "Meeting Details…"); large("Stickers", "face.smiling", width: 44, command: "Stickers…") }
         }
     }
     private var draw: some View {
         Group {
-            large("Text Mode", "text.cursor")
-            large("Lasso Select", "lasso")
-            large("Insert Space", "arrow.up.and.down.and.arrow.left.and.right")
+            HStack(spacing: 0) { large("Text Mode", "text.cursor", width: 37); large("Lasso Select", "lasso", width: 37); large("Insert Space", "arrow.up.and.down", width: 37) }.padding(.leading, -7)
             separator
-            Menu { RibbonMenuContents(items: ["Small Eraser", "Medium Eraser", "Large Eraser", "Stroke Eraser"].map { InterfaceItem($0) }, commands: commands) } label: { VStack(spacing: 5) { Image(systemName: "eraser").font(.system(size: 25)); Text("Eraser").font(.system(size: 11)) } }.fixedSize()
-            large("Pen", "pencil.tip"); large("Marker", "pencil.tip.crop.circle"); large("Highlighter", "highlighter")
+            HStack(spacing: 0) {
+                largeMenu("Eraser", "eraser.fill", width: 50, choices: ["Small Eraser", "Medium Eraser", "Large Eraser", "Stroke Eraser"])
+                large("Pen", "pencil.tip", width: 40); large("Marker", "pencil.tip.crop.circle", width: 45); large("Highlighter", "highlighter", width: 57)
+            }
             separator
-            HStack(spacing: 10) { ForEach([Color.brown, .blue, .green, .red], id: \.self) { color in Button {} label: { Circle().fill(color).frame(width: 22, height: 22) }.disabled(true) } }.accessibilityLabel("Suggested colours")
-            colorMenu("Ink Colour", symbol: "paintpalette", key: nil)
+            HStack(spacing: 13) { ForEach([Color.gray, .blue, .green, .red], id: \.self) { color in Button {} label: { Circle().fill(color).frame(width: 21, height: 21) }.disabled(true) } }.frame(width: 172, height: 58).background(Color.white.opacity(0.085)).clipShape(RoundedRectangle(cornerRadius: 3)).accessibilityLabel("Suggested colours")
+            largeMenu("Ink Colour", "pencil.tip", width: 40, choices: ["Automatic", "Blue", "Green", "Red", "More Colours…"])
             separator
-            VStack(spacing: 7) { HStack(spacing: 14) { ForEach([0.25, 0.35, 0.5, 0.7, 1.0], id: \.self) { thickness in Button {} label: { Circle().fill(Color.primary).frame(width: thickness * 12 + 2, height: thickness * 12 + 2).frame(width: 22, height: 22) }.disabled(true).help("\(thickness.formatted()) mm") } }; Text("Thickness").font(.system(size: 11)) }.accessibilityLabel("Thickness")
+            HStack(spacing: 0) { ForEach([0.25, 0.35, 0.5, 0.7, 1.0], id: \.self) { thickness in
+                Button {} label: { VStack(spacing: 5) { StrokeSample().stroke(Color.primary.opacity(0.6), style: StrokeStyle(lineWidth: thickness * 4, lineCap: .round)).frame(width: 48, height: 26); Text("\(thickness.formatted()) mm").font(.system(size: 11)) }.frame(width: 61) }.disabled(true).help("\(thickness.formatted()) mm").accessibilityLabel("\(thickness.formatted()) mm")
+            } }.padding(.horizontal, 15).frame(width: 335, height: 58).background(Color.white.opacity(0.085)).clipShape(RoundedRectangle(cornerRadius: 3))
         }
     }
     private var view: some View {
         Group {
-            large("New Window", "macwindow.badge.plus")
-            large("Switch Background", "circle.lefthalf.filled")
+            HStack(spacing: 0) { large("New Window", "macwindow.badge.plus", width: 48); large("Switch Background", "sun.max", width: 64) }.padding(.leading, -8)
             separator
-            VStack(alignment: .leading, spacing: 8) {
-                menuLabel("Page Versions", "clock.arrow.circlepath", choices: ["Page Versions", "Delete All Versions in Section"])
-                menuLabel("Deleted Notes", "trash", choices: ["View Deleted Notes", "Empty Deleted Notes", "Disable History for This Notebook"])
+            HStack(spacing: 0) {
+                largeMenu("Page Versions", "doc.on.doc", width: 50, choices: ["Page Versions", "Delete All Versions in Section"])
+                largeMenu("Deleted Notes", "trash", width: 44, choices: ["View Deleted Notes", "Empty Deleted Notes", "Disable History for This Notebook"])
             }
             separator
-            icon("Zoom Out", "minus.magnifyingglass")
-            icon("Zoom In", "plus.magnifyingglass")
-            RibbonCombo(label: "Zoom", value: "\(Int(commands.zoom * 100))%", choices: ["50%", "75%", "100%", "125%", "150%", "200%"]) { let text = $0.replacingOccurrences(of: "%", with: ""); if let value = Double(text), (50...200).contains(value) { commands.zoom = value / 100 } }.frame(width: 65, height: 24)
-            VStack(alignment: .leading, spacing: 8) { small("Reset Zoom", "1.magnifyingglass"); small("Page Width", "arrow.left.and.right") }
-            separator
-            menuLabel("Password Protection", "lock", choices: ["Protect Current Section", "Lock All Protected Sections"])
-            separator
-            VStack(alignment: .leading, spacing: 8) {
-                colorMenu("Paper Colour", symbol: "paintpalette", key: nil)
-                menuLabel("Paper Style", "list.bullet.rectangle", choices: InterfaceCatalog.paperStyles + ["Always Create Pages with Rule Lines"])
+            HStack(spacing: 0) {
+                large("Zoom Out", "minus.magnifyingglass", width: 38); large("Zoom In", "plus.magnifyingglass", width: 38)
+                VStack(alignment: .leading, spacing: 2) {
+                    RibbonCombo(label: "Zoom", value: "\(Int(commands.zoom * 100))%", choices: ["50%", "75%", "100%", "125%", "150%", "200%"]) { let text = $0.replacingOccurrences(of: "%", with: ""); if let value = Double(text), (50...200).contains(value) { commands.zoom = value / 100 } }.frame(width: 92, height: 22)
+                    small("Reset Zoom", "doc.plaintext"); small("Page Width", "arrow.left.and.right")
+                }.frame(width: 92)
             }
-            VStack(alignment: .leading, spacing: 8) { small("Hide Page Title", "doc.text"); small("Hide Authors", "person") }
+            separator
+            largeMenu("Password Protection", "lock", width: 60, choices: ["Protect Current Section", "Lock All Protected Sections"])
+            separator
+            HStack(spacing: 0) {
+                largeMenu("Paper Colour", "paintpalette", width: 50, choices: ["Automatic", "White", "Blue", "Yellow", "Green", "More Colours…"])
+                largeMenu("Paper Style", "list.bullet.rectangle", width: 50, choices: InterfaceCatalog.paperStyles + ["Always Create Pages with Rule Lines"])
+                large("Hide Page Title", "doc.text", width: 56); large("Hide Authors", "person.text.rectangle", width: 50)
+            }
         }
     }
     private var chevron: some View { Image(systemName: "chevron.down").font(.system(size: 7)) }
@@ -166,8 +182,15 @@ import SwiftUI
     private func small(_ title: String, _ symbol: String, command: String? = nil) -> some View {
         Button { commands.perform(command ?? title) } label: { Label(title, systemImage: symbol).font(.system(size: 12)).lineLimit(1) }.disabled(!commands.canPerform(command ?? title)).help(commands.canPerform(command ?? title) ? title : title + " • unavailable in the local editor")
     }
-    private func large(_ title: String, _ symbol: String) -> some View {
-        Button { commands.perform(title) } label: { VStack(spacing: 5) { Image(systemName: symbol).font(.system(size: 25)); Text(title).font(.system(size: 11)).lineLimit(2).multilineTextAlignment(.center) }.frame(minWidth: 40) }.disabled(!commands.canPerform(title)).help(commands.canPerform(title) ? title : title + " • unavailable in the local editor").accessibilityLabel(title)
+    private func tile(_ title: String, _ symbol: String, width: Double) -> some View {
+        let split: [String: String] = ["Text Mode": "Text\nMode", "Lasso Select": "Lasso\nSelect", "Insert Space": "Insert\nSpace", "Audio Recording": "Audio\nRecording", "Meeting Details": "Meeting\nDetails", "New Window": "New\nWindow", "Switch Background": "Switch\nBackground", "Page Versions": "Page\nVersions", "Deleted Notes": "Deleted\nNotes", "Zoom Out": "Zoom\nOut", "Zoom In": "Zoom\nIn", "Password Protection": "Password\nProtection", "Paper Colour": "Paper\nColour", "Paper Style": "Paper\nStyle", "Hide Page Title": "Hide\nPage Title", "Hide Authors": "Hide\nAuthors", "Ink Colour": "Ink\nColour"]
+        return VStack(spacing: 4) { Image(systemName: symbol).font(.system(size: 28)).frame(height: 30); Text(split[title] ?? title).font(.system(size: 11)).lineLimit(2).multilineTextAlignment(.center).frame(width: width).fixedSize(horizontal: false, vertical: true) }.frame(width: width, height: 64, alignment: .top)
+    }
+    private func large(_ title: String, _ symbol: String, width: Double = 48, command: String? = nil) -> some View {
+        Button { commands.perform(command ?? title) } label: { tile(title, symbol, width: width) }.disabled(!commands.canPerform(command ?? title)).help(commands.canPerform(command ?? title) ? title : title + " • unavailable in the local editor").accessibilityLabel(title)
+    }
+    private func largeMenu(_ title: String, _ symbol: String, width: Double, choices: [String]) -> some View {
+        Menu { RibbonMenuContents(items: choices.map { InterfaceItem($0) }, commands: commands) } label: { tile(title, symbol, width: width) }.menuIndicator(.hidden).fixedSize().help(title).accessibilityLabel(title)
     }
     private func dropdown(_ title: String, items: [String]) -> some View { Menu { RibbonMenuContents(items: items.map { InterfaceItem($0) }, commands: commands) } label: { chevron }.menuIndicator(.hidden).fixedSize().help(title + " options") }
     private func splitIcon(_ title: String, _ symbol: String, options: [String]) -> some View { HStack(spacing: 0) { icon(title, symbol); dropdown(title, items: options) } }
@@ -195,7 +218,7 @@ import SwiftUI
             ForEach(["Automatic", "White", "Black", "Blue", "Red", "Green", "Yellow", "Purple", "No Colour"], id: \.self) { name in
                 Button(name) {
                     guard let key else { return }
-                    let colors: [String: NSColor] = ["Automatic": EditorTheme.foreground, "White": .white, "Black": .black, "Blue": EditorTheme.link, "Red": .systemRed, "Green": .systemGreen, "Yellow": NSColor(srgbRed: 0.3, green: 0.3, blue: 0, alpha: 1), "Purple": .systemPurple, "No Colour": .clear]
+                    let colors: [String: NSColor] = ["Automatic": EditorTheme.foreground, "White": .white, "Black": .black, "Blue": EditorTheme.link, "Red": .systemRed, "Green": .systemGreen, "Yellow": NSColor(srgbRed: 0.3, green: 0.3, blue: 0, alpha: 1), "Purple": .systemPurple, "No Colour": key == .foregroundColor ? EditorTheme.foreground : .clear]
                     formatting.attribute(key, value: colors[name]!, action: title)
                 }.disabled(key == nil || !formatting.available)
             }
@@ -236,5 +259,44 @@ import SwiftUI
         init(_ parent: RibbonCombo) { self.parent = parent }
         func comboBoxSelectionDidChange(_ notification: Notification) { if let combo = notification.object as? NSComboBox { parent.change(combo.stringValue) } }
         func controlTextDidEndEditing(_ notification: Notification) { if let combo = notification.object as? NSComboBox { parent.change(combo.stringValue) } }
+    }
+}
+
+private struct StrokeSample: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path(); path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addCurve(to: CGPoint(x: rect.midX, y: rect.midY), control1: CGPoint(x: rect.width * 0.2, y: rect.minY), control2: CGPoint(x: rect.width * 0.25, y: rect.minY))
+        path.addCurve(to: CGPoint(x: rect.maxX, y: rect.minY), control1: CGPoint(x: rect.width * 0.8, y: rect.maxY), control2: CGPoint(x: rect.width * 0.8, y: rect.maxY))
+        return path
+    }
+}
+
+private struct ShapeSample: Shape {
+    let kind: Int
+    func path(in r: CGRect) -> Path {
+        var p = Path(); let left = r.minX + 1, right = r.maxX - 1, top = r.minY + 1, bottom = r.maxY - 1
+        switch kind {
+        case 0, 1, 2:
+            p.move(to: CGPoint(x: left, y: top)); p.addLine(to: CGPoint(x: right, y: bottom))
+            if kind > 0 { p.move(to: CGPoint(x: right - 7, y: bottom)); p.addLine(to: CGPoint(x: right, y: bottom)); p.addLine(to: CGPoint(x: right, y: bottom - 7)) }
+            if kind == 2 { p.move(to: CGPoint(x: left + 7, y: top)); p.addLine(to: CGPoint(x: left, y: top)); p.addLine(to: CGPoint(x: left, y: top + 7)) }
+        case 3, 4, 5:
+            p.move(to: CGPoint(x: left, y: top)); p.addLine(to: CGPoint(x: right, y: top)); p.addLine(to: CGPoint(x: right, y: bottom))
+            if kind > 3 { p.move(to: CGPoint(x: right - 5, y: bottom - 5)); p.addLine(to: CGPoint(x: right, y: bottom)); p.addLine(to: CGPoint(x: right + 1, y: bottom - 5)) }
+            if kind == 5 { p.move(to: CGPoint(x: left + 5, y: top - 1)); p.addLine(to: CGPoint(x: left, y: top)); p.addLine(to: CGPoint(x: left + 5, y: top + 5)) }
+        case 6: p.addRect(r.insetBy(dx: 1, dy: 1))
+        case 7: p.addEllipse(in: r.insetBy(dx: 1, dy: 1))
+        case 8:
+            p.move(to: CGPoint(x: r.midX, y: top)); p.addLine(to: CGPoint(x: right, y: bottom)); p.addLine(to: CGPoint(x: left, y: bottom)); p.closeSubpath()
+        case 9:
+            p.move(to: CGPoint(x: left + 4, y: top)); p.addLine(to: CGPoint(x: right, y: top)); p.addLine(to: CGPoint(x: right - 4, y: bottom)); p.addLine(to: CGPoint(x: left, y: bottom)); p.closeSubpath()
+        case 10:
+            p.move(to: CGPoint(x: r.midX, y: top)); p.addLine(to: CGPoint(x: right, y: r.midY)); p.addLine(to: CGPoint(x: r.midX, y: bottom)); p.addLine(to: CGPoint(x: left, y: r.midY)); p.closeSubpath()
+        default:
+            let center = CGPoint(x: kind == 11 ? left : r.midX, y: kind == 11 ? bottom : r.midY)
+            p.move(to: CGPoint(x: center.x, y: bottom)); p.addLine(to: CGPoint(x: center.x, y: top)); p.move(to: CGPoint(x: left, y: center.y)); p.addLine(to: CGPoint(x: right, y: center.y))
+            if kind == 13 { p.move(to: center); p.addLine(to: CGPoint(x: right, y: bottom)) }
+        }
+        return p
     }
 }
