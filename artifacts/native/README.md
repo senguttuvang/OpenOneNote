@@ -1,9 +1,11 @@
 # Native Swift Foundation Build
 
-This directory retains the compiled independent Swift foundation alongside its reproducible source. It contains command-line tools, not a graphical OneNote replacement or a signed/notarized application release.
+This directory retains independent native Swift app/tool builds alongside reproducible source and checksums. The current graphical app is a local-first editing alpha, with an ad-hoc development signature and no notarization.
 
-The archive includes `openonenote`, `onenote-research`, a synthetic example notebook, binary hashes, dependency/toolchain metadata, and a source-revision manifest. Requires Apple Silicon and macOS 14 or newer. Intel source builds have not been verified.
+`openonenote-app-arm64-<revision>.tar.gz` contains `OpenOneNote.app`. Extract it to a new directory and open the app. Requires Apple Silicon and targets macOS 14 or newer; Intel builds have not been verified. The app's resource manifest records the committed source revision. The earlier `openonenote-foundation-*` archives preserve the initial CLI-only milestones, including a synthetic notebook and original build metadata.
+
+The recommended build is [openonenote-app-arm64-2d0f768.tar.gz](openonenote-app-arm64-2d0f768.tar.gz), version 0.1.1 from source tag `native-alpha-0.1.1-source`. Its adjacent checksum and the native [preview verification](../previews/verification.json) record the preserved build and test scope. The earlier 0.1.0 graphical build is also retained. Version 0.1.1 wraps actor callbacks explicitly to avoid a Swift 6.1 compiler crash; it was verified with Swift 6.1.2 and 6.4 before Actions was disabled.
 
 Retrieve the archive with `git lfs pull`, validate its adjacent `.sha256` file, extract to a new directory, and run `openonenote inspect example-notebook.json` from that directory. The executables do not need the original Microsoft archives.
 
-Build and verify from source with `sh Tools/check.sh`; create a new compiled archive with `sh Tools/package-build.sh`. The embedded revision identifies the program source used for that build; later commits may add delivery metadata or packaging instructions without changing those sources.
+Build and verify with `swift run openonenote-dev check`; assemble the app with `swift run openonenote-dev app`; archive committed sources with `swift run openonenote-dev package-app` or `package-tools`. The embedded revision identifies the program source; later artifact/documentation commits may leave those program sources unchanged. No project shell scripts are required.

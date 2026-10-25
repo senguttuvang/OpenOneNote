@@ -8,5 +8,5 @@
   "thirdPartyResearchRoots": ["research"],
   "generatedBuildRoots": [".build", "artifacts/native", "scratch"],
   "indexingPolicy": "No third-party research uploads; verify provider exclusions before indexing",
-  "validation": "sh Tools/check.sh"
+  "validation": "swift run openonenote-dev check"
 }

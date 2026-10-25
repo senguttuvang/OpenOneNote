@@ -6,9 +6,12 @@ public struct NoteBlock: Codable, Equatable, Identifiable, Sendable {
     public var y: Double
     public var width: Double
     public var text: String
+    public var height: Double?
+    public var richText: Data?
 
-    public init(id: UUID = UUID(), x: Double = 48, y: Double = 120, width: Double = 720, text: String = "") {
+    public init(id: UUID = UUID(), x: Double = 48, y: Double = 120, width: Double = 720, text: String = "", height: Double? = nil, richText: Data? = nil) {
         self.id = id; self.x = x; self.y = y; self.width = width; self.text = text
+        self.height = height; self.richText = richText
     }
 }
 
@@ -52,6 +55,7 @@ public struct Notebook: Codable, Equatable, Identifiable, Sendable {
                     try register(block.id)
                     guard block.x.isFinite, block.y.isFinite, block.width.isFinite,
                           block.x >= 0, block.y >= 0, block.width > 0 else { throw NotebookError.invalidGeometry(block.id) }
+                    if let height = block.height, !height.isFinite || height <= 0 { throw NotebookError.invalidGeometry(block.id) }
                 }
             }
         }

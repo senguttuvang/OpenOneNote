@@ -16,12 +16,12 @@ Every regular file has a SHA-256 inventory entry; symlinks retain their destinat
 Use a new immutable label:
 
 ```sh
-sh Tools/capture-originals.sh '/Applications/Microsoft OneNote.app' 'new-version-build'
+swift run openonenote-dev capture '/Applications/Microsoft OneNote.app' 'new-version-build'
 ```
 
 The command rejects existing outputs and does not install, patch, or launch OneNote. It currently requires an arm64 slice. A failed partial capture remains visible for investigation.
 
-The initial capture also includes decoded ribbon XML, selectors, selected original resources, and an `mso40ui` symbol table. Additional extraction commands are retained in `capture-additional-evidence.sh`. `ibtool` rejected the compiled NIB; error XML is retained. No editable XIB source was recovered.
+The initial capture also includes decoded ribbon XML, selectors, selected original resources, and an `mso40ui` symbol table. The Swift CLI owns these additional extraction steps. `ibtool` rejected the compiled NIB; error XML is retained. No editable XIB source was recovered. New captures write adjacent archive checksum files without rewriting the initial capture's `SHA256SUMS`.
 
 ## Verify An Archive
 
@@ -40,11 +40,8 @@ Use an empty destination. The verifier checks every captured file/link but does 
 Ghidra 12.2 imported the arm64 slice with external framework loading and whole-program analysis disabled. The version-specific `Tools/ghidra/ExportSelectedMethods.java` disassembles/decompiles six selected addresses with a 20-second budget per function. Outputs have inferred types and imperfect calls; they are not original source.
 
 ```sh
-mkdir -p scratch/ghidra research/decompiled/new-sample
-lipo '/Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote' -thin arm64 -output scratch/onenote-arm64
-/opt/homebrew/opt/ghidra/libexec/support/analyzeHeadless scratch/ghidra OpenOneNote-16.114.1 \
-  -import scratch/onenote-arm64 -noanalysis -max-cpu 2 \
-  -scriptPath Tools/ghidra -postScript ExportSelectedMethods.java "$PWD/research/decompiled/new-sample"
+swift run openonenote-dev decompile-sample '/Applications/Microsoft OneNote.app' 'new-sample' \
+  /opt/homebrew/opt/ghidra/libexec/support/analyzeHeadless
 ```
 
 Addresses apply only to the captured build. The two sampled Copilot bridge methods are no-op bodies and do not establish feature behavior. The generated Ghidra project is preserved as an archive under `originals/` for resuming analysis. No full call graph, complete decompilation, Swift source recovery, private sync-protocol reconstruction, or Windows-binary comparison has been performed.

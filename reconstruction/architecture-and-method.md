@@ -6,7 +6,7 @@ This proposal defines an independent native Mac notebook application informed by
 
 **SwiftUI for the application shell; AppKit/TextKit for editing and input; a Swift-owned notebook model; explicit storage and compatibility adapters.** Reconstruct the useful notebook/canvas behavior rather than copying Microsoft's Office framework stack.
 
-The initial sequencing assumes local-first editing. Whether cloud notebook access or visual/canvas parity should come first remains a user priority decision. These adapters are separate so changing the priority does not require replacing the model.
+The user confirmed **local-first Mac editing first**, with import and cloud integration later. These adapters remain separate from the notebook model.
 
 ## Proposed Boundaries
 
@@ -29,7 +29,7 @@ The diagram shows responsibility/dependency boundaries. Compatibility adapters t
 - SwiftUI window/sidebar hierarchy for notebooks, sections, and pages; standard macOS menus, toolbar, search, focus restoration, and accessibility.
 - Preserve the familiar notebook → section → page relationship. A notebook editor needs a real content surface, not an imitation ribbon full of inactive actions.
 - SwiftUI is appropriate for composition and inspector controls. Bridge the editing surface with `NSViewRepresentable`; avoid relaying every keystroke through whole-document SwiftUI state replacement.
-- The graphical shell is proposed; the current deliverable is the compiling core and CLI.
+- The initial graphical shell is implemented: notebook/section/page navigation and naming, page creation, native rich-text containers, formatting, and local save/reopen. Microsoft OneNote visual/behavioral parity remains unverified.
 
 ### Editing Surface
 
@@ -45,7 +45,7 @@ The diagram shows responsibility/dependency boundaries. Compatibility adapters t
 - Stable IDs independent from OneNote IDs. Preserve source IDs and import provenance in adapter metadata.
 - Geometry in document points; viewport transforms outside the stored model. Ordered content and stacking order need explicit representation.
 - Links reference stable page/block IDs; attachments are content-addressed assets with media metadata. Import must retain originals when conversion is lossy.
-- Rich text, section groups, subpages, media, and ink are proposed extensions. The current model implements notebook/section/page and positioned plain-text blocks only.
+- The current model implements notebook/section/page and positioned text containers with optional height and an RTF payload. RTF is the initial AppKit adapter representation; a richer semantic model, section groups, subpages, media, and ink remain later extensions. Original plain-text foundation files remain readable.
 
 ### Persistence And Recovery
 
@@ -76,8 +76,8 @@ The diagram shows responsibility/dependency boundaries. Compatibility adapters t
 
 1. **Preserve a build:** immutable archives, per-file hashes, signatures, tool versions, command logs, and architecture slice. Completed for the captured build.
 2. **Map responsibilities:** imports, Objective-C classes, ribbon structure, JS bundles, selected assembly/pseudocode. Completed at the limited scope documented in the research report.
-3. **Write behavioral contracts:** use synthetic notes to record input, selection, layout, undo, serialization, import/export, and accessibility outcomes. No real notebook contents are required. This stage is proposed.
-4. **Build a vertical slice:** one local notebook, section, page, editable text container, native undo, atomic persistence, close/reopen. Core persistence exists; native editing remains to be built.
+3. **Write behavioral contracts:** synthetic native tests now cover text editing, formatting, undo/redo, corruption, failed-save recovery, and save/reopen. Reference OneNote behavior, import fidelity, and manual accessibility tests remain to be recorded.
+4. **Build a vertical slice:** implemented one local notebook with sections/pages, editable text containers, native text undo, and atomic local save/reopen. Page navigation clears undo history to avoid invisible native text-view targets. Full window/keyboard/VoiceOver interaction testing remains separate from the owned-view checks.
 5. **Extend by capability:** positioned containers, rich text/lists, tables, attachments, search, links, ink, export, and compatibility. Each capability has its own fixtures and acceptance evidence.
 6. **Validate parity:** compare reference behavior with the Swift application using the same fixtures, viewport dimensions, and interaction sequence. Maintain explicit supported/partial/unsupported statuses.
 7. **Harden:** migrations, crash recovery, accessibility, performance, packaging/signing, and only then two-way sync or collaboration.
@@ -95,4 +95,4 @@ Pseudocode is evidence for hypotheses. An independently written behavior specifi
 
 ## Implemented Foundation
 
-The Swift package builds two libraries (`NotebookCore`, `NotebookPersistence`) and two CLIs (`openonenote`, `onenote-research`). Seven tests cover data preservation, invalid geometry, duplicate IDs, failure preservation, and inward dependencies. These establish a starting point; the GUI, rich-text engine integration, SQLite store, import/export adapters, and sync are not implemented.
+The Swift package separates notebook core, persistence, native editor, and development tooling. The `OpenOneNoteMac` executable supplies the app lifecycle and menus; `openonenote-dev` owns project checks, build/sign/package, and research capture. Tests exercise real AppKit text editing and formatting, undo/redo, Unicode/RTF persistence, geometry, error preservation, process boundaries, and Swift-only automation. Production transactional storage, import/export, ink, attachments, and sync are not implemented. The local `.app` has an ad-hoc development signature and is not notarized.

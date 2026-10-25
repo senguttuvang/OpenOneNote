@@ -1,6 +1,6 @@
 # OpenOneNote
 
-OpenOneNote preserves a private study of OneNote for Mac alongside an independent native Swift reconstruction.
+OpenOneNote preserves a private study of OneNote for Mac alongside an independent, local-first native Swift notebook editor.
 
 ## Findings
 
@@ -15,22 +15,39 @@ Read [the findings](research/findings.md), [architecture and reconstruction meth
 - **`research/assets/16.114.1/`**: original icon, notices, Office JS API, and React Native bundles for direct inspection. All framework resources also remain in the app archive.
 - **`research/decompiled/16.114.1/`**: six sampled Ghidra pseudocode exports and logs.
 - **`reconstruction/` / `specs/`**: design, sequencing, compatibility strategy, acceptance criteria.
-- **`Sources/` / `Tests/`**: independent Swift code and tests.
-- **`artifacts/native/`**: compiled foundation distribution and provenance. This milestone is a CLI/core build; the graphical notebook application is future work.
+- **`Sources/` / `Tests/`**: independent Swift notebook core, persistence, AppKit/SwiftUI editor, development CLI, and tests.
+- **`artifacts/native/`**: compiled `.app` and earlier foundation distributions, checksums, and provenance.
+- **`artifacts/previews/`**: background renders of the real native views at wide and compact window sizes.
 
-## Run The Swift Foundation
+## Build And Open The Mac App
 
 Requires macOS 14 or newer and Swift 6. Microsoft binaries are unnecessary for building and testing.
 
 ```sh
 git clone git@github.com:senguttuvang/OpenOneNote.git
 cd OpenOneNote
-sh Tools/check.sh
-swift run openonenote create-demo /tmp/openonenote-demo.json
-swift run openonenote inspect /tmp/openonenote-demo.json
+swift run openonenote-dev check
+swift run openonenote-dev app
+swift run openonenote-dev verify-app
+open dist/OpenOneNote.app
 ```
 
-`create-demo` refuses to overwrite an existing path. The foundation has stable IDs, sections, pages, positioned text blocks, geometry validation, versioned JSON, and atomic saves. Rich-text editing and sync remain proposed.
+The alpha supports notebook/section/page navigation and naming, positioned/resizable rich-text containers, bold/italic, the Mac font panel, native text undo/redo, and debounced atomic local saves. Normal launch stores its notebook at `~/Library/Application Support/OpenOneNote/notebook.json`; an explicit file can be selected with `OpenOneNoteMac --notebook /path/to/notebook.json`.
+
+**Local-first is the confirmed priority.** Import, OneNote cloud synchronization, ink, attachments, search, section groups, and complete OneNote feature parity are later milestones. The current store is single-writer JSON with an RTF payload for native text formatting. Undo history is scoped to the active page and resets on navigation. Corrupt files are preserved; save failures retain in-memory edits for retry. This is a development alpha, not a production replacement for valuable notebooks.
+
+All project-owned build, verification, packaging, and capture orchestration is Swift. `openonenote-dev` invokes native tools with separate argument arrays. The local check command is the CI-equivalent gate. **GitHub Actions is disabled and its workflow removed to avoid Actions-credit consumption.** There are no maintained shell workflow scripts. Ghidra's exporter remains Java because it runs inside Ghidra's scripting API.
+
+## Foundation And Research Tools
+
+```sh
+swift run openonenote create-demo /tmp/openonenote-demo.json
+swift run openonenote inspect /tmp/openonenote-demo.json
+swift run openonenote-dev package-app
+swift run openonenote-dev help
+```
+
+`create-demo` refuses to overwrite existing data. Packaging requires committed program sources and refuses to overwrite an existing archive. See [the native build guide](artifacts/native/README.md), [design](DESIGN.md), and [existing Swift project references](reconstruction/swift-foundation-references.md).
 
 ## Retrieve Research Archives
 

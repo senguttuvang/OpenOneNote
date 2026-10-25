@@ -1,42 +1,98 @@
 Building for debugging...
-[5 / 26] NotebookCore
-[9 / 23] onenote-research-product
-[10 / 29] NotebookCore
-[13 / 16] onenote-research-product
-[15 / 16] onenote-research-product
-Build complete! (2.09 secs)
-Test Suite 'All tests' started at 2026-10-25 16:06:38.657.
-Test Suite 'All tests' passed at 2026-10-25 16:06:38.659.
-	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.003) seconds
+[1 / 1]
+Build complete! (0.38 secs)
+Building for debugging...
+[Computing dependencies]
+[5 / 34] NotebookCore
+[8 / 34] NotebookPersistence
+[11 / 27] NotebookEditor
+[13 / 28] NotebookEditor
+Build complete! (3.00 secs)
+Test Suite 'All tests' started at 2026-10-25 17:55:39.249.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.250.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'All tests' started at 2026-10-25 17:55:39.370.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.371.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'All tests' started at 2026-10-25 17:55:39.494.
+Test Suite 'All tests' passed at 2026-10-25 17:55:39.496.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
 ◇ Test run started.
 ↳ Testing Library Version: 2084
 ↳ Target Platform: arm64e-apple-macos14.0
-◇ Test invalidCoordinatesAreRejected() started.
-◇ Test coreAndPersistenceKeepDependenciesInward() started.
-◇ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() started.
-◇ Test invalidGeometryCannotOverwriteExistingNotebook() started.
+◇ Suite EditorTests started.
+◇ Test realNativeTextViewEditUndoRedoAndReopen() started.
+✔ Test realNativeTextViewEditUndoRedoAndReopen() passed after 0.145 seconds.
+◇ Test boldUnicodeRichTextSurvivesSaveAndReopen() started.
+✔ Test boldUnicodeRichTextSurvivesSaveAndReopen() passed after 0.005 seconds.
+◇ Test sectionAndGeometryCommandsSupportUndoAndPersist() started.
+✔ Test sectionAndGeometryCommandsSupportUndoAndPersist() passed after 0.003 seconds.
+◇ Test corruptNotebookCannotBeReplacedOnOpenOrSave() started.
+✔ Test corruptNotebookCannotBeReplacedOnOpenOrSave() passed after 0.003 seconds.
+◇ Test saveFailureRetainsInMemoryEditsForRetry() started.
+✔ Test saveFailureRetainsInMemoryEditsForRetry() passed after 0.006 seconds.
+◇ Test invalidRichTextDoesNotOverwriteAValidNotebookContainer() started.
+✔ Test invalidRichTextDoesNotOverwriteAValidNotebookContainer() passed after 0.002 seconds.
+◇ Test navigatingToAnotherPageClearsInvisibleTextUndoTargets() started.
+✔ Test navigatingToAnotherPageClearsInvisibleTextUndoTargets() passed after 0.001 seconds.
+✔ Suite EditorTests passed after 0.168 seconds.
+✔ Test run with 7 tests in 1 suite passed after 0.168 seconds.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
 ◇ Test architectureRuleRejectsUIAndOutwardImports() started.
-◇ Test corruptMissingAndFutureFilesFailWithoutReplacement() started.
+◇ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() started.
+◇ Test invalidContainerHeightIsRejected() started.
 ◇ Test duplicateIDsAreRejectedAcrossHierarchy() started.
+◇ Test corruptMissingAndFutureFilesFailWithoutReplacement() started.
+◇ Test coreAndPersistenceKeepDependenciesInward() started.
+◇ Test invalidCoordinatesAreRejected() started.
+◇ Test invalidGeometryCannotOverwriteExistingNotebook() started.
+◇ Test plainFoundationNotebookRemainsReadableWithoutRichTextFields() started.
 ✔ Test architectureRuleRejectsUIAndOutwardImports() passed after 0.001 seconds.
+✔ Test plainFoundationNotebookRemainsReadableWithoutRichTextFields() passed after 0.001 seconds.
 ✔ Test duplicateIDsAreRejectedAcrossHierarchy() passed after 0.001 seconds.
+✔ Test invalidContainerHeightIsRejected() passed after 0.001 seconds.
 ✔ Test invalidCoordinatesAreRejected() passed after 0.001 seconds.
-✔ Test coreAndPersistenceKeepDependenciesInward() passed after 0.003 seconds.
-✔ Test invalidGeometryCannotOverwriteExistingNotebook() passed after 0.005 seconds.
-✔ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() passed after 0.006 seconds.
-✔ Test corruptMissingAndFutureFilesFailWithoutReplacement() passed after 0.015 seconds.
-✔ Test run with 7 tests in 0 suites passed after 0.015 seconds.
+✔ Test coreAndPersistenceKeepDependenciesInward() passed after 0.002 seconds.
+✔ Test invalidGeometryCannotOverwriteExistingNotebook() passed after 0.003 seconds.
+✔ Test preservesIdentityUnicodeAndGeometryAcrossSaveAndReload() passed after 0.005 seconds.
+✔ Test corruptMissingAndFutureFilesFailWithoutReplacement() passed after 0.011 seconds.
+✔ Test run with 9 tests in 0 suites passed after 0.011 seconds.
+◇ Test run started.
+↳ Testing Library Version: 2084
+↳ Target Platform: arm64e-apple-macos14.0
+◇ Test subprocessDeadlineFailsAndTerminatesOwnedChild() started.
+◇ Test authoredAutomationContainsNoShellScripts() started.
+◇ Test processArgumentsAreLiteralAndExitFailuresPropagate() started.
+◇ Test versionLabelsCannotEscapeEvidenceDirectories() started.
+✔ Test versionLabelsCannotEscapeEvidenceDirectories() passed after 0.001 seconds.
+✔ Test authoredAutomationContainsNoShellScripts() passed after 0.004 seconds.
+✔ Test subprocessDeadlineFailsAndTerminatesOwnedChild() passed after 0.158 seconds.
+✔ Test processArgumentsAreLiteralAndExitFailuresPropagate() passed after 0.196 seconds.
+✔ Test run with 4 tests in 0 suites passed after 0.196 seconds.
 Building for production...
-[3 / 16]
-[5 / 18] NotebookCore
-[8 / 20] NotebookCore
-[11 / 21] NotebookCore
-[12 / 21]
-[15 / 18] onenote-research-product
-[17 / 18] onenote-research-product
-[20 / 20] onenote-research-product
-Build complete! (3.05 secs)
+[Using on-disk description]
+[7 / 27] NotebookCore
+[10 / 29] NotebookCore
+[13 / 30] NotebookCore
+[14 / 30]
+[18 / 34] NotebookEditor
+[19 / 34] DevelopmentKit
+[23 / 30] NotebookEditor
+Build complete! (3.53 secs)
 Created and verified notebook.json
 OpenOneNote: 1 sections, 1 pages
+OpenOneNote failed: destinationExists
+Usage: openonenote <create-demo|inspect> <notebook.json>
+Native text edit, undo/redo, save and reopen passed
+Rendered native preview
+Rendered native preview
+--notebook requires a file path
+Native verification failed: failed("Preview width must be a number")
+Research operation failed: usage
+Usage: onenote-research <capture|verify|summarize> <bundle|extraction> <output|inventory.json>
 Verified 1 captured files and symlinks against SHA-256 inventory
-Swift tests, release build, CLI paths, and whitespace checks passed.
+Research operation failed: mismatch("Contents/sample")
+Usage: onenote-research <capture|verify|summarize> <bundle|extraction> <output|inventory.json>
+Swift tests, release build, native edit/format/undo/reopen, native renders, CLI rejection and evidence integrity checks passed
