@@ -1,0 +1,10 @@
+{
+  "architecture" : "arm64",
+  "limits" : "No full desktop keyboard\/VoiceOver automation or Microsoft OneNote parity claim",
+  "nativeEditing" : "Text, bold, undo\/redo, save and reopen passed",
+  "renderScope" : "Real native views in hidden windows at 1280pt and 960pt; prohibited activation policy",
+  "scope" : "Local-first editor alpha; import and sync not implemented",
+  "signature" : "Ad-hoc deep\/strict verification passed",
+  "sourceRevision" : "51d9805282e0476c182807f8bd42cadcb9c5afb6",
+  "sourceState" : "committed"
+}
