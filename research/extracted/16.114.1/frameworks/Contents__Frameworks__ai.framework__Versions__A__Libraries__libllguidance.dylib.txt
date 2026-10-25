@@ -1,0 +1,4 @@
+/Applications/Microsoft OneNote.app/Contents/Frameworks/ai.framework/Versions/A/Libraries/libllguidance.dylib:
+	@rpath/ai.framework/Versions/A/Libraries/libllguidance.dylib (compatibility version 1.7.5, current version 1.7.5)
+	/usr/lib/libiconv.2.dylib (compatibility version 7.0.0, current version 7.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1345.120.2)

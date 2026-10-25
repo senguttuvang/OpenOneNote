@@ -1,0 +1,3 @@
+/Applications/Microsoft OneNote.app/Contents/Frameworks/ai.framework/Versions/A/Libraries/liblmcpu1.dylib:
+	@rpath/ai.framework/Versions/A/Libraries/liblmcpu1.dylib (compatibility version 0.20.41, current version 0.20.41)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)

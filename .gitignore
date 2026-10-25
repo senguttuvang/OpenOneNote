@@ -1,0 +1,14 @@
+.DS_Store
+.build/
+.swiftpm/
+dist/
+scratch/
+.beads/
+.agents/skills/
+.claude/
+.codex/
+*.xcuserstate
+xcuserdata/
+.beads/issues.jsonl
+.beads/interactions.jsonl
+.beads/events.jsonl
