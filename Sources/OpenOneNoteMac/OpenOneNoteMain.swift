@@ -11,6 +11,7 @@ import NotebookEditor
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 800),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
         window.title = "OpenOneNote"; window.minSize = NSSize(width: 960, height: 640)
+        window.appearance = NSAppearance(named: .darkAqua)
         window.contentView = NSHostingView(rootView: EditorView(session: session)); window.delegate = self
         self.window = window
         installMenus()
@@ -54,6 +55,7 @@ import NotebookEditor
         let format = submenu("Format")
         format.addItem(withTitle: "Bold", action: NSSelectorFromString("toggleBoldface:"), keyEquivalent: "b")
         format.addItem(withTitle: "Italic", action: NSSelectorFromString("toggleItalics:"), keyEquivalent: "i")
+        format.addItem(withTitle: "Underline", action: NSSelectorFromString("underline:"), keyEquivalent: "u")
         format.addItem(withTitle: "Show Fonts", action: #selector(NSFontManager.orderFrontFontPanel(_:)), keyEquivalent: "t").target = NSFontManager.shared
         NSApp.mainMenu = menu
     }
@@ -76,8 +78,9 @@ import NotebookEditor
                         width = value
                     } else { width = 1280 }
                     let fixture = FileManager.default.temporaryDirectory.appendingPathComponent("OpenOneNote-\(UUID()).json")
-                    let session = NotebookSession(url: fixture)
-                    try NativeVerification.render(session: session, to: output, width: width, height: 800)
+                    defer { try? FileManager.default.removeItem(at: fixture) }
+                    let session = try NativeVerification.fixture(at: fixture)
+                    try NativeVerification.render(session: session, to: output, width: width, height: width == 1728 ? 1088 : 800)
                     print("Rendered native preview")
                 }
             } catch { FileHandle.standardError.write(Data("Native verification failed: \(error)\n".utf8)); exit(1) }

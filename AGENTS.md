@@ -14,6 +14,7 @@ Private OneNote Mac research and an independent native Swift reconstruction.
 - `reconstruction/` and `specs/`: distinguish proposals from implementation. Library presence and pseudocode samples cannot establish feature parity.
 - Git LFS owns original archives, compressed assembly, and compiled distributions. Keep them out of ordinary Git blobs.
 - Do not upload third-party research to semantic indexes. Verify provider exclusion controls before indexing authored Sources, Tests, and Tools.
+  The authorized offline Swift text index may include extracted/decompiled research with hashes and provenance; exclude archives, binaries, assets, account data and private screenshots. See reconstruction/indexing.md.
 
 ## Delivery And Tasks
 
