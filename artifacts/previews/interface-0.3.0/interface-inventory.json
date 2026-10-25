@@ -359,6 +359,24 @@
       "Meeting Details",
       "Stickers"
     ],
+    "Table" : [
+      "Select Cell",
+      "Select Rows",
+      "Select Columns",
+      "Select Table",
+      "Delete Rows",
+      "Delete Columns",
+      "Delete Table",
+      "Insert Row Above",
+      "Insert Row Below",
+      "Insert Column Left",
+      "Insert Column Right",
+      "Merge Cells",
+      "Split Cells",
+      "Hide Borders",
+      "Shading",
+      "Sort"
+    ],
     "View" : [
       "New Window",
       "Switch Background",
