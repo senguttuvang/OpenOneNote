@@ -1,0 +1,52 @@
+[
+  {
+    "arguments" : "/Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "file.txt",
+    "tool" : "/usr/bin/file"
+  },
+  {
+    "arguments" : "-dv --verbose=4 /Applications/Microsoft OneNote.app",
+    "artifact" : "signature.txt",
+    "tool" : "/usr/bin/codesign"
+  },
+  {
+    "arguments" : "--verify --deep --strict --verbose=2 /Applications/Microsoft OneNote.app",
+    "artifact" : "signature-verification.txt",
+    "tool" : "/usr/bin/codesign"
+  },
+  {
+    "arguments" : "-d --entitlements :- /Applications/Microsoft OneNote.app",
+    "artifact" : "entitlements.txt",
+    "tool" : "/usr/bin/codesign"
+  },
+  {
+    "arguments" : "-arch arm64 -L /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "dependencies-arm64.txt",
+    "tool" : "/usr/bin/otool"
+  },
+  {
+    "arguments" : "-arch arm64 -l /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "load-commands-arm64.txt",
+    "tool" : "/usr/bin/otool"
+  },
+  {
+    "arguments" : "-arch arm64 -m /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "symbols-arm64.txt",
+    "tool" : "/usr/bin/nm"
+  },
+  {
+    "arguments" : "-arch arm64 -ov /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "objc-metadata-arm64.txt",
+    "tool" : "/usr/bin/otool"
+  },
+  {
+    "arguments" : "-a /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "strings.txt",
+    "tool" : "/usr/bin/strings"
+  },
+  {
+    "arguments" : "llvm-objdump --arch=arm64 --disassemble --start-address=0x10005ad4c --stop-address=0x10005af4c /Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote",
+    "artifact" : "disassembly-arm64.txt.gz",
+    "tool" : "/usr/bin/xcrun"
+  }
+]

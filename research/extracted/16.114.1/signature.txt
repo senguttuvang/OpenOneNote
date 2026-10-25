@@ -1,0 +1,30 @@
+Executable=/Applications/Microsoft OneNote.app/Contents/MacOS/Microsoft OneNote
+Identifier=com.microsoft.onenote.mac
+Format=app bundle with Mach-O universal (x86_64 arm64)
+CodeDirectory v=20500 size=197413 flags=0x10000(runtime) hashes=6158+7 location=embedded
+VersionPlatform=1
+VersionMin=917504
+VersionSDK=1704960
+Hash type=sha256 size=32
+CandidateCDHash sha256=07887a512dfce4e1abe4d6fcd8b8de71a0793fc3
+CandidateCDHashFull sha256=07887a512dfce4e1abe4d6fcd8b8de71a0793fc32f3354f3e58a359400c00255
+Hash choices=sha256
+CMSDigest=07887a512dfce4e1abe4d6fcd8b8de71a0793fc32f3354f3e58a359400c00255
+CMSDigestType=2
+Executable Segment base=0
+Executable Segment limit=22511616
+Executable Segment flags=0x1
+Page size=4096
+CDHash=07887a512dfce4e1abe4d6fcd8b8de71a0793fc3
+Signature size=9013
+Authority=Developer ID Application: Microsoft Corporation (UBF8T346G9)
+Authority=Developer ID Certification Authority
+Authority=Apple Root CA
+Timestamp=21 Oct 2026 at 3:26:43 PM
+Info.plist entries=52
+TeamIdentifier=UBF8T346G9
+Runtime Version=26.4.0
+Sealed Resources version=2 rules=13 files=7236
+Internal requirements count=1 size=188
+Total signatures=1
+Chosen signature=1

@@ -1,0 +1,6 @@
+/Applications/Microsoft OneNote.app/Contents/Frameworks/dwrite10.framework/Versions/A/dwrite10:
+	@rpath/dwrite10.framework/Versions/A/dwrite10 (compatibility version 0.0.0, current version 0.0.0)
+	@rpath/merp.framework/Versions/A/merp (compatibility version 0.0.0, current version 0.0.0)
+	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 4424.1.255)
+	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2100.43.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)

@@ -1,0 +1,9 @@
+{
+  "build" : "16.114.26102031",
+  "bundleName" : "Microsoft OneNote.app",
+  "capturedAt" : "2026-10-25T10:14:18Z",
+  "disassemblyScope" : "Full arm64 main executable disassembly, compressed as disassembly-arm64.txt.gz. The initial llvm-objdump Mach-O invocation did not honor its requested start/stop bounds; output was inspected and retained in full.",
+  "executableSHA256" : "9b47f05110382560fafbccfa25ff716463fe7af9fec63da848546a26531733aa",
+  "scope" : "Static application bundle only; no notebook caches, Keychain, account data, or runtime traffic.",
+  "version" : "16.114.1"
+}

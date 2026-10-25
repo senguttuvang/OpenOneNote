@@ -1,0 +1,13 @@
+/Applications/Microsoft OneNote.app/Contents/Frameworks/OPF.framework/Versions/A/Resources/OPF_Common.dylib:
+	@rpath/OPF.framework/Resources/OPF_Common.dylib (compatibility version 1.0.0, current version 1.0.0)
+	@rpath/mbuinstrument.framework/Versions/A/mbuinstrument (compatibility version 0.0.0, current version 0.0.0)
+	@rpath/mbukernel.framework/Versions/A/mbukernel (compatibility version 0.0.0, current version 0.0.0)
+	@rpath/mso20.framework/Versions/A/mso20 (compatibility version 0.0.0, current version 0.0.0)
+	@rpath/OutlookCore.framework/Versions/A/OutlookCore (compatibility version 0.0.0, current version 0.0.0)
+	@rpath/OutlookFoundation.framework/Versions/A/OutlookFoundation (compatibility version 0.0.0, current version 0.0.0)
+	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices (compatibility version 1.0.0, current version 66.0.0)
+	@rpath/WLMKernel.framework/Versions/A/WLMKernel (compatibility version 0.0.0, current version 0.0.0)
+	/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 2100.43.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)
+	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation (compatibility version 150.0.0, current version 4424.1.255)
+	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices (compatibility version 1.0.0, current version 1226.0.0)

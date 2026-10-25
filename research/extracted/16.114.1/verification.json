@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-25",
+  "archiveGzipIntegrity": "passed",
+  "archiveSHA256Readback": "passed",
+  "restoredBundleFileAndSymlinkVerification": "passed",
+  "verifiedEntries": 20441,
+  "applicationSignatureDeepStrictVerification": "passed",
+  "selectedGhidraFunctionsDecompiled": 6,
+  "wholeProgramGhidraAnalysis": false,
+  "userNotebookOrAccountDataCaptured": false,
+  "note": "Remote LFS delivery is recorded separately in the PR and delivery report."
+}

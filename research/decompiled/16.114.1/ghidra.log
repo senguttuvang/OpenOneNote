@@ -1,0 +1,145 @@
+2026-10-25 15:46:32 INFO  (LoggingInitialization) Using log config file: jar:file:/opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-25 15:46:32 INFO  (LoggingInitialization) Using log file: /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/research/decompiled/16.114.1/ghidra.log  
+2026-10-25 15:46:32 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-25 15:46:32 INFO  (Preferences) Loading user preferences: /Users/SenG/Library/ghidra/ghidra_12.2_PUBLIC/preferences  
+2026-10-25 15:46:32 INFO  (ClassSearcher) Searching for classes...  
+2026-10-25 15:46:32 INFO  (ClassSearcher) Class search complete (710 ms)  
+2026-10-25 15:46:32 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-25 15:46:33 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-25 15:46:33 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2026-10-25 15:46:33 INFO  (DefaultTrustManagerFactory) Loaded 4 trusted CA certificates from the OS trust store.  
+2026-10-25 15:46:33 INFO  (DefaultTrustManagerFactory) Loaded 110 trusted CA certificates from the Java default trust store.  
+2026-10-25 15:46:33 INFO  (FileCacheMaintenanceDaemon) Starting cache cleanup: /var/tmp/SenG-ghidra/fscache2  
+2026-10-25 15:46:33 INFO  (FileCacheMaintenanceDaemon) Finished cache cleanup, estimated storage used: 0  
+2026-10-25 15:46:33 INFO  (AnalyzeHeadless) Headless startup complete (1703 ms)  
+2026-10-25 15:46:33 INFO  (ClassSearcher) Class searcher loaded 60 extension points (19 false positives)  
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Decompiler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/FunctionID/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/FileFormats/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/8051/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/VersionTracking/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/BSim/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/Atmel/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Swift/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/DATA/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Debug/Debugger/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/JVM/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/PIC/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/PDB/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/BytePatterns/ghidra_scripts
+    /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/Tools/ghidra
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/PyGhidra/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Base/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts  
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer) Creating project: /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/scratch/ghidra/OpenOneNote-16.114.1  
+2026-10-25 15:46:33 INFO  (DefaultProject) Creating project: /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/scratch/ghidra/OpenOneNote-16.114.1  
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer) REPORT: Processing input files:   
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer)      project: /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/scratch/ghidra/OpenOneNote-16.114.1  
+2026-10-25 15:46:33 INFO  (HeadlessAnalyzer) IMPORTING: file:///Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/scratch/onenote-arm64  
+2026-10-25 15:46:35 DEBUG (SleighLanguage) Took 339ms (180ms inside lock) to initialize language /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/AARCH64/data/languages/AARCH64_AppleSilicon.slaspec -> /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/AARCH64/data/languages/AARCH64_AppleSilicon.sla  
+2026-10-25 15:46:35 INFO  (ProgramLoader) Using Loader: Mac OS X Mach-O  
+2026-10-25 15:46:35 INFO  (ProgramLoader) Using Language/Compiler: AARCH64:LE:64:AppleSilicon:default  
+2026-10-25 15:46:35 INFO  (ProgramLoader) Using Library Search Path: [., /System/Library/dyld/dyld_shared_cache_arm64e, /System/Library/dyld/dyld_shared_cache_x86_64, /System/Library/dyld/dyld_shared_cache_x86_64h, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64h, /Users/SenG/Library/Java/Extensions, /Library/Java/Extensions, /Network/Library/Java/Extensions, /System/Library/Java/Extensions, /usr/lib/java]  
+2026-10-25 15:46:50 INFO  (ProgramLoader) Additional info:
+Loading file:///Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/scratch/onenote-arm64?MD5=35e7ee202b3871f2f9868f70a5270d30...
+Discovered 212053 DYLD_CHAINED_PTR_64_OFFSET chained pointers.
+Fixed up 212053 chained pointers.
+------------------------------------------------
+
+Linking the External Programs of 'onenote-arm64' to imported libraries...
+  [@rpath/ADAL4.framework/Versions/A/ADAL4] -> not found in project
+  [@rpath/CocoaUI.framework/Versions/A/CocoaUI] -> not found in project
+  [@rpath/COMBase.framework/Versions/A/COMBase] -> not found in project
+  [@rpath/MicrosoftCredui.framework/Versions/A/MicrosoftCredui] -> not found in project
+  [@rpath/MicrosoftCSI.framework/Versions/A/MicrosoftCSI] -> not found in project
+  [@rpath/dwrite10.framework/Versions/A/dwrite10] -> not found in project
+  [@rpath/Gfx.framework/Versions/A/Gfx] -> not found in project
+  [@rpath/Hlink.framework/Versions/A/Hlink] -> not found in project
+  [@rpath/MicrosoftCloudServices.framework/Versions/A/MicrosoftCloudServices] -> not found in project
+  [@rpath/MicrosoftFontLibrary.framework/Versions/A/MicrosoftFontLibrary] -> not found in project
+  [@rpath/mbuinstrument.framework/Versions/A/mbuinstrument] -> not found in project
+  [@rpath/mbukernel.framework/Versions/A/mbukernel] -> not found in project
+  [@rpath/mbulocale.framework/Versions/A/mbulocale] -> not found in project
+  [@rpath/merp.framework/Versions/A/merp] -> not found in project
+  [@rpath/mso20.framework/Versions/A/mso20] -> not found in project
+  [@rpath/mso30.framework/Versions/A/mso30] -> not found in project
+  [@rpath/mso40ui.framework/Versions/A/mso40ui] -> not found in project
+  [@rpath/mso99.framework/Versions/A/mso99] -> not found in project
+  [@rpath/MsoCF.framework/Versions/A/MsoCF] -> not found in project
+  [@rpath/MSXML.framework/Versions/A/MSXML] -> not found in project
+  [@rpath/molc.framework/Versions/A/molc] -> not found in project
+  [@rpath/OLE.framework/Versions/A/OLE] -> not found in project
+  [@rpath/FluentUI.framework/Versions/A/FluentUI] -> not found in project
+  [@rpath/osfcore.framework/Versions/A/osfcore] -> not found in project
+  [@rpath/MicrosoftRichEdit.framework/Versions/A/MicrosoftRichEdit] -> not found in project
+  [/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate] -> not found in project
+  [/System/Library/Frameworks/AddressBook.framework/Versions/A/AddressBook] -> not found in project
+  [/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit] -> not found in project
+  [/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices] -> not found in project
+  [/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation] -> not found in project
+  [/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa] -> not found in project
+  [/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics] -> not found in project
+  [/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation] -> not found in project
+  [/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/JavaScriptCore] -> not found in project
+  [/System/Library/Frameworks/Network.framework/Versions/A/Network] -> not found in project
+  [/usr/lib/libsqlite3.dylib] -> not found in project
+  [/usr/lib/libxml2.2.dylib] -> not found in project
+  [/usr/lib/libz.1.dylib] -> not found in project
+  [/System/Library/Frameworks/LocalAuthentication.framework/Versions/A/LocalAuthentication] -> not found in project
+  [/System/Library/Frameworks/Quartz.framework/Versions/A/Quartz] -> not found in project
+  [/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore] -> not found in project
+  [/System/Library/Frameworks/ScreenCaptureKit.framework/Versions/A/ScreenCaptureKit] -> not found in project
+  [/System/Library/Frameworks/Security.framework/Versions/A/Security] -> not found in project
+  [/System/Library/Frameworks/StoreKit.framework/Versions/A/StoreKit] -> not found in project
+  [/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration] -> not found in project
+  [/System/Library/Frameworks/UserNotifications.framework/Versions/A/UserNotifications] -> not found in project
+  [/System/Library/Frameworks/WebKit.framework/Versions/A/WebKit] -> not found in project
+  [@rpath/Uniscribe.framework/Versions/A/Uniscribe] -> not found in project
+  [@rpath/WinCrypto.framework/Versions/A/WinCrypto] -> not found in project
+  [@rpath/OLEAutomation.framework/Versions/A/OLEAutomation] -> not found in project
+  [@rpath/rpcrt4.framework/Versions/A/rpcrt4] -> not found in project
+  [@rpath/WLMGraphicsDevice.framework/Versions/A/WLMGraphicsDevice] -> not found in project
+  [@rpath/WLMKernel.framework/Versions/A/WLMKernel] -> not found in project
+  [@rpath/Xmllite.framework/Versions/A/Xmllite] -> not found in project
+  [/usr/lib/libobjc.A.dylib] -> not found in project
+  [/usr/lib/libc++.1.dylib] -> not found in project
+  [/usr/lib/libSystem.B.dylib] -> not found in project
+  [/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio] -> not found in project
+  [/System/Library/Frameworks/Accessibility.framework/Versions/A/Accessibility] -> not found in project
+  [/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork] -> not found in project
+  [/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation] -> not found in project
+  [/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices] -> not found in project
+  [/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO] -> not found in project
+  [/System/Library/Frameworks/PDFKit.framework/Versions/A/PDFKit] -> not found in project
+  [/System/Library/Frameworks/QuickLookUI.framework/Versions/A/QuickLookUI] -> not found in project
+  [/usr/lib/swift/libswiftCore.dylib] -> not found in project
+  [/usr/lib/swift/libswiftCoreFoundation.dylib] -> not found in project
+  [/usr/lib/swift/libswiftCoreImage.dylib] -> not found in project
+  [/usr/lib/swift/libswiftDarwin.dylib] -> not found in project
+  [/usr/lib/swift/libswiftDispatch.dylib] -> not found in project
+  [/usr/lib/swift/libswiftIOKit.dylib] -> not found in project
+  [/usr/lib/swift/libswiftMetal.dylib] -> not found in project
+  [/usr/lib/swift/libswiftOSLog.dylib] -> not found in project
+  [/usr/lib/swift/libswiftObjectiveC.dylib] -> not found in project
+  [/usr/lib/swift/libswiftQuartzCore.dylib] -> not found in project
+  [/usr/lib/swift/libswiftSpatial.dylib] -> not found in project
+  [/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib] -> not found in project
+  [/usr/lib/swift/libswiftXPC.dylib] -> not found in project
+  [/usr/lib/swift/libswiftos.dylib] -> not found in project
+  [/usr/lib/swift/libswiftsimd.dylib] -> not found in project
+------------------------------------------------
+
+  
+2026-10-25 15:46:50 INFO  (HeadlessAnalyzer) IMPORTING: Loaded 0 additional files  
+2026-10-25 15:46:50 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportSelectedMethods.java '/Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/research/decompiled/16.114.1'   
+2026-10-25 15:46:51 INFO  (HeadlessAnalyzer) SCRIPT: /Users/SenG/WorkTrees/OpenOneNote/codex-session-onenote-foundation-20261025-1539/Tools/ghidra/ExportSelectedMethods.java  
+2026-10-25 15:46:52 INFO  (LocalFileSystem) /onenote-arm64: file created (SenG)  
+2026-10-25 15:46:52 INFO  (HeadlessAnalyzer) REPORT: Save succeeded for: /onenote-arm64 (OpenOneNote-16.114.1:/onenote-arm64)  
+2026-10-25 15:46:52 INFO  (HeadlessAnalyzer) REPORT: Import succeeded  

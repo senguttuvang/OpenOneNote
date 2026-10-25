@@ -1,0 +1,12 @@
+{
+  "project": "OpenOneNote",
+  "instructions": "AGENTS.md",
+  "specifications": ["specs/reconstruction.md"],
+  "architecture": "reconstruction/architecture-and-method.md",
+  "evidence": "research/findings.md",
+  "authoredSourceRoots": ["Sources", "Tests", "Tools"],
+  "thirdPartyResearchRoots": ["research"],
+  "generatedBuildRoots": [".build", "artifacts/native", "scratch"],
+  "indexingPolicy": "No third-party research uploads; verify provider exclusions before indexing",
+  "validation": "sh Tools/check.sh"
+}
