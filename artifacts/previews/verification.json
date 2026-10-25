@@ -1,10 +1,10 @@
 {
   "architecture" : "arm64",
   "limits" : "No full desktop keyboard\/VoiceOver automation or Microsoft OneNote parity claim",
-  "nativeEditing" : "Text, bold, undo\/redo, save and reopen passed",
-  "renderScope" : "Real native views in hidden windows at 1280pt and 960pt; prohibited activation policy",
+  "nativeEditing" : "Packaged binary: text, bold, undo\/redo, save and reopen passed; expanded ribbon\/RTF cases run in the local check suite",
+  "renderScope" : "Real native views in hidden windows at 1728x1088, 1280x800 and 960x800; one pixel per point; prohibited activation policy",
   "scope" : "Local-first editor alpha; import and sync not implemented",
   "signature" : "Ad-hoc deep\/strict verification passed",
-  "sourceRevision" : "2d0f768d1a71751fa8d5875e54a6851ea689bd99",
+  "sourceRevision" : "be794c51d41c12ea573f09bc38df9071c05736b7",
   "sourceState" : "committed"
 }
