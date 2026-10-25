@@ -1,5 +1,7 @@
 # Dark native fidelity verification — 25 October 2026
 
+Historical 0.2.0 evidence. Common preview filenames now reflect the latest build; version 0.3.0 has its own `interface-0.3.0/` review captures. This historical slice was rejected as insufficient UI coverage and is superseded for current UI acceptance by the observed-menu inventory and native comparison specification.
+
 Source build: `be794c51d41c12ea573f09bc38df9071c05736b7`, app version 0.2.0. The private user screenshot remains outside the repository; all committed previews contain synthetic Field Notes content.
 
 ## Native renders

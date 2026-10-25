@@ -2,6 +2,8 @@
 
 This directory retains independent native Swift app/tool builds alongside reproducible source and checksums. The current graphical app is a local-first editing alpha, with an ad-hoc development signature and no notarization.
 
+The UI-retention review preview is [openonenote-app-arm64-7f927c6.tar.gz](openonenote-app-arm64-7f927c6.tar.gz), version 0.3.0. See the [all-tab previews and open audit limits](../previews/interface-0.3.0/README.md). It retains the observed menus/ribbon surfaces; the remaining full-match audit is not yet accepted. Earlier `84ae164` and `b05f4a9` previews are retained for comparison.
+
 `openonenote-app-arm64-<revision>.tar.gz` contains `OpenOneNote.app`. Extract it to a new directory and open the app. Requires Apple Silicon and targets macOS 14 or newer; Intel builds have not been verified. The app's resource manifest records the committed source revision. The earlier `openonenote-foundation-*` archives preserve the initial CLI-only milestones, including a synthetic notebook and original build metadata.
 
 The recommended build is [openonenote-app-arm64-be794c5.tar.gz](openonenote-app-arm64-be794c5.tar.gz), version 0.2.0, with the dark native ribbon and expanded local editing. Its adjacent checksum, [preview verification](../previews/verification.json) and [fidelity evidence](../previews/fidelity.md) record the source and test scope. Earlier 0.1.0 and 0.1.1 graphical builds are retained. Version 0.1.1 introduced explicit actor callbacks to avoid a Swift 6.1 compiler crash; that protection remains.
