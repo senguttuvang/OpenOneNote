@@ -173,7 +173,7 @@ import SwiftUI
         }
     }
     private var chevron: some View { Image(systemName: "chevron.down").font(.system(size: 7)) }
-    private func galleryBinding(_ name: String) -> Binding<Bool> { Binding(get: { galleryOpen == name }, set: { if !$0 { galleryOpen = nil } }) }
+    private func galleryBinding(_ name: String) -> Binding<Bool> { Binding(get: { galleryOpen == name }, set: { if !$0 && galleryOpen == name { galleryOpen = nil } }) }
     private func listControl(numbered: Bool) -> some View {
         let title = numbered ? "Numbering" : "Bulletpoints"
         return HStack(spacing: 0) { icon(title, numbered ? "list.number" : "list.bullet"); Button { galleryOpen = title } label: { chevron }.help(title + " options").accessibilityLabel(title + " options").popover(isPresented: galleryBinding(title)) { ListGallery(numbered: numbered, formatting: formatting) { galleryOpen = nil } } }
