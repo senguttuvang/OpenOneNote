@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import Security
 
 extension DevelopmentWorkflow {
     public func buildApp() throws {
@@ -18,29 +19,74 @@ extension DevelopmentWorkflow {
         try FileManager.default.createDirectory(at: contents.appendingPathComponent("MacOS"), withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: resources, withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNoteMac"), to: contents.appendingPathComponent("MacOS/OpenOneNoteMac"))
+        let frameworks = contents.appendingPathComponent("Frameworks")
+        try FileManager.default.createDirectory(at: frameworks, withIntermediateDirectories: true)
+        let msal = frameworks.appendingPathComponent("MSAL.framework")
+        try FileManager.default.copyItem(at: bin.appendingPathComponent("MSAL.framework"), to: msal)
+        try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNote_MarkdownEditor.bundle"), to: resources.appendingPathComponent("OpenOneNote_MarkdownEditor.bundle"))
+        let executable = contents.appendingPathComponent("MacOS/OpenOneNoteMac")
+        let loadCommands = try run("otool", ["-l", executable.path], capture: true).stdout
+        for line in loadCommands.components(separatedBy: "\n") {
+            let value = line.trimmingCharacters(in: .whitespaces)
+            if value.hasPrefix("path "), value.contains("/.build/"), let path = value.dropFirst(5).components(separatedBy: " (offset").first {
+                try run("install_name_tool", ["-delete_rpath", path, executable.path])
+            }
+        }
+        try run("install_name_tool", ["-add_rpath", "@executable_path/../Frameworks", executable.path])
+        let notices = resources.appendingPathComponent("Licenses")
+        try FileManager.default.createDirectory(at: notices, withIntermediateDirectories: true)
+        for (source, name) in [
+            (".build/checkouts/swift-markdown/LICENSE.txt", "Swift-Markdown.txt"),
+            (".build/checkouts/swift-cmark/COPYING", "cmark.txt"),
+            (".build/checkouts/SwiftSoup/LICENSE", "SwiftSoup.txt"),
+            (".build/checkouts/microsoft-authentication-library-for-objc/LICENSE", "MSAL.txt"),
+            ("Sources/MarkdownEditor/Resources/Mermaid/LICENSE", "Mermaid.txt")
+        ] { try FileManager.default.copyItem(at: root.appendingPathComponent(source), to: notices.appendingPathComponent(name)) }
         let plist: [String: Any] = [
             "CFBundleName": "OpenOneNote", "CFBundleDisplayName": "OpenOneNote", "CFBundleIdentifier": "dev.senguttuvang.OpenOneNote",
-            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.2.0",
-            "CFBundleVersion": "3", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
+            "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.3.0",
+            "CFBundleVersion": "4", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
             "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication"
         ]
-        try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0).write(to: contents.appendingPathComponent("Info.plist"))
+        var appPlist = plist
+        appPlist["CFBundleURLTypes"] = [["CFBundleURLName": "O2N Microsoft sign-in", "CFBundleURLSchemes": ["msauth.dev.senguttuvang.OpenOneNote"]]]
+        try PropertyListSerialization.data(fromPropertyList: appPlist, format: .xml, options: 0).write(to: contents.appendingPathComponent("Info.plist"))
         let iconset = root.appendingPathComponent("scratch/AppIcon.iconset")
         try AppIcon.write(to: iconset)
         try run("iconutil", ["-c", "icns", iconset.path, "-o", resources.appendingPathComponent("AppIcon.icns").path])
         let revision = try run("git", ["rev-parse", "HEAD"], capture: true).stdout
-        let dirty = try run("git", ["status", "--porcelain", "--", "Package.swift", "Sources"], capture: true).stdout
+        let dirty = try run("git", ["status", "--porcelain", "--", "Package.swift", "Package.resolved", "Sources"], capture: true).stdout
         let metadata = ["sourceRevision": revision, "sourceState": dirty.isEmpty ? "committed" : "working-tree",
                         "architecture": try run("uname", ["-m"], capture: true).stdout,
-                        "scope": "Local-first editor alpha; import and sync not implemented"]
+                        "signingMode": (ProcessInfo.processInfo.environment["O2N_SIGNING_IDENTITY"] ?? "-") == "-" ? "ad-hoc; offline workspace; native MSAL requires developer identity/profile" : "developer identity and profile requested",
+                        "scope": "Markdown vault editor with delegated Graph same-page sync; see build verification for live evidence"]
         try JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted, .sortedKeys]).write(to: resources.appendingPathComponent("build.json"))
-        try run("codesign", ["--force", "--sign", "-", "--timestamp=none", app.path])
+        let identity = ProcessInfo.processInfo.environment["O2N_SIGNING_IDENTITY"] ?? "-"
+        try run("codesign", ["--force", "--sign", identity, "--timestamp=none", msal.path])
+        try run("codesign", ["--force", "--sign", identity, "--timestamp=none", app.path])
+        if identity != "-" {
+            var code: SecStaticCode?; var information: CFDictionary?
+            guard SecStaticCodeCreateWithPath(app as CFURL, [], &code) == errSecSuccess, let code,
+                  SecCodeCopySigningInformation(code, SecCSFlags(rawValue: kSecCSSigningInformation), &information) == errSecSuccess,
+                  let values = information as? [String: Any], let team = values[kSecCodeInfoTeamIdentifier as String] as? String,
+                  let profilePath = ProcessInfo.processInfo.environment["O2N_PROVISIONING_PROFILE"] else {
+                throw DevelopmentError.invalidArguments("Developer signing requires an approved matching identity and O2N_PROVISIONING_PROFILE; no ad-hoc entitlement fallback")
+            }
+            let decoded = try run("security", ["cms", "-D", "-i", profilePath], capture: true)
+            guard let data = decoded.stdout.data(using: .utf8), let profile = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else { throw DevelopmentError.invalidArguments("Provisioning profile could not be decoded") }
+            try Self.validateSigningProfile(profile, team: team)
+            try FileManager.default.copyItem(at: URL(fileURLWithPath: profilePath), to: contents.appendingPathComponent("embedded.provisionprofile"))
+            let entitlements = resources.appendingPathComponent("O2N-Keychain.entitlements.plist")
+            let applicationID = team + ".dev.senguttuvang.OpenOneNote"
+            try PropertyListSerialization.data(fromPropertyList: ["keychain-access-groups": [applicationID], "com.apple.application-identifier": applicationID, "com.apple.developer.team-identifier": team], format: .xml, options: 0).write(to: entitlements)
+            try run("codesign", ["--force", "--sign", identity, "--timestamp=none", "--entitlements", entitlements.path, app.path])
+        }
         try run("codesign", ["--verify", "--deep", "--strict", app.path])
         print("Built \(app.path)")
     }
 
     public func packageApp() throws {
-        let dirty = try run("git", ["status", "--porcelain", "--", "Package.swift", "Sources"], capture: true).stdout
+        let dirty = try run("git", ["status", "--porcelain", "--", "Package.swift", "Package.resolved", "Sources"], capture: true).stdout
         guard dirty.isEmpty else { throw DevelopmentError.uncommittedSource }
         try buildApp()
         let revision = try run("git", ["rev-parse", "--short", "HEAD"], capture: true).stdout
@@ -55,6 +101,8 @@ extension DevelopmentWorkflow {
         let binary = app.appendingPathComponent("Contents/MacOS/OpenOneNoteMac").path
         let fixture = root.appendingPathComponent("scratch/bundle-verification-\(UUID())/notebook.json")
         try run(binary, ["--self-test", fixture.path])
+        try run(binary, ["--markdown-self-test", fixture.deletingLastPathComponent().appendingPathComponent("markdown").path])
+        try run(binary, ["--diagram-self-test", fixture.deletingLastPathComponent().appendingPathComponent("diagrams").path])
         let previews = root.appendingPathComponent("artifacts/previews")
         try FileManager.default.createDirectory(at: previews, withIntermediateDirectories: true)
         for width in [1728, 1280, 960] {
@@ -62,8 +110,13 @@ extension DevelopmentWorkflow {
         }
         let metadata = try Data(contentsOf: app.appendingPathComponent("Contents/Resources/build.json"))
         var verification = try JSONSerialization.jsonObject(with: metadata) as? [String: String] ?? [:]
-        verification["signature"] = "Ad-hoc deep/strict verification passed"
-        verification["nativeEditing"] = "Packaged binary: text, bold, undo/redo, save and reopen passed; expanded ribbon/RTF cases run in the local check suite"
+        let capability = try run(binary, ["--signing-status"], allowFailure: true)
+        let adHoc = verification["signingMode"]?.hasPrefix("ad-hoc") == true
+        guard capability.exitCode == (adHoc ? 2 : 0) else { throw DevelopmentError.invalidArguments("Packaged native credential-cache capability did not match the signing mode") }
+        verification["nativeCredentialCache"] = adHoc ? "Unavailable in ad-hoc build; requires approved developer identity/profile; no credentials probed" : "Private Keychain entitlement verified; native user sign-in remains separate"
+        verification["signature"] = adHoc ? "Ad-hoc deep/strict verification passed" : "Developer deep/strict verification passed"
+        verification["nativeEditing"] = "Packaged binary: legacy rich text and Markdown source edit/undo/redo/save/reopen passed"
+        verification["diagrams"] = "Bundled offline Mermaid PNG, preview and malformed-source rejection passed"
         verification["renderScope"] = "Real native views in hidden windows at 1728x1088, 1280x800 and 960x800; one pixel per point; prohibited activation policy"
         verification["limits"] = "No full desktop keyboard/VoiceOver automation or Microsoft OneNote parity claim"
         try JSONSerialization.data(withJSONObject: verification, options: [.prettyPrinted, .sortedKeys]).write(to: previews.appendingPathComponent("verification.json"))
@@ -71,7 +124,7 @@ extension DevelopmentWorkflow {
     }
 
     public func packageTools() throws {
-        guard try run("git", ["status", "--porcelain", "--", "Package.swift", "Sources"], capture: true).stdout.isEmpty else { throw DevelopmentError.uncommittedSource }
+        guard try run("git", ["status", "--porcelain", "--", "Package.swift", "Package.resolved", "Sources"], capture: true).stdout.isEmpty else { throw DevelopmentError.uncommittedSource }
         try build()
         let revision = try run("git", ["rev-parse", "--short", "HEAD"], capture: true).stdout
         try DevelopmentWorkflow.validateLabel(revision)

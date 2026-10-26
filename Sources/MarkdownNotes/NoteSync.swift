@@ -6,7 +6,10 @@ public actor NoteSync {
     private let markdown = MarkdownConversion()
     private let html = HTMLConversion()
     private var inFlight: Set<UUID> = []
-    public init(vault: MarkdownVault, remote: any OneNoteRemote) { self.vault = vault; self.remote = remote }
+    private let diagrams: (any DiagramRendering)?
+    public init(vault: MarkdownVault, remote: any OneNoteRemote, diagrams: (any DiagramRendering)? = nil) {
+        self.vault = vault; self.remote = remote; self.diagrams = diagrams
+    }
 
     private func materialize(_ page: RemotePage) async throws -> (RemoteDocument, [AssetRecord]) {
         var mapping: [String: String] = [:]; var assets: [AssetRecord] = []
@@ -25,13 +28,14 @@ public actor NoteSync {
             } catch is CancellationError { throw CancellationError() }
             catch { continue } // Explicit protected-object warning is produced by the converter.
         }
-        return (try html.decode(page.html, resources: mapping), assets)
+        let decoded = try html.decode(page.html, resources: mapping)
+        return (try DiagramSource.recover(decoded, vault: vault), assets)
     }
     /// Canonicalization removes vendor wrappers and Markdown punctuation differences.
     private func canonical(_ document: NoteDocument) throws -> NoteDocument {
         func normalize(_ node: NoteNode) -> NoteNode {
             guard case .element(let tag, var attrs, let children) = node else { return node }
-            if tag == "pre" { attrs["language"] = "" } // Graph does not retain code-language metadata.
+            if tag == "pre", attrs["language"] != "mermaid" { attrs["language"] = "" }
             if tag == "object" { attrs["type"] = "application/octet-stream" }
             return .element(tag, attrs, children.map(normalize))
         }
@@ -41,6 +45,7 @@ public actor NoteSync {
     public func open(_ identity: PageIdentity) async throws -> NoteLedger {
         if let existing = try vault.ledgers().first(where: { $0.identity == identity }) { return existing }
         let page = try await remote.fetch(identity)
+        guard page.id == identity.pageID else { throw NotesError.invalid("Remote page identity mismatch") }
         let (document, assets) = try await materialize(page)
         let source = markdown.markdown(document.document)
         let baseline = try canonical(document.document)
@@ -58,6 +63,7 @@ public actor NoteSync {
         defer { inFlight.remove(id) }
         var ledger = try vault.load(id)
         try vault.recover(&ledger)
+        guard ledger.externalRecoveryMarkdown == nil else { throw NotesError.conflict }
         var localSource = try vault.markdown(ledger)
         var parsedLocal = try markdown.parse(localSource)
         func address(_ node: NoteNode) throws -> NoteNode {
@@ -80,6 +86,7 @@ public actor NoteSync {
         let local = try canonical(parsedLocal)
         do {
             let fetched = try await remote.fetch(ledger.identity)
+            guard fetched.id == ledger.identity.pageID else { throw NotesError.invalid("Remote page identity mismatch") }
             let (current, currentAssets) = try await materialize(fetched)
             let currentDocument = try canonical(current.document)
             let mergedBlocks: [NoteNode]
@@ -95,9 +102,12 @@ public actor NoteSync {
                     try vault.saveLedger(ledger); return ledger
                 }
                 guard parsedLocal.warnings.isEmpty else { throw NotesError.unsupported(parsedLocal.warnings.joined(separator: " ")) }
-                // Re-fetch immediately before write. This detects changes but is NOT a conditional transaction.
-                let rechecked = try await remote.fetch(ledger.identity)
-                guard MarkdownVault.hash(rechecked.html) == MarkdownVault.hash(fetched.html) else { throw NotesError.remoteChanged }
+                let presentations = try await diagramPresentations(desired.blocks)
+                func presented(_ node: NoteNode) -> NoteNode {
+                    if let source = DiagramSource.source(node), let value = presentations[MarkdownVault.hash(source)] { return value }
+                    if case .element(let tag, let attrs, let children) = node { return .element(tag, attrs, children.map(presented)) }
+                    return node
+                }
                 // Grouping/normalization can differ from Markdown. Protect pages where mapping is ambiguous.
                 let rawCanonicalBlocks = try current.blocks.map { try canonical(NoteDocument(blocks: [$0.node])).blocks }
                 guard rawCanonicalBlocks.allSatisfy({ $0.count == 1 }), rawCanonicalBlocks.flatMap({ $0 }) == currentDocument.blocks else {
@@ -105,17 +115,21 @@ public actor NoteSync {
                 }
                 var mapped = current
                 for index in mapped.blocks.indices { mapped.blocks[index].node = rawCanonicalBlocks[index][0] }
-                var commands = try html.commands(from: mapped, to: desired)
+                var commands = try html.commands(from: mapped, to: desired, render: { self.markdown.html(presented($0)) })
                 var parts: [BinaryPart] = []
                 // Re-upload referenced local assets as binary multipart, never as file:// or authenticated URLs.
                 for index in commands.indices {
                     let rewritten = try resourceCommands(commands[index].content, parts: &parts)
                     commands[index].content = rewritten
                 }
+                // No documented conditional write is assumed; this recheck narrows, but cannot close, the race.
+                let rechecked = try await remote.fetch(ledger.identity)
+                guard rechecked.id == ledger.identity.pageID, MarkdownVault.hash(rechecked.html) == MarkdownVault.hash(fetched.html) else { throw NotesError.remoteChanged }
                 ledger.state = "writing"; ledger.pendingMarkdown = localSource
                 ledger.remoteRecovery = currentDocument; try vault.saveLedger(ledger)
                 try await remote.update(ledger.identity, commands: commands, parts: parts)
                 let readback = try await remote.fetch(ledger.identity)
+                guard readback.id == ledger.identity.pageID else { throw NotesError.remoteChanged }
                 let (verified, verifiedAssets) = try await materialize(readback)
                 let normalized = try canonical(verified.document)
                 guard normalized.blocks == desired.blocks else {
@@ -132,14 +146,17 @@ public actor NoteSync {
             else {
                 // Keep unchanged local block spelling, including fenced code language, during a merge.
                 let localAST = parsedLocal.blocks
+                let raw = markdown.rawBlocks(localSource)
                 var used: Set<Int> = []
-                let retained = desired.blocks.map { block -> NoteNode in
+                let retained = desired.blocks.map { block -> String in
                     if let index = local.blocks.indices.first(where: { !used.contains($0) && local.blocks[$0] == block }) {
-                        used.insert(index); return localAST[index]
+                        used.insert(index)
+                        if index < raw.count, let original = raw[index], let reparsed = try? markdown.parse(original), reparsed.blocks == [localAST[index]] { return original }
+                        return String(markdown.markdown(NoteDocument(blocks: [localAST[index]])).dropLast())
                     }
-                    return block
+                    return String(markdown.markdown(NoteDocument(blocks: [block])).dropLast())
                 }
-                source = markdown.markdown(NoteDocument(blocks: retained))
+                source = retained.joined(separator: "\n\n") + (retained.isEmpty ? "" : "\n")
             }
             // An external file edit during network I/O is preserved; never replace it silently.
             guard try vault.markdown(ledger) == localSource else { throw NotesError.conflict }
@@ -169,5 +186,25 @@ public actor NoteSync {
             if image && mime == "application/octet-stream" { throw NotesError.unsupported("Image format is not supported; source retained") }
             parts.append(BinaryPart(name: name, mimeType: mime, bytes: bytes)); return "name:" + name
         }
+    }
+    private func diagramPresentations(_ blocks: [NoteNode]) async throws -> [String: NoteNode] {
+        func sources(_ node: NoteNode) -> [String] {
+            if let source = DiagramSource.source(node) { return [source] }
+            if case .element(_, _, let children) = node { return children.flatMap(sources) }
+            return []
+        }
+        var result: [String: NoteNode] = [:]
+        for source in Set(blocks.flatMap(sources)) {
+            guard let diagrams else { throw NotesError.unsupported("A local Mermaid renderer is required before diagram sync") }
+            let png = try await diagrams.png(source: source)
+            let preview = try vault.storeAsset(png, resourceURL: "", extension: "png")
+            let text = try vault.storeAsset(Data(source.utf8), resourceURL: "", extension: "mmd")
+            let filename = DiagramSource.filename(sourceHash: text.hash, previewHash: preview.hash)
+            result[text.hash] = .element("div", [:], [
+                .element("img", ["src": preview.path, "alt": "O2N diagram"], []),
+                .element("object", ["data": text.path, "type": "application/octet-stream", "data-attachment": filename], [])
+            ])
+        }
+        return result
     }
 }

@@ -1,3 +1,19 @@
+# O2N Markdown Workspace Design
+
+The current product is a single linear Markdown document with source editing and reading preview. This supersedes canvas-first composition; the earlier reference remains below as a legacy record. O2N keeps the established dark neutral/purple native identity and system symbols.
+
+## Current workspace
+
+A compact native toolbar provides Microsoft connection, local save, attachment import, explicit sync and cancellation. Local notes show their notebook/section context and sync/recovery state. Source and reading panes split the remaining width; the 900pt minimum keeps both usable. Body preview uses 18pt type, source uses 16pt monospaced text, with semantic headings and bordered simple tables. Images scale within the reading pane. Mermaid previews render locally from the same source fence; errors retain visible source and explain the failure.
+
+The Microsoft connection panel contains approved client metadata, explicit Sign in and notebook/section/page selection. It supports personal/user/group/SharePoint roots and section-group discovery. No canvas/ribbon imitation is required. Conflict disclosure presents the synced baseline and remote copy alongside editable local source; explicit resolution preserves history. Moved Markdown is relinked from a note's context menu; missing files are never silently recreated by autosave.
+
+Local source saves immediately and survives offline operation. Background polling runs at 120 seconds only for the selected page, never writes to the cloud, and never opens consent. A single busy operation disables source changes and supports cancellation. Errors remain in the status area; failed saves prevent window termination. Native undo is scoped to the current note.
+
+Verification uses prohibited activation and hidden owned windows. The local gate exercises source edit/undo/reopen, real preview renders, local diagram PNGs and malformed diagram rejection. Packaged checks repeat those behaviors with the copied framework/resource bundle and nested signatures. Live Graph readback remains distinct from native OneNote visual proof.
+
+## Preserved legacy canvas reference
+
 # OpenOneNote Native Editor Design
 
 The 25 October 2026 OneNote Mac screenshot is the visual authority for this native local notebook editor. This replaces the earlier blue/white alpha direction. OpenOneNote keeps its own identity and system-symbol assets.

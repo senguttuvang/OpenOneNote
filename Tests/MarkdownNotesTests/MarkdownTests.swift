@@ -49,7 +49,7 @@ import Testing
     #expect(throws: NotesError.self) { try codec.parse("[bad](https://example.com/?access_token=secret)") }
     #expect(!MarkdownConversion.safeAsset(".assets/../../secret"))
     #expect(!MarkdownConversion.safeLink("javascript:alert(1)"))
-    #expect(try codec.parse("```mermaid\ngraph TD; A-->B\n```").warnings.count == 1)
+    #expect(try DiagramSource.source(codec.parse("```mermaid\ngraph TD; A-->B\n```").blocks[0]) != nil)
 }
 
 @Test func disjointAndOverlappingMerge() throws {
@@ -139,4 +139,34 @@ import Testing
     #expect(throws: NotesError.conflict) { try vault.recover(&ledger) }
     #expect(try vault.markdown(ledger) == "External local edit\n")
     #expect(try vault.load(ledger.id).pendingMarkdown == "Remote newer\n")
+}
+
+@Test func movedMarkdownDoesNotRecreateOldPathAndRelinkKeepsIdentity() throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let vault = try MarkdownVault(root: root)
+    var ledger = NoteLedger(identity: PageIdentity(pageID: "synthetic"), title: "Moved", baseline: try MarkdownConversion().parse("Original\n"), markdown: "Original\n", htmlHash: "base", assets: [])
+    try vault.create(ledger)
+    let oldPath = ledger.relativePath
+    try FileManager.default.moveItem(at: vault.safeURL(oldPath), to: vault.safeURL("Renamed.md"))
+    #expect(throws: NotesError.self) { try vault.saveOffline("New local\n", ledger: &ledger) }
+    #expect(!FileManager.default.fileExists(atPath: try vault.safeURL(oldPath).path))
+    try vault.relink(&ledger, path: "Renamed.md", preservedLocal: "Unsaved recovery\n")
+    #expect(ledger.identity.pageID == "synthetic")
+    #expect(ledger.relativePath == "Renamed.md")
+    #expect(ledger.recoveryVersions?.last?.localMarkdown == "Unsaved recovery\n")
+    #expect(try vault.markdown(ledger) == "Original\n")
+}
+
+@Test func ordinaryMarkdownIsAdoptedWithoutRewriteOrDuplicateIdentity() throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let vault = try MarkdownVault(root: root)
+    let source = "# Portable note\n\nKeep **my** punctuation.\n"
+    try Data(source.utf8).write(to: vault.safeURL("Portable.md"))
+    let first = try vault.adoptMarkdown(path: "Portable.md")
+    let second = try vault.adoptMarkdown(path: "Portable.md")
+    #expect(first.id == second.id)
+    #expect(first.identity.root == "local")
+    #expect(try vault.markdown(first) == source)
 }

@@ -6,7 +6,7 @@ public struct MarkdownConversion: Sendable {
     public init() {}
 
     public func parse(_ source: String) throws -> NoteDocument {
-        var warnings: [String] = []
+        let warnings: [String] = []
         func convert(_ node: any Markup) throws -> NoteNode {
             let children = try node.children.map { try convert($0) }
             func element(_ tag: String, _ attributes: [String: String] = [:]) -> NoteNode { .element(tag, attributes, children) }
@@ -28,7 +28,6 @@ public struct MarkdownConversion: Sendable {
                 return .element("img", ["src": target, "alt": image.plainText], [])
             case let code as InlineCode: return .element("code", [:], [.text(code.code)])
             case let code as CodeBlock:
-                if code.language == "mermaid" { warnings.append("Mermaid source retained; sync requires a matching local PNG fallback.") }
                 return .element("pre", ["language": code.language ?? ""], [.text(code.code)])
             case is UnorderedList: return element("ul")
             case let list as OrderedList: return element("ol", ["start": String(list.startIndex)])
@@ -51,6 +50,21 @@ public struct MarkdownConversion: Sendable {
     }
 
     public func html(_ document: NoteDocument) -> String { document.blocks.map(html).joined() }
+
+    /// Source ranges use UTF-8 columns. Each retained slice is reparsed before use by reconciliation.
+    public func rawBlocks(_ source: String) -> [String?] {
+        let bytes = Array(source.utf8)
+        var starts = [0]
+        for (index, byte) in bytes.enumerated() where byte == 10 { starts.append(index + 1) }
+        return Document(parsing: source).children.map { node in
+            guard let range = node.range, range.lowerBound.line > 0, range.upperBound.line > 0,
+                  range.lowerBound.line <= starts.count, range.upperBound.line <= starts.count else { return nil }
+            let lower = starts[range.lowerBound.line - 1] + range.lowerBound.column - 1
+            let upper = starts[range.upperBound.line - 1] + range.upperBound.column - 1
+            guard lower >= 0, upper >= lower, upper <= bytes.count else { return nil }
+            return String(bytes: bytes[lower..<upper], encoding: .utf8)
+        }
+    }
 
     public func html(_ node: NoteNode) -> String {
         switch node {

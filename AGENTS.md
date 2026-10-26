@@ -4,6 +4,9 @@ Private OneNote Mac research and an independent native Swift reconstruction.
 
 ## Ownership
 
+- `Sources/MarkdownNotes`: portable Markdown model/conversion/vault/sync and diagram source recovery. `Sources/OneNoteGraph`: own delegated MSAL identity and Graph adapter. `Sources/MarkdownEditor`: current linear native editor and offline Mermaid rendering. These targets are the current product direction; legacy canvas stores remain preserved.
+- `Sources/MarkdownEditor/Resources/Mermaid`: pinned third-party runtime bundle and license. Exclude it from authored semantic uploads; it is not authored O2N source or Microsoft research.
+
 - `research/`: immutable Microsoft bundle archives, original assets, metadata, assembly, and pseudocode. They retain original ownership and are never dependencies of the new application.
 - `Sources/NotebookCore`: independent notebook model and repository port; Foundation imports only.
 - `Sources/NotebookPersistence`: local storage, depending inward on NotebookCore.
@@ -28,4 +31,4 @@ Beads owns live work: `bd prime`, `bd ready`, `bd show <id>`, then `bd update <i
 
 `swift run openonenote-dev check`: Swift tests, release build, real native text edits/format/undo/save/reopen, background native renders, CLI read/write/rejection paths, evidence tamper rejection, and authored whitespace checks. Research additionally needs gzip validation, archive checksums, and `onenote-research verify` against the per-file inventory after extraction.
 
-Native tests and preview modes must set prohibited activation policy and keep windows hidden. Never activate an app or switch the user's focus for agent convenience. Microsoft OneNote API/GUI interaction testing has not run. Static research concentrates on the arm64 main binary, dependency inventories, and six sampled functions; Intel bytes are preserved with less analysis.
+Native tests and preview modes must set prohibited activation policy and keep windows hidden. Never activate an app or switch the user's focus for agent convenience. Graph API acceptance, native MSAL sign-in and native OneNote GUI proof are separate evidence; record actual outcomes without treating synthetic adapters or CLI auth as native proof. Native OneNote GUI interaction has not run. Static research concentrates on the arm64 main binary, dependency inventories, and six sampled functions; Intel bytes are preserved with less analysis.

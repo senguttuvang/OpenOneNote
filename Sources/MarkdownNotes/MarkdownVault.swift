@@ -21,6 +21,7 @@ public struct NoteLedger: Codable, Equatable, Identifiable, Sendable {
     public var pendingMarkdown: String?
     public var materializationPreviousHash: String?
     public var remoteRecovery: NoteDocument?
+    public var externalRecoveryMarkdown: String?
     public var recoveryVersions: [RecoveryVersion]?
     public init(identity: PageIdentity, title: String, baseline: NoteDocument, markdown: String, htmlHash: String, assets: [AssetRecord]) {
         id = UUID(); self.identity = identity; self.title = title
@@ -94,7 +95,10 @@ public struct MarkdownVault: Sendable {
         try Data(text.utf8).write(to: safeURL(ledger.relativePath), options: .atomic)
     }
     public func saveOffline(_ text: String, ledger: inout NoteLedger) throws {
-        ledger.pendingMarkdown = text; ledger.state = "outbox"
+        guard FileManager.default.fileExists(atPath: try safeURL(ledger.relativePath).path) else {
+            throw NotesError.invalid("Markdown file moved or is missing. Relink it before saving; recovery copies are retained.")
+        }
+        ledger.pendingMarkdown = text; ledger.state = ledger.identity.root == "local" ? "local-only" : "outbox"
         try saveLedger(ledger)
         try writeMarkdown(text, ledger: ledger)
     }
@@ -126,7 +130,8 @@ public struct MarkdownVault: Sendable {
                 let current = try markdown(ledger)
                 if current != pending {
                     guard ledger.materializationPreviousHash == Self.hash(current) else {
-                        ledger.state = "recovery"; ledger.remoteRecovery = ledger.baseline; try saveLedger(ledger)
+                        ledger.state = "external-file-conflict"; ledger.remoteRecovery = ledger.baseline
+                        ledger.externalRecoveryMarkdown = current; try saveLedger(ledger)
                         throw NotesError.conflict
                     }
                     try writeMarkdown(pending, ledger: ledger)
@@ -136,19 +141,56 @@ public struct MarkdownVault: Sendable {
             ledger.state = "synced"; try saveLedger(ledger)
         }
         // Outbox holds the newest explicit save even if the process died before the .md rename.
-        if let pending = ledger.pendingMarkdown, ledger.state == "outbox", try markdown(ledger) != pending {
+        if let pending = ledger.pendingMarkdown, ["outbox", "local-only"].contains(ledger.state), try markdown(ledger) != pending {
             // Preserve an externally modified file instead of choosing a winner.
-            ledger.state = "recovery"; try saveLedger(ledger)
+            ledger.state = "external-file-conflict"; ledger.externalRecoveryMarkdown = try markdown(ledger); try saveLedger(ledger)
             throw NotesError.conflict
         }
     }
     /// Explicit user resolution retains the prior three copies before establishing a new merge base.
     public func resolve(_ ledger: inout NoteLedger, editedMarkdown: String) throws {
+        guard ledger.externalRecoveryMarkdown == nil else { throw NotesError.conflict }
         guard let remote = ledger.remoteRecovery else { throw NotesError.invalid("No remote conflict copy to resolve") }
         _ = try MarkdownConversion().parse(editedMarkdown)
         let version = RecoveryVersion(baseline: ledger.baseline, localMarkdown: try markdown(ledger), remote: remote)
         ledger.recoveryVersions = (ledger.recoveryVersions ?? []) + [version]
         ledger.baseline = remote; ledger.remoteRecovery = nil
         try saveOffline(editedMarkdown, ledger: &ledger)
+    }
+    public func relink(_ ledger: inout NoteLedger, path: String, preservedLocal: String? = nil) throws {
+        guard path.hasSuffix(".md"), !path.hasPrefix(".o2n/"), !path.hasPrefix(".assets/") else { throw NotesError.invalid("Choose a Markdown note inside this vault") }
+        let file = try safeURL(path)
+        let source = try String(contentsOf: file, encoding: .utf8)
+        let previous = preservedLocal ?? ledger.pendingMarkdown ?? (try? markdown(ledger)) ?? ledger.baselineMarkdown
+        ledger.recoveryVersions = (ledger.recoveryVersions ?? []) + [RecoveryVersion(baseline: ledger.baseline, localMarkdown: previous, remote: ledger.remoteRecovery ?? ledger.baseline)]
+        if let external = ledger.externalRecoveryMarkdown {
+            let document = (try? MarkdownConversion().parse(external)) ?? NoteDocument(blocks: [.element("pre", [:], [.text(external)])])
+            ledger.recoveryVersions?.append(RecoveryVersion(baseline: ledger.baseline, localMarkdown: previous, remote: document))
+            ledger.externalRecoveryMarkdown = nil
+        }
+        ledger.relativePath = path; ledger.pendingMarkdown = source; ledger.state = "outbox"
+        try saveLedger(ledger)
+    }
+    public func resolveExternal(_ ledger: inout NoteLedger, editedMarkdown: String, keepEdited: Bool) throws {
+        guard let external = ledger.externalRecoveryMarkdown, try markdown(ledger) == external else { throw NotesError.conflict }
+        let document = (try? MarkdownConversion().parse(external)) ?? NoteDocument(blocks: [.element("pre", [:], [.text(external)])])
+        ledger.recoveryVersions = (ledger.recoveryVersions ?? []) + [RecoveryVersion(baseline: ledger.baseline, localMarkdown: editedMarkdown, remote: document)]
+        ledger.externalRecoveryMarkdown = nil
+        try saveOffline(keepEdited ? editedMarkdown : external, ledger: &ledger)
+    }
+    public func createLocal() throws -> NoteLedger {
+        let source = "# Untitled note\n\n"
+        var ledger = NoteLedger(identity: PageIdentity(root: "local", pageID: UUID().uuidString), title: "Untitled note", baseline: try MarkdownConversion().parse(source), markdown: source, htmlHash: "", assets: [])
+        ledger.state = "local-only"; try create(ledger); return ledger
+    }
+    public func adoptMarkdown(path: String) throws -> NoteLedger {
+        guard path.hasSuffix(".md"), !path.hasPrefix(".o2n/"), !path.hasPrefix(".assets/") else { throw NotesError.invalid("Choose a Markdown note inside this vault") }
+        if let existing = try ledgers().first(where: { $0.relativePath == path }) { return existing }
+        let bytes = try Data(contentsOf: safeURL(path))
+        guard bytes.count <= 16 * 1024 * 1024, let source = String(data: bytes, encoding: .utf8) else { throw NotesError.invalid("Markdown must be UTF-8 and at most 16 MiB") }
+        let document = (try? MarkdownConversion().parse(source)) ?? NoteDocument(blocks: [.element("pre", [:], [.text(source)])])
+        var ledger = NoteLedger(identity: PageIdentity(root: "local", pageID: UUID().uuidString), title: URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent, baseline: document, markdown: source, htmlHash: "", assets: [])
+        ledger.relativePath = path; ledger.state = "local-only"
+        try saveLedger(ledger); return ledger
     }
 }

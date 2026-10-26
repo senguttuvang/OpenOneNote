@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 import NotebookEditor
+import MarkdownEditor
 
 @MainActor private final class ApplicationDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     let session: NotebookSession
@@ -65,6 +66,47 @@ import NotebookEditor
     static func main() {
         let app = NSApplication.shared
         let arguments = Array(CommandLine.arguments.dropFirst())
+        if arguments.first == "--signing-status" {
+            app.setActivationPolicy(.prohibited)
+            do {
+                guard arguments.count == 1 else { throw EditorVerificationError.failed("Signing status takes no extra arguments") }
+                try CloudVerification.signingStatus()
+            } catch { FileHandle.standardError.write(Data("Native signing capability: \(error.localizedDescription)\n".utf8)); exit(2) }
+            return
+        }
+        if arguments.first == "--cloud-status" || arguments.first == "--cloud-self-test" {
+            app.setActivationPolicy(.prohibited)
+            guard arguments.count == 2 else { FileHandle.standardError.write(Data("Expected configured vault directory\n".utf8)); exit(1) }
+            Task { @MainActor in
+                do {
+                    let vault = URL(fileURLWithPath: arguments[1])
+                    if arguments[0] == "--cloud-status" { try await CloudVerification.status(vault: vault) }
+                    else { try await CloudVerification.exercise(vault: vault) }
+                    exit(0)
+                }
+                catch { FileHandle.standardError.write(Data("Native cloud status: \(error.localizedDescription)\n".utf8)); exit(2) }
+            }
+            CFRunLoopRun(); return
+        }
+        if arguments.first == "--diagram-self-test" {
+            app.setActivationPolicy(.prohibited)
+            guard arguments.count == 2 else { FileHandle.standardError.write(Data("Expected diagram fixture directory\n".utf8)); exit(1) }
+            Task { @MainActor in
+                do { try await DiagramVerification.exercise(at: URL(fileURLWithPath: arguments[1])); exit(0) }
+                catch { FileHandle.standardError.write(Data("Diagram verification failed: \(error)\n".utf8)); exit(1) }
+            }
+            CFRunLoopRun()
+            return
+        }
+        if arguments.first == "--markdown-self-test" {
+            app.setActivationPolicy(.prohibited)
+            do {
+                guard arguments.count == 2 else { throw EditorVerificationError.failed("Expected Markdown fixture directory") }
+                try MarkdownVerification.exercise(at: URL(fileURLWithPath: arguments[1]))
+                print("Hidden Markdown edit/undo/reopen/render passed")
+            } catch { FileHandle.standardError.write(Data("Markdown verification failed: \(error)\n".utf8)); exit(1) }
+            return
+        }
         if arguments.first == "--self-test" || arguments.first == "--render-preview" {
             app.setActivationPolicy(.prohibited)
             do {
@@ -84,6 +126,21 @@ import NotebookEditor
                     print("Rendered native preview")
                 }
             } catch { FileHandle.standardError.write(Data("Native verification failed: \(error)\n".utf8)); exit(1) }
+            return
+        }
+        if !arguments.contains("--legacy") && !arguments.contains("--notebook") {
+            do {
+                guard arguments.isEmpty || (arguments.count == 2 && arguments[0] == "--vault") else {
+                    throw EditorVerificationError.failed("Use --vault <directory>, --legacy or --notebook <file>")
+                }
+                let vault = arguments.isEmpty
+                    ? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("OpenOneNote/Markdown")
+                    : URL(fileURLWithPath: arguments[1])
+                app.setActivationPolicy(.regular)
+                let delegate = try MarkdownApplication(vault: vault)
+                app.delegate = delegate
+                withExtendedLifetime(delegate) { app.run() }
+            } catch { FileHandle.standardError.write(Data("Markdown workspace failed: \(error)\n".utf8)); exit(1) }
             return
         }
         let dataURL: URL

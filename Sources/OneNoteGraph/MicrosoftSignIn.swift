@@ -21,6 +21,7 @@ import MarkdownNotes
         }
         let authority = try MSALAADAuthority(url: URL(string: "https://login.microsoftonline.com/\(tenant)")!)
         let config = MSALPublicClientApplicationConfig(clientId: clientID, redirectUri: redirectURI, authority: authority)
+        config.cacheConfig.keychainSharingGroup = try NativeSigning.privateKeychainGroup()
         application = try MSALPublicClientApplication(configuration: config)
         // Never silently choose between multiple identities.
         let accounts = try application.allAccounts()
@@ -29,12 +30,13 @@ import MarkdownNotes
     public func accessToken() async throws -> String {
         guard let account else { throw NotesError.authenticationRequired }
         let parameters = MSALSilentTokenParameters(scopes: Self.scopes, account: account)
-        return try await withCheckedThrowingContinuation { continuation in
+        let token: String = try await withCheckedThrowingContinuation { continuation in
             application.acquireTokenSilent(with: parameters) { result, _ in
                 guard let result else { continuation.resume(throwing: NotesError.authenticationRequired); return }
                 continuation.resume(returning: result.accessToken)
             }
         }
+        try Task.checkCancellation(); return token
     }
     public func identityKey() async throws -> String {
         guard let identifier = account?.identifier else { throw NotesError.authenticationRequired }
@@ -51,6 +53,8 @@ import MarkdownNotes
                 continuation.resume(returning: result)
             }
         }
+        try Task.checkCancellation()
         account = result.account
     }
+    public func cancel() { _ = MSALPublicClientApplication.cancelCurrentWebAuthSession() }
 }

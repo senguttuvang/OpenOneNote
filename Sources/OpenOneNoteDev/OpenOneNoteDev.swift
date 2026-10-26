@@ -11,6 +11,13 @@ import DevelopmentKit
             }
             let workflow = DevelopmentWorkflow(root: root)
             switch arguments.first {
+            case "graph-probe" where arguments.count == 3:
+                Task { @MainActor in
+                    do { try await workflow.graphProbe(cli: arguments[1], output: URL(fileURLWithPath: arguments[2])); exit(0) }
+                    catch { FileHandle.standardError.write(Data("Synthetic CLI Graph probe failed: \(error.localizedDescription)\n".utf8)); exit(1) }
+                }
+                RunLoop.main.run()
+            case "microsoft-setup" where arguments.count == 3: try workflow.microsoftSetup(cli: arguments[1], vault: URL(fileURLWithPath: arguments[2]))
             case "source-index" where arguments.count == 1: try workflow.sourceIndex(query: nil)
             case "source-query" where arguments.count == 2: try workflow.sourceIndex(query: arguments[1])
             case "check" where arguments.count == 1: try workflow.check()
@@ -22,7 +29,7 @@ import DevelopmentKit
             case "additional" where arguments.count == 4: try workflow.additional(bundle: URL(fileURLWithPath: arguments[1]), output: URL(fileURLWithPath: arguments[2]), label: arguments[3])
             case "decompile-sample" where arguments.count == 4: try workflow.decompileSample(bundle: URL(fileURLWithPath: arguments[1]), label: arguments[2], ghidra: URL(fileURLWithPath: arguments[3]))
             case "help", "--help", nil:
-                print("OpenOneNote Swift development CLI\nCommands: check | app | verify-app | package-app | package-tools | source-index | source-query <terms> | capture <app> <new-label> | additional <app> <new-directory> <label> | decompile-sample <app> <new-label> <analyzeHeadless>")
+                print("OpenOneNote Swift development CLI\nCommands: check | app | verify-app | package-app | package-tools | microsoft-setup <m365> <vault> | graph-probe <m365> <new-output> | source-index | source-query <terms> | capture <app> <new-label> | additional <app> <new-directory> <label> | decompile-sample <app> <new-label> <analyzeHeadless>")
             default: throw DevelopmentError.invalidArguments("Unknown command or wrong arguments; use openonenote-dev help")
             }
         } catch { FileHandle.standardError.write(Data("Development workflow failed: \(error)\n".utf8)); exit(1) }

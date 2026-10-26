@@ -6,6 +6,7 @@ public struct RemoteBlock: Equatable, Sendable {
     public var container: String
     public var node: NoteNode
     public var editable: Bool
+    public var additionalTargets: [String] = []
 }
 
 public struct RemoteDocument: Equatable, Sendable {
@@ -110,22 +111,23 @@ public struct HTMLConversion: Sendable {
 
     /// Conservative change plan: preserve every unsupported object and all outer containers.
     /// Changed ranges replace an existing supported child; an empty paragraph represents deletion.
-    public func commands(from remote: RemoteDocument, to desired: NoteDocument) throws -> [PageCommand] {
+    public func commands(from remote: RemoteDocument, to desired: NoteDocument, render: ((NoteNode) throws -> String)? = nil) throws -> [PageCommand] {
         let old = remote.blocks.map(\.node)
         let changes = SequenceMerge.edits(base: old, changed: desired.blocks)
         var commands: [PageCommand] = []
         let converter = MarkdownConversion()
+        func content(_ nodes: [NoteNode]) throws -> String { try nodes.map { try render?($0) ?? converter.html($0) }.joined() }
         for edit in changes {
             if edit.range.isEmpty {
                 if edit.range.lowerBound < remote.blocks.count {
                     let anchor = remote.blocks[edit.range.lowerBound]
                     guard anchor.editable else { throw NotesError.unsupported("Cannot insert beside a protected remote object") }
-                    commands.append(PageCommand(target: anchor.target, action: "insert", position: "before", content: converter.html(NoteDocument(blocks: edit.replacement))))
+                    commands.append(PageCommand(target: anchor.target, action: "insert", position: "before", content: try content(edit.replacement)))
                 } else if let last = remote.blocks.last {
                     guard last.editable else { throw NotesError.unsupported("Cannot append beside a protected remote object") }
-                    commands.append(PageCommand(target: last.target, action: "insert", position: "after", content: converter.html(NoteDocument(blocks: edit.replacement))))
+                    commands.append(PageCommand(target: last.additionalTargets.last ?? last.target, action: "insert", position: "after", content: try content(edit.replacement)))
                 } else {
-                    commands.append(PageCommand(target: "body", action: "append", content: converter.html(NoteDocument(blocks: edit.replacement))))
+                    commands.append(PageCommand(target: "body", action: "append", content: try content(edit.replacement)))
                 }
             } else {
                 let affected = remote.blocks[edit.range]
@@ -133,8 +135,9 @@ public struct HTMLConversion: Sendable {
                 guard Set(affected.map(\.container)).count == 1 else { throw NotesError.unsupported("Edit spans multiple remote containers; explicit conversion is required.") }
                 // One sibling group per replacement preserves order within the changed range.
                 for (offset, block) in affected.enumerated() {
-                    let content = offset == 0 ? converter.html(NoteDocument(blocks: edit.replacement)) : ""
-                    commands.append(PageCommand(target: block.target, action: "replace", content: content.isEmpty ? "<p></p>" : "<div>" + content + "</div>"))
+                    let replacement = offset == 0 ? try content(edit.replacement) : ""
+                    commands.append(PageCommand(target: block.target, action: "replace", content: replacement.isEmpty ? "<p></p>" : "<div>" + replacement + "</div>"))
+                    commands += block.additionalTargets.map { PageCommand(target: $0, action: "replace", content: "<p></p>") }
                 }
             }
         }

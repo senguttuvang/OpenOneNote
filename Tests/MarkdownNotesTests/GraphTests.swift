@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 import MarkdownNotes
+import MarkdownEditor
 @testable import OneNoteGraph
 
 private struct SyntheticAuthorization: GraphAuthorization {
@@ -67,4 +68,35 @@ private actor ScriptedTransport: GraphTransport {
         try await client.fetch(PageIdentity(pageID: "synthetic", accountKey: "other-account"))
     }
     #expect(await transport.requests.isEmpty)
+}
+
+@Test @MainActor func cancelledGraphOperationDoesNotSendNetworkRequest() async throws {
+    let transport = ScriptedTransport([GraphResponse(data: Data("{\"value\":[]}".utf8), status: 200)])
+    let client = GraphClient(authorization: SyntheticAuthorization(), transport: transport)
+    let task = Task { try await client.list(root: "me", path: "notebooks") }
+    task.cancel()
+    await #expect(throws: CancellationError.self) { try await task.value }
+    #expect(await transport.requests.isEmpty)
+}
+
+@Test @MainActor func refreshedRemoteSourceBecomesTheNextNativeEditSnapshot() async throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let vault = try MarkdownVault(root: root)
+    let ledger = NoteLedger(identity: PageIdentity(pageID: "synthetic-page", accountKey: "synthetic-account"), title: "Synthetic", baseline: try MarkdownConversion().parse("Original\n"), markdown: "Original\n", htmlHash: "old", assets: [])
+    try vault.create(ledger)
+    let transport = ScriptedTransport([
+        GraphResponse(data: Data("{\"id\":\"synthetic-page\",\"title\":\"Synthetic\"}".utf8), status: 200),
+        GraphResponse(data: Data("<body><div id='outer'><p id='p'>Remote refresh</p></div></body>".utf8), status: 200)
+    ])
+    let session = try MarkdownSession(vault: vault); session.select(ledger.id)
+    session.graph = GraphClient(authorization: SyntheticAuthorization(), transport: transport)
+    session.sync()
+    let deadline = Date().addingTimeInterval(3)
+    while session.busy && Date() < deadline { try await Task.sleep(for: .milliseconds(10)) }
+    #expect(!session.busy)
+    #expect(session.source == "Remote refresh\n")
+    session.edit("Next local edit\n")
+    #expect(session.selected?.externalRecoveryMarkdown == nil)
+    #expect(try vault.markdown(ledger) == "Next local edit\n")
 }

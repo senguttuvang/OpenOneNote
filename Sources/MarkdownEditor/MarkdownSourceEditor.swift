@@ -39,6 +39,6 @@ public struct MarkdownSourceEditor: NSViewRepresentable {
         guard let view = scroll.documentView as? NSTextView else { return }
         context.coordinator.onChange = onChange
         if context.coordinator.identity != identity { view.undoManager?.removeAllActions(); context.coordinator.identity = identity }
-        if view.string != source { view.string = source }
+        if view.string != source { view.undoManager?.removeAllActions(); view.string = source }
     }
 }

@@ -16,12 +16,18 @@ public struct MarkdownEditorView: View {
                 Text("O2N").font(.headline)
                 Text("Markdown workspace").foregroundStyle(.secondary)
                 Spacer()
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                Button("New local note", systemImage: "square.and.pencil") { session.newLocal() }.disabled(session.busy)
                 Button("Microsoft connection", systemImage: "person.crop.circle") { showConnection.toggle() }
                 Button("Save locally", systemImage: "square.and.arrow.down") { session.save() }.keyboardShortcut("s")
+                    .disabled(session.busy || session.selectedID == nil)
                 Button("Attach file", systemImage: "paperclip") { session.attachFile() }.disabled(session.selectedID == nil || session.busy)
                 Button("Sync page", systemImage: "arrow.triangle.2.circlepath") { session.sync() }
-                    .disabled(session.selectedID == nil || session.graph == nil || session.busy)
+                    .disabled(session.selectedID == nil || session.selected?.identity.root == "local" || session.graph == nil || session.busy)
                 if session.busy { ProgressView().controlSize(.small); Button("Cancel") { session.cancel() } }
+                    }.fixedSize(horizontal: true, vertical: false)
+                }.frame(maxWidth: 800)
             }.padding(16)
             Divider()
             if showConnection { connectionPanel; Divider() }
@@ -29,7 +35,7 @@ public struct MarkdownEditorView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("LOCAL NOTES").font(.caption.weight(.semibold)).foregroundStyle(.secondary).padding(16)
                     if session.notes.isEmpty {
-                        ContentUnavailableView("Open a cloud page", systemImage: "book.closed", description: Text("Connect Microsoft, then choose an existing notebook, section and page."))
+                        ContentUnavailableView("Start a Markdown note", systemImage: "book.closed", description: Text("Create a local note, use File → Open local Markdown, or connect Microsoft and choose an existing page."))
                     } else {
                         List(session.notes) { note in
                             Button { session.select(note.id) } label: {
@@ -41,8 +47,9 @@ public struct MarkdownEditorView: View {
                                     Text(note.state).font(.caption).foregroundStyle(.secondary)
                                 }.padding(.vertical, 5).frame(maxWidth: .infinity, alignment: .leading)
                             }.buttonStyle(.plain)
+                                .contextMenu { Button("Relink moved Markdown…") { session.relink(note.id) } }
                                 .listRowBackground(session.selectedID == note.id ? Color.purple.opacity(0.2) : Color.clear)
-                        }
+                        }.disabled(session.busy)
                     }
                     Spacer(minLength: 0)
                     Text("Plain .md + local assets").font(.caption).foregroundStyle(.secondary).padding(16)
@@ -50,6 +57,16 @@ public struct MarkdownEditorView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(session.selected?.title ?? "Choose a note").font(.title2.weight(.semibold)).padding(20)
                     Divider()
+                    if let external = session.selected?.externalRecoveryMarkdown {
+                        DisclosureGroup("External Markdown file changed · both copies retained") {
+                            ScrollView { Text(external).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading) }.frame(maxHeight: 120)
+                            HStack {
+                                Button("Reload external file") { session.resolveExternal(keepEdited: false) }
+                                Button("Save edited source over external change") { session.resolveExternal(keepEdited: true) }
+                            }.disabled(session.busy)
+                        }.padding(16)
+                        Divider()
+                    }
                     if let selected = session.selected, let recovery = selected.remoteRecovery {
                         DisclosureGroup("Conflict recovery · compare before resolving") {
                             HStack(alignment: .top) {
@@ -62,7 +79,7 @@ public struct MarkdownEditorView: View {
                                     Text(MarkdownConversion().markdown(recovery)).textSelection(.enabled)
                                 }.frame(maxWidth: .infinity, alignment: .leading)
                             }.font(.system(size: 14)).frame(maxHeight: 160)
-                            Button("Use edited source as resolution") { session.resolve() }.disabled(session.busy)
+                            Button("Use edited source as resolution") { session.resolve() }.disabled(session.busy || selected.externalRecoveryMarkdown != nil)
                         }.padding(16)
                         Divider()
                     }
@@ -92,6 +109,11 @@ public struct MarkdownEditorView: View {
             Text(session.message).font(.callout).textSelection(.enabled)
                 .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 16).padding(.vertical, 10)
         }.frame(minWidth: 900, minHeight: 600).background(Color(nsColor: .windowBackgroundColor)).tint(.purple)
+            .onAppear {
+                if let config = session.microsoftConfiguration {
+                    clientID = config.clientID; tenant = config.tenant; redirect = config.redirectURI
+                }
+            }
     }
     private var connectionPanel: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -168,6 +190,7 @@ private struct MarkdownBlockView: View {
                 ForEach(Array(children.enumerated()), id: \.offset) { _, child in block(child) }
             })
         }
+        if tag == "pre", attrs["language"] == "mermaid" { return AnyView(MermaidPreview(source: node.text)) }
         if tag == "pre" { return AnyView(Text(node.text).font(.system(size: 15, design: .monospaced)).textSelection(.enabled).padding(12).frame(maxWidth: .infinity, alignment: .leading).background(.quaternary, in: RoundedRectangle(cornerRadius: 8))) }
         if ["ul", "ol", "li", "blockquote", "table", "tbody", "tr", "div"].contains(tag) {
             if tag == "tr" {
