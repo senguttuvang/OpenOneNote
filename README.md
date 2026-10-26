@@ -23,7 +23,7 @@ Read [the findings](research/findings.md), [architecture and reconstruction meth
 
 ## Build And Open The Mac App
 
-Requires macOS 14 or newer and Swift 6. Microsoft binaries are unnecessary for building and testing.
+Requires macOS 14 or newer and Swift 6. The original Microsoft OneNote research archives are unnecessary for building and testing. SwiftPM downloads the supported MSAL authentication dependency.
 
 ```sh
 git clone git@github.com:senguttuvang/OpenOneNote.git
