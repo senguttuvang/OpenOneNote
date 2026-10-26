@@ -52,15 +52,30 @@ private actor ProbeRemote: OneNoteRemote {
         guard identity.pageID == pageID else { throw DevelopmentError.invalidArguments("Probe cannot update a pre-existing page") }
         var mapped = commands
         let resources = Dictionary(uniqueKeysWithValues: parts.map { ($0.name, $0) })
+        var attachments: [BinaryPart] = []
+        for part in parts where !part.mimeType.hasPrefix("image/") {
+            guard String(data: part.bytes, encoding: .utf8) != nil else { throw DevelopmentError.invalidArguments("CLI validation cannot transport arbitrary binary attachments; use the native transport") }
+            attachments.append(part)
+        }
         for index in mapped.indices {
             mapped[index].content = try HTMLAssetRewriter.rewrite(mapped[index].content) { reference, image in
-                guard image, reference.hasPrefix("name:"), let part = resources[String(reference.dropFirst(5))], part.mimeType.hasPrefix("image/") else {
+                guard reference.hasPrefix("name:"), let part = resources[String(reference.dropFirst(5))] else {
                     throw DevelopmentError.invalidArguments("CLI probe supports documented image data URLs; binary source attachments require the native transport")
                 }
-                return "data:\(part.mimeType);base64," + part.bytes.base64EncodedString()
+                return image ? "data:\(part.mimeType);base64," + part.bytes.base64EncodedString() : reference
             }
         }
-        _ = try request(endpoint("pages/\(identity.pageID)/content"), method: "patch", body: JSONEncoder().encode(mapped))
+        if attachments.isEmpty { _ = try request(endpoint("pages/\(identity.pageID)/content"), method: "patch", body: JSONEncoder().encode(mapped)) }
+        else {
+            // Every byte in this validation payload is UTF-8; PNGs use documented data URLs, not a text-corrupted binary body.
+            let boundary = "O2NProbe-" + UUID().uuidString
+            var body = "--\(boundary)\r\nContent-Disposition: form-data; name=\"Commands\"\r\nContent-Type: application/json\r\n\r\n" + String(decoding: try JSONEncoder().encode(mapped), as: UTF8.self) + "\r\n"
+            for part in attachments {
+                body += "--\(boundary)\r\nContent-Disposition: form-data; name=\"\(part.name)\"\r\nContent-Type: \(part.mimeType)\r\n\r\n" + String(decoding: part.bytes, as: UTF8.self) + "\r\n"
+            }
+            body += "--\(boundary)--\r\n"
+            _ = try request(endpoint("pages/\(identity.pageID)/content"), method: "patch", body: Data(body.utf8), type: "multipart/form-data; boundary=\(boundary)")
+        }
     }
     func create(_ path: String, body: Data, type: String = "application/json") throws -> GraphItem {
         try JSONDecoder().decode(GraphItem.self, from: request(endpoint(path), method: "post", body: body, type: type))
@@ -74,6 +89,15 @@ private actor ProbeRemote: OneNoteRemote {
     }
 }
 
+private struct ProbeDiagram: DiagramRendering {
+    let source: String
+    let bytes: Data
+    func png(source: String) async throws -> Data {
+        guard source == self.source else { throw DevelopmentError.invalidArguments("Probe diagram source does not match the real native renderer fixture") }
+        return bytes
+    }
+}
+
 extension DevelopmentWorkflow {
     public func graphProbe(cli: String, output: URL) async throws {
         guard cli.hasPrefix("/"), FileManager.default.isExecutableFile(atPath: cli), !FileManager.default.fileExists(atPath: output.path) else { throw DevelopmentError.invalidArguments("Supply an installed sanctioned CLI and a new synthetic output directory") }
@@ -81,6 +105,10 @@ extension DevelopmentWorkflow {
         let fingerprint = ProbeRemote.identity(status)
         guard !fingerprint.isEmpty else { throw DevelopmentError.invalidArguments("No usable delegated CLI identity") }
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        let rendererOutput = output.appendingPathComponent("native-renderer")
+        try run(try releaseDirectory().appendingPathComponent("OpenOneNoteMac").path, ["--diagram-self-test", rendererOutput.path])
+        let diagramSource = "flowchart LR\n A[Local Markdown] --> B[OneNote page]\n"
+        let diagramPNG = try Data(contentsOf: rendererOutput.appendingPathComponent("diagram.png"))
         let remote = ProbeRemote(cli: cli, directory: output, fingerprint: fingerprint)
         var registry = ["classification": "synthetic-only; CLI delegated transport, not native MSAL", "state": "started"]
         registry["sourceRevision"] = try run("git", ["rev-parse", "HEAD"], capture: true).stdout
@@ -97,11 +125,17 @@ extension DevelopmentWorkflow {
         registry["pageID"] = page.id; try record(); await remote.register(page.id)
         let identity = PageIdentity(pageID: page.id, accountKey: fingerprint)
         let vault = try MarkdownVault(root: output.appendingPathComponent("vault"))
-        let sync = NoteSync(vault: vault, remote: remote)
+        let sync = NoteSync(vault: vault, remote: remote, diagrams: ProbeDiagram(source: diagramSource, bytes: diagramPNG))
         var ledger = try await sync.open(identity)
-        _ = try await sync.save(ledger.id, markdown: vault.markdown(ledger).replacingOccurrences(of: "Local base", with: "Local changed"))
+        let image = try vault.storeAsset(diagramPNG, resourceURL: "", extension: "png")
+        let edited = try vault.markdown(ledger).replacingOccurrences(of: "Local base", with: "Local changed") + "\n![Synthetic image](\(image.path))\n\n```mermaid\n\(diagramSource)```\n"
+        _ = try await sync.save(ledger.id, markdown: edited)
         ledger = try await sync.sync(ledger.id)
         registry["samePageFormattingTable"] = "Graph readback passed"; try record()
+        let fresh = try MarkdownVault(root: output.appendingPathComponent("recovered-vault"))
+        let recovered = try await NoteSync(vault: fresh, remote: remote).open(identity)
+        guard try fresh.markdown(recovered).contains("```mermaid"), recovered.assets.count >= 2 else { throw DevelopmentError.invalidArguments("Live image/diagram source recovery failed") }
+        registry["imageDiagramSourceRecovery"] = "passed via documented image data URLs and UTF-8 source multipart; native binary transport remains separate"; try record()
         func changeRemote(_ original: String, _ changed: String) async throws {
             let page = try await remote.fetch(identity)
             let document = try HTMLConversion().decode(page.html)
@@ -123,8 +157,21 @@ extension DevelopmentWorkflow {
         try await changeRemote("Local offline", "Remote overlap")
         do { _ = try await sync.sync(ledger.id); throw DevelopmentError.invalidArguments("Overlap was not rejected") } catch NotesError.conflict { }
         guard try vault.load(ledger.id).remoteRecovery != nil else { throw DevelopmentError.invalidArguments("Live conflict recovery missing") }
-        registry["externalRefreshOfflineReconnectDisjointOverlap"] = "passed"; registry["state"] = "passed; native MSAL/image/diagram/native OneNote visual acceptance remain separate"
+        let current = try await remote.fetch(identity)
+        let resourceURLs = try HTMLConversion().resourceURLs(current.html)
+        let placeholders = Dictionary(resourceURLs.map { ($0, ".assets/placeholder.png") }, uniquingKeysWith: { first, _ in first })
+        let targets = try HTMLConversion().decode(current.html, resources: placeholders)
+        guard let diagram = targets.blocks.first(where: { block in
+            if case .element("img", let attrs, _) = block.node { return attrs["alt"] == "O2N diagram" }; return false
+        }), let bitmap = NSBitmapImageRep(data: diagramPNG) else { throw DevelopmentError.invalidArguments("Synthetic diagram target or PNG missing") }
+        bitmap.setColor(.red, atX: 0, y: 0)
+        guard let changed = bitmap.representation(using: .png, properties: [:]) else { throw DevelopmentError.invalidArguments("Changed PNG fixture failed") }
+        try await remote.update(identity, commands: [PageCommand(target: diagram.target, action: "replace", content: "<img src=\"name:changed-preview\" alt=\"O2N diagram\" />")], parts: [BinaryPart(name: "changed-preview", mimeType: "image/png", bytes: changed)])
+        let stale = try await NoteSync(vault: fresh, remote: remote).sync(recovered.id, allowPush: false)
+        guard stale.baseline.warnings.contains(where: { $0.contains("stale") }), try !fresh.markdown(stale).contains("```mermaid") else { throw DevelopmentError.invalidArguments("Changed remote preview was not protected as stale source") }
+        registry["changedRemoteDiagramProtection"] = "passed; image/source preserved separately, earlier fence retained in recovery"
+        registry["externalRefreshOfflineReconnectDisjointOverlap"] = "passed"; registry["state"] = "passed; native MSAL/binary transport/native OneNote visual acceptance remain separate"
         try record()
-        print("Real delegated CLI Graph probe passed: same-page formatted/table readback, external refresh, offline reconnect, disjoint merge and overlap preservation. Fixtures retained locally. This does not prove native MSAL or image/diagram transport.")
+        print("Real delegated CLI Graph probe passed: formatted/table/image/diagram readback and source recovery, external refresh, offline reconnect, disjoint merge and overlap preservation. Fixtures retained locally. Native MSAL/binary transport/OneNote visual acceptance remain separate.")
     }
 }

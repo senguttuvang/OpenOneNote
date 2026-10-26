@@ -53,3 +53,15 @@ import MarkdownEditor
     session.resolveExternal(keepEdited: true)
     #expect(try vault.markdown(ledger) == "Pending native source\n")
 }
+
+@Test @MainActor func sourceEditsKeepRemoteProtectionWarningsVisible() throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let vault = try MarkdownVault(root: root)
+    var ledger = try vault.createLocal()
+    ledger.baseline.warnings = ["Diagram source is stale; image and attachment retained"]
+    try vault.saveLedger(ledger)
+    let session = try MarkdownSession(vault: vault); session.select(ledger.id)
+    session.edit("# Editing safely\n")
+    #expect(session.preview.warnings == ledger.baseline.warnings)
+}

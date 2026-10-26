@@ -54,13 +54,14 @@ import OneNoteGraph
             }
             try vault.saveOffline(source, ledger: &ledger)
             loadedFileHash = MarkdownVault.hash(source)
-            replace(ledger); message = "Saved locally · pending sync"; return true
+            replace(ledger); message = ledger.identity.root == "local" ? "Saved locally · local-only note" : "Saved locally · pending sync"; return true
         } catch { message = error.localizedDescription; return false }
     }
     public func edit(_ source: String) {
         self.source = source
         do { preview = try MarkdownConversion().parse(source) }
         catch { preview = NoteDocument(blocks: [.element("pre", [:], [.text(source)])], warnings: [error.localizedDescription]) }
+        preview.warnings += selected?.baseline.warnings ?? []
         _ = save()
     }
     public func select(_ id: UUID) {
@@ -149,6 +150,7 @@ import OneNoteGraph
             let ledger = try await sync.sync(id); self.replace(ledger)
             guard self.selectedID == id else { return }
             self.source = try self.vault.markdown(ledger); self.preview = try MarkdownConversion().parse(self.source)
+            self.preview.warnings += ledger.baseline.warnings
             self.loadedFileHash = MarkdownVault.hash(self.source)
             self.message = "Same-page sync verified by Graph readback."
         }
