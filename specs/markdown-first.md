@@ -1,0 +1,17 @@
+# Markdown-first OneNote editor
+
+Accepted scope supersedes canvas-first product assumptions. O2N edits a single linear Markdown document backed by plain `.md` and `.assets` files, with a separate versioned `.o2n` recovery/sync ledger. Legacy JSON/RTF data and research remain untouched and accessible through the legacy app mode.
+
+The product slice opens existing delegated Microsoft Graph pages, downloads supported resources, edits source with readable preview, updates the same page using freshly fetched element IDs, reads back, and refreshes external edits. Local changes save offline. Baseline/local/current-remote comparison merges disjoint block changes and preserves overlapping edits for resolution. Missing/inaccessible pages never delete local files. Page identity is independent of title/path. No `.one` parsing, extracted Microsoft identity, CSI/FSSHTTP, freeform canvas, handwriting, sidecar collaboration, or other authoritative cloud storage.
+
+## Safety and acceptance
+
+Only named synthetic notebooks/sections/pages may be written by automated live experiments. Pre-existing notes are read-only. A normal explicit product save authorizes its selected page update. No test-page deletion. Record synthetic identities locally outside Git; do not publish account identifiers, user note bodies or tokens. Native verification uses prohibited activation policy and hidden windows; preserve foreground focus. Actions stays disabled; full local Swift gate is required.
+
+Acceptance requires delegated sign-in, hierarchy selection, formatted text/table/image conversion, same-page update/readback, external edit refresh, offline reconnect and disjoint/overlapping conflict checks. Graph API readback and native OneNote visual proof are different evidence. Pending human consent/configuration is a gate, never a mocked cloud success.
+
+## Capability boundaries
+
+Supported conversion: headings, paragraphs, emphasis, lists, links, inline/fenced code, simple tables, local images and attachment references. DOM order linearizes multiple containers and explicitly warns that overlapping spatial content has no inferred reading order. Unsupported remote objects remain protected; edits crossing their boundaries are rejected. Raw Markdown HTML is rejected for cloud writes. Safe readable fallbacks retain unsupported remote objects on the server. Ambiguous block mappings reject push rather than replacing a whole canvas.
+
+Mermaid source remains fenced plain text. A rendered diagram PNG fallback and source attachment roundtrip require implementation and verification; the initial implementation refuses to sync Mermaid rather than pretending code text is a rendered diagram. Background refresh follows the explicit correct loop; no undocumented delta/webhook or ETag assumption. Read/recheck/write still has a concurrency race and does not provide transactional multi-client editing.
