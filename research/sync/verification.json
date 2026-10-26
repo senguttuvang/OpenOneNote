@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-26",
+  "evidenceManifestSHA256": "ecfb5106ee929d766ea612f8b4f1fe4bd9fe10850e67b9149de7ddcea5ec32a7",
+  "baseRevision": "c91d6a201886f2008e007157c437574938882329",
+  "localGate": {
+    "command": "swift run openonenote-dev check",
+    "result": "passed",
+    "swiftTestsPassed": 22,
+    "swiftTestsFailed": 0,
+    "releaseBuild": "passed",
+    "hiddenNativeEditUndoSaveReopen": "passed",
+    "hiddenNativeRenderWidths": [1728, 1280, 960],
+    "rejectionAndEvidenceTamperPaths": "passed"
+  },
+  "standaloneTools": {
+    "compiler": "Apple Swift 6.4",
+    "flags": ["-swift-version", "6", "-warnings-as-errors"],
+    "compiledTools": 8,
+    "requestScopeCasesPassed": 7,
+    "unregisteredObjectRejected": true,
+    "scopeSelfTestNetworkRequests": 0
+  },
+  "integrity": {
+    "evidenceFilesVerified": 134,
+    "knownPrivateObjectIDsChecked": 4,
+    "localLinks": "passed",
+    "installedBundleInventoryEntriesVerified": 20441,
+    "originalArchiveSHA256ChecksPassed": 3,
+    "originalArchiveGzipChecksPassed": 3
+  },
+  "secretScan": {
+    "tool": "gitleaks dir --redact=100",
+    "scopes": ["research/sync", "reconstruction/onenote-internals"],
+    "finalLeaksDetected": 0,
+    "reviewedFalsePositive": "Prose phrase in tooling README reworded; no suppression or allowlist added"
+  },
+  "selfReview": {
+    "scope": "Only new research/sync and reconstruction/onenote-internals files",
+    "corrections": [
+      "Separated differing metadata/header enumeration scopes",
+      "Corrected two inferred function labels after body inspection",
+      "Distinguished invalid-target attempts from valid fresh-ID geometry experiment",
+      "Documented CLI errors without inventing HTTP statuses or conflict causes",
+      "Kept native protocol/receipt/offline experiments explicitly unperformed"
+    ],
+    "applicationSourceChanged": false,
+    "existingNoteWritesByProbe": 0,
+    "retainedSyntheticPages": 2,
+    "gitHubActionsEnabled": false,
+    "remainingNativeResearchTask": "oon-4kg"
+  }
+}

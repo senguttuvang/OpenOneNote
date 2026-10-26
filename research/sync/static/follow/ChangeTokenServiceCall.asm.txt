@@ -1,0 +1,52 @@
+0079dc78 sub sp,sp,#0x90
+0079dc7c stp x29,x30,[sp, #0x80]
+0079dc80 add x29,sp,#0x80
+0079dc84 ldp x8,x9,[x29, #0x10]
+0079dc88 ldr w10,[x29, #0x20]
+0079dc8c ldp x11,x12,[x29, #0x28]
+0079dc90 adrp x13,0xc8a000
+0079dc94 ldr x13,[x13, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+0079dc98 ldr x13,[x13]
+  ref 00e29500 ___stack_chk_guard
+0079dc9c stur x13,[x29, #-0x8]
+0079dca0 stp x2,x1,[sp, #0x30]
+0079dca4 stp x4,x3,[sp, #0x20]
+0079dca8 stp x6,x5,[sp, #0x10]
+0079dcac str x7,[sp, #0x8]
+0079dcb0 add x13,sp,#0x38
+0079dcb4 add x14,sp,#0x30
+0079dcb8 stp x13,x14,[sp, #0x40]
+0079dcbc add x13,sp,#0x28
+0079dcc0 add x14,sp,#0x20
+0079dcc4 stp x13,x14,[sp, #0x50]
+0079dcc8 add x13,sp,#0x18
+0079dccc add x14,sp,#0x10
+0079dcd0 stp x13,x14,[sp, #0x60]
+0079dcd4 add x13,sp,#0x8
+0079dcd8 str x13,[sp, #0x70]
+0079dcdc adrp x1,0xd4c000
+0079dce0 add x1,x1,#0x358
+  ref 00d4c358 DAT_00d4c358
+0079dce4 add x2,sp,#0x40
+0079dce8 mov x3,x8
+0079dcec mov x4,x9
+0079dcf0 mov x5,x10
+0079dcf4 mov x6,x11
+0079dcf8 mov x7,x12
+0079dcfc bl 0x009b375c
+  ref 009b375c _WsCall
+0079dd00 ldur x8,[x29, #-0x8]
+0079dd04 adrp x9,0xc8a000
+0079dd08 ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+0079dd0c ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+0079dd10 cmp x9,x8
+0079dd14 b.ne 0x0079dd24
+  ref 0079dd24 LAB_0079dd24
+0079dd18 ldp x29,x30,[sp, #0x80]
+0079dd1c add sp,sp,#0x90
+0079dd20 ret
+0079dd24 bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail

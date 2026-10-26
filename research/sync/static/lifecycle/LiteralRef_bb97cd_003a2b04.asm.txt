@@ -1,0 +1,785 @@
+003a2b04 stp x28,x27,[sp, #-0x60]!
+003a2b08 stp x26,x25,[sp, #0x10]
+003a2b0c stp x24,x23,[sp, #0x20]
+003a2b10 stp x22,x21,[sp, #0x30]
+003a2b14 stp x20,x19,[sp, #0x40]
+003a2b18 stp x29,x30,[sp, #0x50]
+003a2b1c add x29,sp,#0x50
+003a2b20 sub sp,sp,#0x490
+003a2b24 mov x28,x7
+003a2b28 str w6,[sp, #0x8c]
+003a2b2c mov x25,x5
+003a2b30 mov x26,x4
+003a2b34 str x3,[sp, #0x90]
+003a2b38 mov x20,x1
+003a2b3c mov x22,x0
+003a2b40 mov x19,x8
+003a2b44 adrp x8,0xc8a000
+003a2b48 ldr x8,[x8, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+003a2b4c ldr x8,[x8]
+  ref 00e29500 ___stack_chk_guard
+003a2b50 stur x8,[x29, #-0x60]
+003a2b54 stur w2,[x29, #-0xe4]
+003a2b58 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+003a2b5c mov x27,x0
+003a2b60 sub x8,x29,#0xf0
+003a2b64 mov x0,x22
+003a2b68 bl 0x003a34c0
+  ref 003a34c0 FUN_003a34c0
+003a2b6c ldur x0,[x29, #-0xf0]
+003a2b70 cbz x0,0x003a3494
+  ref 003a3494 LAB_003a3494
+003a2b74 ldr x8,[x0]
+003a2b78 ldr x8,[x8, #0x28]
+003a2b7c mov x1,x20
+003a2b80 mov x2,x27
+003a2b84 blr x8
+003a2b88 adrp x8,0xd9a000
+003a2b8c ldrsb w8,[x8, #0xae0]
+  ref 00d9aae0 DAT_00d9aae0
+003a2b90 tbnz w8,#0x1f,0x003a2ba0
+  ref 003a2ba0 LAB_003a2ba0
+003a2b94 cmp w8,#0x0
+003a2b98 cset w0,ne
+003a2b9c b 0x003a2bac
+  ref 003a2bac LAB_003a2bac
+003a2ba0 adrp x0,0xd9a000
+003a2ba4 add x0,x0,#0xae0
+  ref 00d9aae0 DAT_00d9aae0
+003a2ba8 bl 0x009b5bd4
+  ref 009b5bd4 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::FeatureGate::Evaluate
+003a2bac orr w8,w25,w0
+003a2bb0 cmp w20,#0x2
+003a2bb4 csinc w21,w8,wzr,ne
+003a2bb8 ldur w2,[x29, #-0xe4]
+003a2bbc stur w2,[x29, #-0xf4]
+003a2bc0 csinc w8,w25,wzr,ne
+003a2bc4 stp w0,w8,[sp, #0x84]
+003a2bc8 cmp w8,#0x1
+003a2bcc b.ne 0x003a2c18
+  ref 003a2c18 LAB_003a2c18
+003a2bd0 cbz w27,0x003a2c18
+  ref 003a2c18 LAB_003a2c18
+003a2bd4 mov w8,#0x21
+003a2bd8 mov w9,#0x23
+003a2bdc mov w10,#0x24
+003a2be0 mov w11,#0x25
+003a2be4 cmp w20,#0x2
+003a2be8 csel w11,w11,w2,eq
+003a2bec cmp w20,#0x14
+003a2bf0 csel w10,w10,w11,eq
+003a2bf4 cmp w20,#0x4
+003a2bf8 csel w9,w9,w10,eq
+003a2bfc cmp w20,#0x1
+003a2c00 csel w3,w8,w9,eq
+003a2c04 mov w0,#0xd194
+003a2c08 movk w0,#0x1e29, LSL #16
+003a2c0c mov x1,x22
+003a2c10 bl 0x006b58a8
+  ref 006b58a8 FUN_006b58a8
+003a2c14 stur w0,[x29, #-0xe4]
+003a2c18 cbz w21,0x003a2c9c
+  ref 003a2c9c LAB_003a2c9c
+003a2c1c mov x0,x22
+003a2c20 mov w1,#0x1
+003a2c24 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+003a2c28 str w0,[sp, #0x80]
+003a2c2c mov x0,x22
+003a2c30 mov w1,#0x4
+003a2c34 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+003a2c38 str w0,[sp, #0x7c]
+003a2c3c mov x0,x22
+003a2c40 mov w1,#0x14
+003a2c44 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+003a2c48 str w0,[sp, #0x78]
+003a2c4c mov x0,x22
+003a2c50 mov w1,#0x2
+003a2c54 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+003a2c58 mov x21,x0
+003a2c5c mov w24,#0x0
+003a2c60 ldur w8,[x29, #-0xe4]
+003a2c64 cmp w20,#0x4
+003a2c68 b.ne 0x003a2d24
+  ref 003a2d24 LAB_003a2d24
+003a2c6c and w9,w8,#0xfffffffe
+003a2c70 mov x23,x24
+003a2c74 cmp w9,#0xc
+003a2c78 b.ne 0x003a2d28
+  ref 003a2d28 LAB_003a2d28
+003a2c7c mov w0,#0x4495
+003a2c80 movk w0,#0x1e24, LSL #16
+003a2c84 mov x1,x22
+003a2c88 bl 0x003f0e8c
+  ref 003f0e8c FUN_003f0e8c
+003a2c8c mov x24,x0
+003a2c90 mov w23,#0x1
+003a2c94 ldur w8,[x29, #-0xe4]
+003a2c98 b 0x003a2d28
+  ref 003a2d28 LAB_003a2d28
+003a2c9c stur xzr,[x19, #0x1e]
+003a2ca0 movi v0.2D,#0x0
+003a2ca4 stp q0,q0,[x19]
+003a2ca8 stp xzr,xzr,[x19, #0x28]
+003a2cac mov w8,#0x4
+003a2cb0 str w8,[x19, #0x38]
+003a2cb4 strb wzr,[x19, #0x70]
+003a2cb8 stp q0,q0,[x19, #0x40]
+003a2cbc stur q0,[x19, #0x59]
+003a2cc0 adrp x1,0xb7c000
+003a2cc4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2cc8 add x0,x19,#0x78
+003a2ccc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2cd0 adrp x1,0xb7c000
+003a2cd4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2cd8 add x0,x19,#0x90
+003a2cdc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2ce0 adrp x1,0xb7c000
+003a2ce4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2ce8 add x0,x19,#0xa8
+003a2cec bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2cf0 adrp x1,0xb7c000
+003a2cf4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2cf8 add x0,x19,#0xc0
+003a2cfc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2d00 adrp x1,0xb7c000
+003a2d04 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2d08 add x0,x19,#0xd8
+003a2d0c bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2d10 str wzr,[x19, #0x108]
+003a2d14 strh wzr,[x19, #0x10c]
+003a2d18 stp xzr,xzr,[x19, #0xf0]
+003a2d1c stur xzr,[x19, #0xfe]
+003a2d20 b 0x003a3444
+  ref 003a3444 LAB_003a3444
+003a2d24 mov x23,x24
+003a2d28 str w8,[x19]
+003a2d2c strb w27,[x19, #0x4]
+003a2d30 ldr w8,[sp, #0x8c]
+003a2d34 strb w8,[x19, #0x5]
+003a2d38 ldr x8,[sp, #0x90]
+003a2d3c ldr q0,[x8]
+003a2d40 stur q0,[x19, #0x6]
+003a2d44 str x26,[sp, #0x70]
+003a2d48 ldr q0,[x26]
+003a2d4c stur q0,[x19, #0x16]
+003a2d50 mov x26,#0x594b
+003a2d54 movk x26,#0x3886, LSL #16
+003a2d58 movk x26,#0xc5d6, LSL #32
+003a2d5c movk x26,#0x346d, LSL #48
+003a2d60 umulh x8,x28,x26
+003a2d64 lsr x8,x8,#0xb
+003a2d68 str x8,[x19, #0x28]
+003a2d6c mov w0,#0xb34f
+003a2d70 movk w0,#0x1e35, LSL #16
+003a2d74 mov x1,x22
+003a2d78 bl 0x000e3584
+  ref 000e3584 FUN_000e3584
+003a2d7c umulh x8,x0,x26
+003a2d80 lsr x8,x8,#0xb
+003a2d84 str x8,[x19, #0x30]
+003a2d88 mov w8,#0x4
+003a2d8c str w8,[x19, #0x38]
+003a2d90 strb wzr,[x19, #0x70]
+003a2d94 movi v0.2D,#0x0
+003a2d98 stp q0,q0,[x19, #0x40]
+003a2d9c stur q0,[x19, #0x59]
+003a2da0 adrp x1,0xb7c000
+003a2da4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2da8 add x0,x19,#0x78
+003a2dac bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2db0 adrp x1,0xb7c000
+003a2db4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2db8 add x0,x19,#0x90
+003a2dbc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2dc0 adrp x1,0xb7c000
+003a2dc4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2dc8 add x0,x19,#0xa8
+003a2dcc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2dd0 adrp x1,0xb7c000
+003a2dd4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2dd8 add x0,x19,#0xc0
+003a2ddc bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2de0 adrp x1,0xb7c000
+003a2de4 add x1,x1,#0x84d
+  ref 00b7c84d s__00b7c84d
+003a2de8 add x0,x19,#0xd8
+003a2dec bl 0x00001eb8
+  ref 00001eb8 FUN_00001eb8
+003a2df0 stp xzr,xzr,[x19, #0xf0]
+003a2df4 ldp w8,w9,[sp, #0x7c]
+003a2df8 strb w9,[x19, #0x100]
+003a2dfc strb w8,[x19, #0x101]
+003a2e00 ldr w8,[sp, #0x78]
+003a2e04 strb w8,[x19, #0x102]
+003a2e08 strb w21,[x19, #0x103]
+003a2e0c mov x0,x22
+003a2e10 mov w1,#0x1
+003a2e14 bl 0x000b5884
+  ref 000b5884 FUN_000b5884
+003a2e18 strb w0,[x19, #0x104]
+003a2e1c mov x0,x22
+003a2e20 bl 0x003f0a04
+  ref 003f0a04 FUN_003f0a04
+003a2e24 strb w0,[x19, #0x105]
+003a2e28 ldur w8,[x29, #-0xf4]
+003a2e2c str w8,[x19, #0x108]
+003a2e30 orr w8,w24,w23, LSL #0x8
+003a2e34 strh w8,[x19, #0x10c]
+003a2e38 mov x0,x22
+003a2e3c mov x1,x19
+003a2e40 bl 0x003a3c58
+  ref 003a3c58 FUN_003a3c58
+003a2e44 mov w0,#0x18
+003a2e48 mov w1,#0x0
+003a2e4c bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+003a2e50 cbz x0,0x003a3498
+  ref 003a3498 LAB_003a3498
+003a2e54 mov w8,#0x1
+003a2e58 str w8,[x0, #0x8]
+003a2e5c adrp x8,0xcee000
+003a2e60 add x8,x8,#0x270
+003a2e64 str x8,[x0]
+  ref 00cee270 PTR_FUN_00cee270
+003a2e68 str x19,[x0, #0x10]
+003a2e6c str x0,[sp, #0x398]
+003a2e70 add x3,sp,#0x398
+003a2e74 mov w0,#0xa04c
+003a2e78 movk w0,#0x1e31, LSL #16
+003a2e7c mov x1,x22
+003a2e80 mov x2,x20
+003a2e84 bl 0x000b5eb0
+  ref 000b5eb0 FUN_000b5eb0
+003a2e88 ldr x0,[sp, #0x398]
+003a2e8c cbz x0,0x003a2ea0
+  ref 003a2ea0 LAB_003a2ea0
+003a2e90 str xzr,[sp, #0x398]
+003a2e94 ldr x8,[x0]
+003a2e98 ldr x8,[x8, #0x10]
+  ref 00cee280 PTR_FUN_00cee280
+003a2e9c blr x8
+  ref 000b6044 FUN_000b6044
+003a2ea0 adrp x8,0xbb9000
+003a2ea4 add x8,x8,#0x7cd
+003a2ea8 stur x8,[x29, #-0x100]
+  ref 00bb97cd s_HostNotifications::OnRequestComp_00bb97cd
+003a2eac add x21,sp,#0x368
+003a2eb0 add x0,sp,#0x368
+003a2eb4 sub x1,x29,#0xe4
+003a2eb8 bl 0x00059ce0
+  ref 00059ce0 thunk_FUN_00059ce4
+003a2ebc ldrsb w8,[sp, #0x37f]
+003a2ec0 ldr x9,[sp, #0x368]
+003a2ec4 cmp w8,#0x0
+003a2ec8 csel x1,x9,x21,lt
+003a2ecc add x0,sp,#0x380
+003a2ed0 bl 0x000019ec
+  ref 000019ec FUN_000019ec
+003a2ed4 adrp x21,0xc8e000
+003a2ed8 add x21,x21,#0x7c8
+003a2edc add x26,sp,#0x290
+003a2ee0 add x8,x21,#0x10
+003a2ee4 adrp x9,0xb7e000
+003a2ee8 add x9,x9,#0x35c
+003a2eec str x8,[sp, #0x398]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a2ef0 str x9,[sp, #0x3a0]
+  ref 00b7e35c s_FileScenario_00b7e35c
+003a2ef4 ldr q0,[x26, #0xf0]
+003a2ef8 add x8,sp,#0x2a9
+003a2efc stur q0,[x8, #0xff]
+003a2f00 ldr x8,[sp, #0x390]
+003a2f04 str x8,[sp, #0x3b8]
+003a2f08 str xzr,[sp, #0x388]
+003a2f0c str xzr,[sp, #0x380]
+003a2f10 str xzr,[sp, #0x390]
+003a2f14 mov w8,#0x4
+003a2f18 strh w8,[sp, #0x3c0]
+003a2f1c str xzr,[sp, #0x3d8]
+003a2f20 str xzr,[sp, #0x3c8]
+003a2f24 str xzr,[sp, #0x3d0]
+003a2f28 add x23,sp,#0x2f0
+003a2f2c add x0,sp,#0x2f0
+003a2f30 sub x1,x29,#0xf4
+003a2f34 bl 0x00059ce0
+  ref 00059ce0 thunk_FUN_00059ce4
+003a2f38 ldrsb w8,[sp, #0x307]
+003a2f3c ldr x9,[sp, #0x2f0]
+003a2f40 cmp w8,#0x0
+003a2f44 csel x1,x9,x23,lt
+003a2f48 add x0,sp,#0x308
+003a2f4c bl 0x000019ec
+  ref 000019ec FUN_000019ec
+003a2f50 add x8,x21,#0x10
+003a2f54 adrp x9,0xbb9000
+003a2f58 add x9,x9,#0x7f4
+003a2f5c str x8,[sp, #0x320]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a2f60 str x9,[sp, #0x328]
+  ref 00bb97f4 s_OriginalFileScenario_00bb97f4
+003a2f64 add x8,sp,#0x209
+003a2f68 ldur q0,[x8, #0xff]
+003a2f6c str q0,[x26, #0xa0]
+003a2f70 ldr x8,[sp, #0x318]
+003a2f74 str x8,[sp, #0x340]
+003a2f78 str xzr,[sp, #0x310]
+003a2f7c str xzr,[sp, #0x308]
+003a2f80 str xzr,[sp, #0x318]
+003a2f84 mov w8,#0x4
+003a2f88 strh w8,[sp, #0x348]
+003a2f8c str xzr,[sp, #0x360]
+003a2f90 add w8,w20,#0x4
+003a2f94 str xzr,[sp, #0x350]
+003a2f98 str xzr,[sp, #0x358]
+003a2f9c cmp w8,#0x1b
+003a2fa0 b.hi 0x003a2fb4
+  ref 003a2fb4 LAB_003a2fb4
+003a2fa4 adrp x9,0xcee000
+003a2fa8 add x9,x9,#0x4e0
+003a2fac ldr x1,[x9, w8, UXTW #0x3]
+  ref 00cee4e0 PTR_u_UpdateNotificationType_Persiste_00cee4e0
+003a2fb0 b 0x003a2fbc
+  ref 003a2fbc LAB_003a2fbc
+003a2fb4 adrp x1,0xc05000
+003a2fb8 add x1,x1,#0xd66
+  ref 00c05d66 u_UnknownUpdateNotificationType_00c05d66
+003a2fbc add x0,sp,#0x290
+003a2fc0 bl 0x000019ec
+  ref 000019ec FUN_000019ec
+003a2fc4 add x8,x21,#0x10
+003a2fc8 adrp x9,0xbb9000
+003a2fcc add x9,x9,#0x14f
+003a2fd0 str x8,[sp, #0x2a8]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a2fd4 str x9,[sp, #0x2b0]
+  ref 00bb914f s_Notification_00bb914f
+003a2fd8 add x8,x19,#0x68
+003a2fdc ldr q0,[x26]
+003a2fe0 add x9,sp,#0x1b9
+003a2fe4 stur q0,[x9, #0xff]
+003a2fe8 ldr x9,[sp, #0x2a0]
+003a2fec str x9,[sp, #0x2c8]
+003a2ff0 str xzr,[sp, #0x298]
+003a2ff4 str xzr,[sp, #0x290]
+003a2ff8 str xzr,[sp, #0x2a0]
+003a2ffc mov w9,#0x4
+003a3000 strh w9,[sp, #0x2d0]
+003a3004 str xzr,[sp, #0x2e8]
+003a3008 str xzr,[sp, #0x2d8]
+003a300c str xzr,[sp, #0x2e0]
+003a3010 adrp x23,0xc8b000
+003a3014 add x23,x23,#0x148
+003a3018 add x10,x23,#0x10
+003a301c adrp x11,0xbb9000
+003a3020 add x11,x11,#0x62d
+003a3024 str x10,[sp, #0x260]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a3028 str x11,[sp, #0x268]
+  ref 00bb962d s_Subscribed_00bb962d
+003a302c strb w27,[sp, #0x270]
+003a3030 strh w9,[sp, #0x272]
+003a3034 str xzr,[sp, #0x288]
+003a3038 str xzr,[sp, #0x278]
+003a303c str xzr,[sp, #0x280]
+003a3040 adrp x11,0xb7d000
+003a3044 add x11,x11,#0xd11
+003a3048 str x10,[sp, #0x230]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a304c str x11,[sp, #0x238]
+  ref 00b7dd11 s_IsRepeatable_00b7dd11
+003a3050 ldr w11,[sp, #0x8c]
+003a3054 strb w11,[sp, #0x240]
+003a3058 strh w9,[sp, #0x242]
+003a305c str xzr,[sp, #0x258]
+003a3060 str xzr,[sp, #0x248]
+003a3064 str xzr,[sp, #0x250]
+003a3068 adrp x11,0xbb9000
+003a306c add x11,x11,#0x809
+003a3070 str x10,[sp, #0x200]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a3074 str x11,[sp, #0x208]
+  ref 00bb9809 s_DetectedUpdates_00bb9809
+003a3078 strb w25,[sp, #0x210]
+003a307c mov w10,#0x100
+003a3080 strh w10,[sp, #0x212]
+003a3084 str xzr,[sp, #0x228]
+003a3088 str xzr,[sp, #0x218]
+003a308c str xzr,[sp, #0x220]
+003a3090 adrp x24,0xc8d000
+003a3094 add x24,x24,#0xef0
+003a3098 add x11,x24,#0x10
+003a309c adrp x12,0xbb5000
+003a30a0 add x12,x12,#0xbce
+003a30a4 stp x11,x12,[x29, #-0xa0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+  ref 00bb5bce s_SyncRequestId_00bb5bce
+003a30a8 ldr x12,[sp, #0x90]
+003a30ac ldr q0,[x12]
+003a30b0 str q0,[x26, #0x1c0]
+003a30b4 sturh w10,[x29, #-0x80]
+003a30b8 stp xzr,xzr,[x29, #-0x70]
+003a30bc adrp x12,0xb81000
+003a30c0 add x12,x12,#0x641
+003a30c4 stur xzr,[x29, #-0x78]
+003a30c8 stp x11,x12,[x29, #-0xe0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+  ref 00b81641 s_ServerCorrelationId_00b81641
+003a30cc ldr x11,[sp, #0x70]
+003a30d0 ldr q0,[x11]
+003a30d4 str q0,[x26, #0x180]
+003a30d8 sturh w10,[x29, #-0xc0]
+003a30dc stp xzr,xzr,[x29, #-0xb0]
+003a30e0 stur xzr,[x29, #-0xb8]
+003a30e4 ldr w10,[x19, #0x38]
+003a30e8 adrp x25,0xc8b000
+003a30ec add x25,x25,#0x198
+003a30f0 add x11,x25,#0x10
+003a30f4 adrp x12,0xb95000
+003a30f8 add x12,x12,#0xb4d
+003a30fc stp x11,x12,[sp, #0x1d0]
+  ref 00c8b1a8 PTR_DAT_00c8b1a8
+  ref 00b95b4d s_RtcConnectionState_00b95b4d
+003a3100 str w10,[sp, #0x1e0]
+003a3104 strh w9,[sp, #0x1e4]
+003a3108 stp xzr,xzr,[sp, #0x1f0]
+003a310c str xzr,[sp, #0x1e8]
+003a3110 adrp x26,0xc8b000
+003a3114 add x26,x26,#0xf8
+003a3118 add x27,x26,#0x10
+003a311c adrp x10,0xb95000
+003a3120 add x10,x10,#0xb92
+003a3124 stp x27,x10,[sp, #0x198]
+  ref 00c8b108 PTR_DAT_00c8b108
+  ref 00b95b92 s_TimeSinceRtcReconnectingStart_00b95b92
+003a3128 ldp x10,x11,[x19, #0x40]
+003a312c str x10,[sp, #0x1a8]
+003a3130 strh w9,[sp, #0x1b0]
+003a3134 stp xzr,xzr,[sp, #0x1c0]
+003a3138 str xzr,[sp, #0x1b8]
+003a313c adrp x10,0xb95000
+003a3140 add x10,x10,#0xb76
+003a3144 stp x27,x10,[sp, #0x160]
+  ref 00c8b108 PTR_DAT_00c8b108
+  ref 00b95b76 s_TimeSinceRtcConnectingStart_00b95b76
+003a3148 str x11,[sp, #0x170]
+003a314c strh w9,[sp, #0x178]
+003a3150 stp xzr,xzr,[sp, #0x188]
+003a3154 str xzr,[sp, #0x180]
+003a3158 adrp x10,0xb95000
+003a315c add x10,x10,#0xbb0
+003a3160 stp x27,x10,[sp, #0x128]
+  ref 00c8b108 PTR_DAT_00c8b108
+  ref 00b95bb0 s_TimeSinceRtcTokenRefreshStart_00b95bb0
+003a3164 ldr x10,[x19, #0x50]
+003a3168 str x10,[sp, #0x138]
+003a316c strh w9,[sp, #0x140]
+003a3170 stp xzr,xzr,[sp, #0x150]
+003a3174 str xzr,[sp, #0x148]
+003a3178 adrp x10,0xb95000
+003a317c add x10,x10,#0xb60
+003a3180 stp x27,x10,[sp, #0xf0]
+  ref 00c8b108 PTR_DAT_00c8b108
+  ref 00b95b60 s_TimeSincePowerRestore_00b95b60
+003a3184 ldp x10,x11,[x19, #0xf0]
+003a3188 str x10,[sp, #0x100]
+003a318c strh w9,[sp, #0x108]
+003a3190 stp xzr,xzr,[sp, #0x118]
+003a3194 str xzr,[sp, #0x110]
+003a3198 adrp x10,0xbb9000
+003a319c add x10,x10,#0x819
+003a31a0 stp x27,x10,[sp, #0xb8]
+  ref 00c8b108 PTR_DAT_00c8b108
+  ref 00bb9819 s_TimeSinceSubscriptionStarted_00bb9819
+003a31a4 str x11,[sp, #0xc8]
+003a31a8 strh w9,[sp, #0xd0]
+003a31ac stp xzr,xzr,[sp, #0xe0]
+003a31b0 str xzr,[sp, #0xd8]
+003a31b4 adrp x10,0xc9d000
+003a31b8 add x10,x10,#0x38
+003a31bc add x10,x10,#0x10
+003a31c0 adrp x11,0xbb9000
+003a31c4 add x11,x11,#0x836
+003a31c8 stp x10,x11,[sp, #0x98]
+  ref 00c9d048 PTR_FUN_00c9d048
+  ref 00bb9836 s_EstimatedLastResumeTime_00bb9836
+003a31cc str x8,[sp, #0xa8]
+003a31d0 strh w9,[sp, #0xb0]
+003a31d4 add x8,sp,#0x98
+003a31d8 add x9,sp,#0xb8
+003a31dc stp x8,x22,[sp, #0x58]
+003a31e0 str x9,[sp, #0x50]
+003a31e4 add x8,sp,#0xf0
+003a31e8 add x9,sp,#0x128
+003a31ec stp x9,x8,[sp, #0x40]
+003a31f0 add x8,sp,#0x160
+003a31f4 add x9,sp,#0x198
+003a31f8 add x10,sp,#0x1d0
+003a31fc stp x9,x8,[sp, #0x30]
+003a3200 sub x8,x29,#0xe0
+003a3204 sub x9,x29,#0xa0
+003a3208 add x11,sp,#0x200
+003a320c add x12,sp,#0x230
+003a3210 stp x8,x10,[sp, #0x20]
+003a3214 add x8,sp,#0x260
+003a3218 sub x4,x29,#0x100
+003a321c add x5,sp,#0x398
+003a3220 add x6,sp,#0x320
+003a3224 add x7,sp,#0x2a8
+003a3228 stp x11,x9,[sp, #0x10]
+003a322c stp x8,x12,[sp]
+003a3230 mov w0,#0xd049
+003a3234 movk w0,#0x1e31, LSL #16
+003a3238 mov w1,#0x657
+  ref 00000657 section_00000650.sectname+7
+003a323c mov w2,#0x32
+003a3240 mov w3,#0x2
+003a3244 bl 0x003a46cc
+  ref 003a46cc FUN_003a46cc
+003a3248 str x27,[sp, #0xb8]
+  ref 00c8b108 PTR_DAT_00c8b108
+003a324c ldrsb w8,[sp, #0xef]
+003a3250 tbz w8,#0x1f,0x003a325c
+  ref 003a325c LAB_003a325c
+003a3254 ldr x0,[sp, #0xd8]
+003a3258 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a325c str x27,[sp, #0xf0]
+  ref 00c8b108 PTR_DAT_00c8b108
+003a3260 ldrsb w8,[sp, #0x127]
+003a3264 tbz w8,#0x1f,0x003a3270
+  ref 003a3270 LAB_003a3270
+003a3268 ldr x0,[sp, #0x110]
+003a326c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3270 add x22,x26,#0x10
+003a3274 str x22,[sp, #0x128]
+  ref 00c8b108 PTR_DAT_00c8b108
+003a3278 ldrsb w8,[sp, #0x15f]
+003a327c tbz w8,#0x1f,0x003a3288
+  ref 003a3288 LAB_003a3288
+003a3280 ldr x0,[sp, #0x148]
+003a3284 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3288 str x22,[sp, #0x160]
+  ref 00c8b108 PTR_DAT_00c8b108
+003a328c ldrsb w8,[sp, #0x197]
+003a3290 tbz w8,#0x1f,0x003a329c
+  ref 003a329c LAB_003a329c
+003a3294 ldr x0,[sp, #0x180]
+003a3298 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a329c add x8,x26,#0x10
+003a32a0 str x8,[sp, #0x198]
+  ref 00c8b108 PTR_DAT_00c8b108
+003a32a4 ldrsb w8,[sp, #0x1cf]
+003a32a8 tbz w8,#0x1f,0x003a32b4
+  ref 003a32b4 LAB_003a32b4
+003a32ac ldr x0,[sp, #0x1b8]
+003a32b0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a32b4 add x8,x25,#0x10
+003a32b8 str x8,[sp, #0x1d0]
+  ref 00c8b1a8 PTR_DAT_00c8b1a8
+003a32bc ldrsb w8,[sp, #0x1ff]
+003a32c0 tbz w8,#0x1f,0x003a32cc
+  ref 003a32cc LAB_003a32cc
+003a32c4 ldr x0,[sp, #0x1e8]
+003a32c8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a32cc add x22,x24,#0x10
+003a32d0 stur x22,[x29, #-0xe0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+003a32d4 ldursb w8,[x29, #-0xa1]
+003a32d8 tbz w8,#0x1f,0x003a32e4
+  ref 003a32e4 LAB_003a32e4
+003a32dc ldur x0,[x29, #-0xb8]
+003a32e0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a32e4 stur x22,[x29, #-0xa0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+003a32e8 ldursb w8,[x29, #-0x61]
+003a32ec tbz w8,#0x1f,0x003a32f8
+  ref 003a32f8 LAB_003a32f8
+003a32f0 ldur x0,[x29, #-0x78]
+003a32f4 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a32f8 add x22,x23,#0x10
+003a32fc str x22,[sp, #0x200]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a3300 ldrsb w8,[sp, #0x22f]
+003a3304 tbz w8,#0x1f,0x003a3310
+  ref 003a3310 LAB_003a3310
+003a3308 ldr x0,[sp, #0x218]
+003a330c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3310 str x22,[sp, #0x230]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a3314 ldrsb w8,[sp, #0x25f]
+003a3318 tbz w8,#0x1f,0x003a3324
+  ref 003a3324 LAB_003a3324
+003a331c ldr x0,[sp, #0x248]
+003a3320 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3324 add x8,x23,#0x10
+003a3328 str x8,[sp, #0x260]
+  ref 00c8b158 PTR_DAT_00c8b158
+003a332c ldrsb w8,[sp, #0x28f]
+003a3330 tbz w8,#0x1f,0x003a333c
+  ref 003a333c LAB_003a333c
+003a3334 ldr x0,[sp, #0x278]
+003a3338 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a333c add x8,x21,#0x10
+003a3340 str x8,[sp, #0x2a8]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a3344 ldrsb w8,[sp, #0x2ef]
+003a3348 tbz w8,#0x1f,0x003a3354
+  ref 003a3354 LAB_003a3354
+003a334c ldr x0,[sp, #0x2d8]
+003a3350 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3354 ldrsb w8,[sp, #0x2cf]
+003a3358 tbz w8,#0x1f,0x003a3364
+  ref 003a3364 LAB_003a3364
+003a335c ldr x0,[sp, #0x2b8]
+003a3360 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3364 ldrsb w8,[sp, #0x2a7]
+003a3368 tbz w8,#0x1f,0x003a3374
+  ref 003a3374 LAB_003a3374
+003a336c ldr x0,[sp, #0x290]
+003a3370 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3374 add x8,x21,#0x10
+003a3378 str x8,[sp, #0x320]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a337c ldrsb w8,[sp, #0x367]
+003a3380 tbz w8,#0x1f,0x003a338c
+  ref 003a338c LAB_003a338c
+003a3384 ldr x0,[sp, #0x350]
+003a3388 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a338c ldrsb w8,[sp, #0x347]
+003a3390 tbz w8,#0x1f,0x003a339c
+  ref 003a339c LAB_003a339c
+003a3394 ldr x0,[sp, #0x330]
+003a3398 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a339c ldrsb w8,[sp, #0x31f]
+003a33a0 tbz w8,#0x1f,0x003a33ac
+  ref 003a33ac LAB_003a33ac
+003a33a4 ldr x0,[sp, #0x308]
+003a33a8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a33ac ldrsb w8,[sp, #0x307]
+003a33b0 tbz w8,#0x1f,0x003a33bc
+  ref 003a33bc LAB_003a33bc
+003a33b4 ldr x0,[sp, #0x2f0]
+003a33b8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a33bc add x8,x21,#0x10
+003a33c0 str x8,[sp, #0x398]
+  ref 00c8e7d8 PTR_DAT_00c8e7d8
+003a33c4 ldrsb w8,[sp, #0x3df]
+003a33c8 tbz w8,#0x1f,0x003a33d4
+  ref 003a33d4 LAB_003a33d4
+003a33cc ldr x0,[sp, #0x3c8]
+003a33d0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a33d4 ldrsb w8,[sp, #0x3bf]
+003a33d8 tbz w8,#0x1f,0x003a33e4
+  ref 003a33e4 LAB_003a33e4
+003a33dc ldr x0,[sp, #0x3a8]
+003a33e0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a33e4 ldrsb w8,[sp, #0x397]
+003a33e8 tbz w8,#0x1f,0x003a33f4
+  ref 003a33f4 LAB_003a33f4
+003a33ec ldr x0,[sp, #0x380]
+003a33f0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a33f4 ldrsb w8,[sp, #0x37f]
+003a33f8 tbz w8,#0x1f,0x003a3404
+  ref 003a3404 LAB_003a3404
+003a33fc ldr x0,[sp, #0x368]
+003a3400 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+003a3404 ldr w8,[sp, #0x88]
+003a3408 cbz w8,0x003a3420
+  ref 003a3420 LAB_003a3420
+003a340c ldur x0,[x29, #-0xf0]
+003a3410 cbz x0,0x003a349c
+  ref 003a349c LAB_003a349c
+003a3414 ldr x8,[x0]
+003a3418 ldr x8,[x8, #0x18]
+003a341c b 0x003a3438
+  ref 003a3438 LAB_003a3438
+003a3420 ldr w8,[sp, #0x84]
+003a3424 cbz w8,0x003a3444
+  ref 003a3444 LAB_003a3444
+003a3428 ldur x0,[x29, #-0xf0]
+003a342c cbz x0,0x003a34a0
+  ref 003a34a0 LAB_003a34a0
+003a3430 ldr x8,[x0]
+003a3434 ldr x8,[x8, #0x20]
+003a3438 mov x1,x20
+003a343c mov x2,x19
+003a3440 blr x8
+003a3444 ldur x0,[x29, #-0xf0]
+003a3448 cbz x0,0x003a345c
+  ref 003a345c LAB_003a345c
+003a344c stur xzr,[x29, #-0xf0]
+003a3450 ldr x8,[x0]
+003a3454 ldr x8,[x8, #0x10]
+003a3458 blr x8
+003a345c ldur x8,[x29, #-0x60]
+003a3460 adrp x9,0xc8a000
+003a3464 ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+003a3468 ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+003a346c cmp x9,x8
+003a3470 b.ne 0x003a34a4
+  ref 003a34a4 LAB_003a34a4
+003a3474 add sp,sp,#0x490
+003a3478 ldp x29,x30,[sp, #0x50]
+003a347c ldp x20,x19,[sp, #0x40]
+003a3480 ldp x22,x21,[sp, #0x30]
+003a3484 ldp x24,x23,[sp, #0x20]
+003a3488 ldp x26,x25,[sp, #0x10]
+003a348c ldp x28,x27,[sp], #0x60
+003a3490 ret
+003a3494 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+003a3498 bl 0x009a4758
+  ref 009a4758 FUN_009a4758
+003a349c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+003a34a0 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+003a34a4 bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail

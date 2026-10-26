@@ -1,0 +1,257 @@
+2026-10-26 16:10:11 INFO  (LoggingInitialization) Using log config file: jar:file:/opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml  
+2026-10-26 16:10:11 INFO  (LoggingInitialization) Using log file: {worktree}/scratch/sync/csi-analysis/analysis.log  
+2026-10-26 16:10:11 DEBUG (GhidraObjectInputFilter) Including serial input filter: FileSystem/data/client.rmi.serial.filter  
+2026-10-26 16:10:11 INFO  (Preferences) Loading user preferences: {home}/Library/ghidra/ghidra_12.2_PUBLIC/preferences  
+2026-10-26 16:10:11 INFO  (ClassSearcher) Searching for classes...  
+2026-10-26 16:10:12 INFO  (ClassSearcher) Class search complete (710 ms)  
+2026-10-26 16:10:12 INFO  (DefaultSSLContextInitializer) Initializing SSL Context  
+2026-10-26 16:10:12 INFO  (SecureRandomFactory) Initializing Random Number Generator...  
+2026-10-26 16:10:12 INFO  (SecureRandomFactory) Random Number Generator initialization complete: NativePRNGNonBlocking  
+2026-10-26 16:10:12 INFO  (DefaultTrustManagerFactory) Loaded 4 trusted CA certificates from the OS trust store.  
+2026-10-26 16:10:12 INFO  (DefaultTrustManagerFactory) Loaded 110 trusted CA certificates from the Java default trust store.  
+2026-10-26 16:10:13 INFO  (AnalyzeHeadless) Headless startup complete (2467 ms)  
+2026-10-26 16:10:13 INFO  (ClassSearcher) Class searcher loaded 60 extension points (19 false positives)  
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer) HEADLESS Script Paths:
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Decompiler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/FunctionID/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/FileFormats/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/8051/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/VersionTracking/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/BSim/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/Atmel/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Swift/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/DATA/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Debug/Debugger/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/JVM/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/PIC/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/PDB/ghidra_scripts
+    {worktree}/scratch/sync/csi-analysis
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/BytePatterns/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/PyGhidra/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Base/ghidra_scripts
+    /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts  
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer) HEADLESS: execution starts  
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer) Creating project: {worktree}/scratch/sync/csi-analysis/CSI  
+2026-10-26 16:10:13 INFO  (DefaultProject) Creating project: {worktree}/scratch/sync/csi-analysis/CSI  
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer) REPORT: Processing input files:   
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer)      project: {worktree}/scratch/sync/csi-analysis/CSI  
+2026-10-26 16:10:13 INFO  (HeadlessAnalyzer) IMPORTING: file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64  
+2026-10-26 16:10:15 DEBUG (SleighLanguage) Took 356ms (191ms inside lock) to initialize language /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/AARCH64/data/languages/AARCH64_AppleSilicon.slaspec -> /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Processors/AARCH64/data/languages/AARCH64_AppleSilicon.sla  
+2026-10-26 16:10:15 INFO  (ProgramLoader) Using Loader: Mac OS X Mach-O  
+2026-10-26 16:10:15 INFO  (ProgramLoader) Using Language/Compiler: AARCH64:LE:64:AppleSilicon:default  
+2026-10-26 16:10:15 INFO  (ProgramLoader) Using Library Search Path: [., /System/Library/dyld/dyld_shared_cache_arm64e, /System/Library/dyld/dyld_shared_cache_x86_64, /System/Library/dyld/dyld_shared_cache_x86_64h, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64, /System/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_x86_64h, {home}/Library/Java/Extensions, /Library/Java/Extensions, /Network/Library/Java/Extensions, /System/Library/Java/Extensions, /usr/lib/java]  
+2026-10-26 16:10:21 INFO  (ProgramLoader) Additional info:
+Loading file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64?MD5=21e32089859da8209a3265d3187b050b...
+Discovered 112861 DYLD_CHAINED_PTR_64_OFFSET chained pointers.
+Fixed up 112861 chained pointers.
+------------------------------------------------
+
+Linking the External Programs of 'MicrosoftCSI-arm64' to imported libraries...
+  [@rpath/COMBase.framework/Versions/A/COMBase] -> not found in project
+  [@rpath/mbuinstrument.framework/Versions/A/mbuinstrument] -> not found in project
+  [@rpath/mbukernel.framework/Versions/A/mbukernel] -> not found in project
+  [@rpath/merp.framework/Versions/A/merp] -> not found in project
+  [@rpath/mso20.framework/Versions/A/mso20] -> not found in project
+  [@rpath/mso30.framework/Versions/A/mso30] -> not found in project
+  [@rpath/MsoCF.framework/Versions/A/MsoCF] -> not found in project
+  [@rpath/OLE.framework/Versions/A/OLE] -> not found in project
+  [@rpath/MicrosoftWebServices.framework/Versions/A/MicrosoftWebServices] -> not found in project
+  [/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation] -> not found in project
+  [/usr/lib/libz.1.dylib] -> not found in project
+  [/System/Library/Frameworks/Security.framework/Versions/A/Security] -> not found in project
+  [@rpath/WinCrypto.framework/Versions/A/WinCrypto] -> not found in project
+  [@rpath/OLEAutomation.framework/Versions/A/OLEAutomation] -> not found in project
+  [@rpath/WLMKernel.framework/Versions/A/WLMKernel] -> not found in project
+  [/usr/lib/libc++.1.dylib] -> not found in project
+  [/usr/lib/libSystem.B.dylib] -> not found in project
+  [/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation] -> not found in project
+  [/usr/lib/libobjc.A.dylib] -> not found in project
+------------------------------------------------
+
+  
+2026-10-26 16:10:21 INFO  (HeadlessAnalyzer) IMPORTING: Loaded 0 additional files  
+2026-10-26 16:10:21 INFO  (HeadlessAnalyzer) ANALYZING all memory and code: file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64  
+2026-10-26 16:10:25 ERROR (CreateFunctionCmd) Failed to create function at 006410b4 since its body contains referring thunk at 00641138  
+2026-10-26 16:10:25 ERROR (CreateFunctionCmd) Failed to create function at 00642dd4 since its body contains referring thunk at 00642e30  
+2026-10-26 16:10:27 INFO  (DecompilerSwitchAnalyzer) hit non-returning function, restarting decompiler switch analyzer later  
+2026-10-26 16:11:07 WARN  (AddressMapDB) More than 100 address segments have been created!  
+2026-10-26 16:13:38 DEBUG (FidAnalyzer) No FID Libraries apply for language AARCH64:LE:64:AppleSilicon  
+2026-10-26 16:13:38 INFO  (PackedDatabaseCache) Packed database cache: /var/tmp/SenG-ghidra/packed-db-cache  
+2026-10-26 16:13:39 DEBUG (PackedDatabaseCache) Caching packed database: /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Base/data/typeinfo/mac_10.9/mac_osx.gdt  
+2026-10-26 16:13:39 DEBUG (PackedDatabase) Unpacking database /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Base/data/typeinfo/mac_10.9/mac_osx.gdt -> /var/tmp/SenG-ghidra/packed-db-cache/pdbC21D4F1A/db.1.gbf  
+2026-10-26 16:13:39 DEBUG (PackedDatabaseCache) Cache update completed: /opt/homebrew/Cellar/ghidra/12.2/libexec/Ghidra/Features/Base/data/typeinfo/mac_10.9/mac_osx.gdt  
+2026-10-26 16:13:39 INFO  (ApplyDataArchiveAnalyzer) Applied data type archive: mac_osx  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24700: Csi::CAsyncBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24800: Csi::CAsyncThreadedBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24900: Csi::CAsyncTimeSlicedBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24a00: Mso::Json::Json_exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24b00: Bondi::Exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24c00: MsoCF::CErrorException::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24d00: std::bad_weak_ptr::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24e00: std::system_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e24f00: std::error_category::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25000: std::streambuf::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25100: std::__shared_weak_count::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25200: std::ios_base::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25300: std::logic_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25400: std::range_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25500: std::length_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25600: std::out_of_range::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25700: std::runtime_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25800: std::invalid_argument::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25900: std::bad_variant_access::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25a00: std::bad_optional_access::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25b00: std::bad_array_new_length::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25c00: std::bad_cast::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25d00: std::bad_alloc::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25e00: std::exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e25f00: bool::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26000: int::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26100: unsigned_int::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26200: void::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26300: long_long::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26400: unsigned_long_long::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26500: std::stringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26600: std::istringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26700: std::ostringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26800: __cxxabiv1::__class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26900: __cxxabiv1::__pointer_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26a00: __cxxabiv1::__function_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26b00: __cxxabiv1::__si_class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26c00: __cxxabiv1::__vmi_class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26d00: Csi::CAsyncBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26e00: Csi::CAsyncThreadedBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e26f00: Csi::CAsyncTimeSlicedBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27000: Mso::Diagnostics::ClassifiedStructuredObject<Mso::ErrorCode>::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27100: Bondi::Exception::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27200: std::bad_weak_ptr::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27300: std::system_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27400: std::istream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27500: std::ostream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27600: std::streambuf::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27700: std::stringbuf::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27800: std::stringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27900: std::istringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27a00: std::ostringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27b00: std::range_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27c00: std::length_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27d00: std::out_of_range::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27e00: std::invalid_argument::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e27f00: std::bad_variant_access::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e28000: std::bad_optional_access::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e28100: std::bad_alloc::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table at 00e28200: std::exception::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncThreadedBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncTimeSlicedBase::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso20.framework/Versions/A/mso20::Mso::Json::Json_exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Bondi::Exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: <EXTERNAL>::MsoCF::CErrorException::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_weak_ptr::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::system_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::error_category::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::streambuf::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::__shared_weak_count::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::ios_base::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::logic_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: <EXTERNAL>::std::range_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: <EXTERNAL>::std::length_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: <EXTERNAL>::std::out_of_range::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::runtime_error::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: <EXTERNAL>::std::invalid_argument::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_variant_access::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_optional_access::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_array_new_length::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_cast::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_alloc::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::exception::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::bool::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::int::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::unsigned_int::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::void::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::long_long::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::unsigned_long_long::typeinfo  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::stringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::istringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::ostringstream::VTT  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::__cxxabiv1::__class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::__cxxabiv1::__pointer_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::__cxxabiv1::__function_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::__cxxabiv1::__si_class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::__cxxabiv1::__vmi_class_type_info::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncThreadedBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Csi::CAsyncTimeSlicedBase::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso20.framework/Versions/A/mso20::Mso::Diagnostics::ClassifiedStructuredObject<Mso::ErrorCode>::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: @rpath/mso30.framework/Versions/A/mso30::Bondi::Exception::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_weak_ptr::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::system_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::istream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::ostream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::streambuf::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::stringbuf::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::stringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::istringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::ostringstream::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::range_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::length_error::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::out_of_range::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::invalid_argument::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_variant_access::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_optional_access::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::bad_alloc::vtable  
+2026-10-26 16:14:14 WARN  (DemangledAddressTable) Unable to fully apply external demangled Address Table: /usr/lib/libc++.1.dylib::std::exception::vtable  
+2026-10-26 16:15:32 INFO  (AutoAnalysisManager) -----------------------------------------------------
+    AARCH64 ELF PLT Thunks                     0.000 secs
+    ASCII Strings                              2.249 secs
+    Apply Data Archives                        0.351 secs
+    Basic Constant Reference Analyzer         33.083 secs
+    CFStrings                                  0.002 secs
+    Call Convention ID                         2.278 secs
+    Call-Fixup Installer                       2.963 secs
+    Create Address Tables                      4.329 secs
+    Create Address Tables - One Time          10.225 secs
+    Create Function                            5.022 secs
+    Data Reference                            15.862 secs
+    Decompiler Switch Analysis                11.936 secs
+    Decompiler Switch Analysis - One Time      1.194 secs
+    Demangler GNU                              1.162 secs
+    Disassemble                               15.311 secs
+    Disassemble Entry Points                   3.111 secs
+    Disassemble Entry Points - One Time        0.038 secs
+    Embedded Media                             0.050 secs
+    External Entry References                  0.002 secs
+    Function ID                                0.075 secs
+    Function Start Search                      1.249 secs
+    Function Start Search After Code           1.234 secs
+    Function Start Search After Data           1.109 secs
+    Function Start Search delayed - One Time   5.789 secs
+    Mach-O Function Starts                    12.598 secs
+    Non-Returning Functions - Discovered       6.779 secs
+    Non-Returning Functions - Known            0.009 secs
+    Objective-C Message Analyzer             102.374 secs
+    Objective-C Type Metadata Analyzer         0.451 secs
+    Reference                                 12.779 secs
+    Shared Return Calls                        4.566 secs
+    Source Language Support                    0.088 secs
+    Stack                                     31.863 secs
+    Subroutine References                      8.206 secs
+    Subroutine References - One Time           0.040 secs
+    Variadic Function Signature Override      13.045 secs
+-----------------------------------------------------
+     Total Time   311 secs
+-----------------------------------------------------
+  
+2026-10-26 16:15:32 INFO  (HeadlessAnalyzer) REPORT: Analysis succeeded for file: file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64  
+2026-10-26 16:15:32 INFO  (HeadlessAnalyzer) REPORT: Execute script: ExportSelectedMethods.java '{worktree}/research/sync/static'   
+2026-10-26 16:15:33 INFO  (HeadlessAnalyzer) SCRIPT: {worktree}/scratch/sync/csi-analysis/ExportSelectedMethods.java  
+2026-10-26 16:15:34 INFO  (HeadlessAnalyzer) ANALYZING changes made by post scripts: file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64  
+2026-10-26 16:15:34 INFO  (HeadlessAnalyzer) REPORT: Post-analysis succeeded for file: file://{worktree}/scratch/sync/csi-analysis/MicrosoftCSI-arm64  
+2026-10-26 16:15:34 INFO  (LocalFileSystem) /MicrosoftCSI-arm64: file created (SenG)  
+2026-10-26 16:15:34 INFO  (HeadlessAnalyzer) REPORT: Save succeeded for: /MicrosoftCSI-arm64 (CSI:/MicrosoftCSI-arm64)  
+2026-10-26 16:15:34 INFO  (HeadlessAnalyzer) REPORT: Import succeeded  

@@ -1,0 +1,48 @@
+000a708c sub sp,sp,#0x80
+000a7090 stp x28,x27,[sp, #0x20]
+000a7094 stp x26,x25,[sp, #0x30]
+000a7098 stp x24,x23,[sp, #0x40]
+000a709c stp x22,x21,[sp, #0x50]
+000a70a0 stp x20,x19,[sp, #0x60]
+000a70a4 stp x29,x30,[sp, #0x70]
+000a70a8 add x29,sp,#0x70
+000a70ac mov x24,x7
+000a70b0 mov x19,x6
+000a70b4 mov x20,x5
+000a70b8 mov x22,x4
+000a70bc mov x23,x3
+000a70c0 mov x25,x2
+000a70c4 mov x26,x1
+000a70c8 mov x27,x0
+000a70cc mov x21,x8
+000a70d0 mov w0,#0x38
+000a70d4 mov w1,#0x0
+000a70d8 bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+000a70dc cbz x0,0x000a7138
+  ref 000a7138 LAB_000a7138
+000a70e0 ldp x9,x8,[x29, #0x10]
+000a70e4 ldrb w8,[x8]
+000a70e8 str xzr,[sp, #0x18]
+000a70ec strb w8,[sp, #0x10]
+000a70f0 stp x24,x9,[sp]
+000a70f4 mov x1,x27
+000a70f8 mov x2,x26
+000a70fc mov x3,x25
+000a7100 mov x4,x23
+000a7104 mov x5,x22
+000a7108 mov x6,x20
+000a710c mov x7,x19
+000a7110 bl 0x000a713c
+  ref 000a713c FUN_000a713c
+000a7114 str x0,[x21]
+000a7118 ldp x29,x30,[sp, #0x70]
+000a711c ldp x20,x19,[sp, #0x60]
+000a7120 ldp x22,x21,[sp, #0x50]
+000a7124 ldp x24,x23,[sp, #0x40]
+000a7128 ldp x26,x25,[sp, #0x30]
+000a712c ldp x28,x27,[sp, #0x20]
+000a7130 add sp,sp,#0x80
+000a7134 ret
+000a7138 bl 0x009a4680
+  ref 009a4680 FUN_009a4680

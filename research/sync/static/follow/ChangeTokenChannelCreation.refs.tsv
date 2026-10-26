@@ -1,0 +1,6 @@
+direction	address	name
+caller	0079f878	GetWebAccountInfo
+caller	0079e7d0	GetItemInfo
+caller	0079ed0c	GetNotebooks
+caller	0079ff78	GetChangesSinceToken
+callee	009b417c	CreateSoapWebService

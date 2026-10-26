@@ -1,0 +1,465 @@
+006b4e58 stp x28,x27,[sp, #-0x60]!
+006b4e5c stp x26,x25,[sp, #0x10]
+006b4e60 stp x24,x23,[sp, #0x20]
+006b4e64 stp x22,x21,[sp, #0x30]
+006b4e68 stp x20,x19,[sp, #0x40]
+006b4e6c stp x29,x30,[sp, #0x50]
+006b4e70 add x29,sp,#0x50
+006b4e74 sub sp,sp,#0x480
+006b4e78 mov x20,x1
+006b4e7c mov x19,x0
+006b4e80 adrp x8,0xc8a000
+006b4e84 ldr x8,[x8, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+006b4e88 ldr x8,[x8]
+  ref 00e29500 ___stack_chk_guard
+006b4e8c stur x8,[x29, #-0x60]
+006b4e90 bl 0x000cc04c
+  ref 000cc04c FUN_000cc04c
+006b4e94 tbz w0,#0x0,0x006b5154
+  ref 006b5154 LAB_006b5154
+006b4e98 add x8,sp,#0x58
+006b4e9c mov x0,x19
+006b4ea0 bl 0x003a34c0
+  ref 003a34c0 FUN_003a34c0
+006b4ea4 ldr x0,[sp, #0x58]
+006b4ea8 cbz x0,0x006b543c
+  ref 006b543c LAB_006b543c
+006b4eac ldr x8,[x0]
+006b4eb0 ldr x8,[x8, #0x30]
+006b4eb4 mov x1,x20
+006b4eb8 blr x8
+006b4ebc add x22,sp,#0x3a8
+006b4ec0 add x8,sp,#0x3a8
+006b4ec4 mov w0,#0xf4de
+006b4ec8 movk w0,#0x2020, LSL #16
+006b4ecc mov x1,x19
+006b4ed0 bl 0x000b5a9c
+  ref 000b5a9c FUN_000b5a9c
+006b4ed4 ldr x9,[sp, #0x3c0]
+006b4ed8 cbz x9,0x006b53c4
+  ref 006b53c4 LAB_006b53c4
+006b4edc add x28,sp,#0x2a0
+006b4ee0 add x24,sp,#0x190
+006b4ee4 add x21,sp,#0x98
+006b4ee8 add x10,x22,#0x18
+006b4eec mov w11,#0x8
+006b4ef0 mov x8,x10
+006b4ef4 ldr w12,[x9, #0x20]
+006b4ef8 cmp w12,w20
+006b4efc csel x12,x11,xzr,lt
+006b4f00 csel x8,x8,x9,lt
+006b4f04 ldr x9,[x9, x12#0x0]
+006b4f08 cbnz x9,0x006b4ef4
+  ref 006b4ef4 LAB_006b4ef4
+006b4f0c cmp x8,x10
+006b4f10 b.eq 0x006b53c4
+  ref 006b53c4 LAB_006b53c4
+006b4f14 ldr w9,[x8, #0x20]
+006b4f18 cmp w20,w9
+006b4f1c b.lt 0x006b53c4
+  ref 006b53c4 LAB_006b53c4
+006b4f20 ldrb w23,[x8, #0x28]
+006b4f24 cmp w20,#0x13
+006b4f28 b.eq 0x006b5338
+  ref 006b5338 LAB_006b5338
+006b4f2c ldp x25,x9,[x8, #0x38]
+006b4f30 str x9,[sp, #0x18]
+006b4f34 bl 0x009b5544
+  ref 009b5544 @rpath/mso20.framework/Versions/A/mso20::Office::FileIO::CSI::GetNamespace
+006b4f38 adrp x8,0xbb8000
+006b4f3c add x8,x8,#0xdc4
+006b4f40 stp x0,x8,[sp, #0x48]
+  ref 00bb8dc4 s_HostNotificationsSubscriptionEve_00bb8dc4
+006b4f44 add x0,sp,#0x40
+006b4f48 mov w1,#0x2
+006b4f4c mov w2,#0x6e
+006b4f50 bl 0x00083a14
+  ref 00083a14 FUN_00083a14
+006b4f54 ldr q0,[x19]
+006b4f58 stur q0,[x28, #0xf1]
+006b4f5c adrp x8,0xc8f000
+006b4f60 add x8,x8,#0x20
+006b4f64 add x8,x8,#0x10
+006b4f68 mov w9,#0x100
+006b4f6c strh w9,[sp, #0x3a2]
+006b4f70 mov w9,#0x656c
+006b4f74 movk w9,#0x6449, LSL #16
+006b4f78 stur w9,[x28, #0xb7]
+006b4f7c adrp x9,0xb7e000
+006b4f80 add x9,x9,#0x348
+006b4f84 ldr x9,[x9]
+  ref 00b7e348 s_CacheFileId_00b7e348
+006b4f88 str x8,[sp, #0x348]
+  ref 00c8f030 PTR_FUN_00c8f030
+006b4f8c str x9,[sp, #0x350]
+006b4f90 strb wzr,[sp, #0x35b]
+006b4f94 adrp x8,0xc8f000
+006b4f98 add x8,x8,#0x68
+006b4f9c add x8,x8,#0x10
+006b4fa0 str w20,[sp, #0x33c]
+006b4fa4 mov w27,#0x4
+006b4fa8 strh w27,[sp, #0x340]
+006b4fac mov w9,#0x6974
+006b4fb0 movk w9,#0x6e6f, LSL #16
+006b4fb4 str w9,[sp, #0x300]
+006b4fb8 adrp x9,0xbb9000
+006b4fbc add x9,x9,#0x14f
+006b4fc0 ldr x9,[x9]
+  ref 00bb914f s_Notification_00bb914f
+006b4fc4 str x8,[sp, #0x2f0]
+  ref 00c8f078 PTR_FUN_00c8f078
+006b4fc8 str x9,[sp, #0x2f8]
+006b4fcc strb wzr,[sp, #0x304]
+006b4fd0 adrp x8,0xca6000
+006b4fd4 add x8,x8,#0xe40
+006b4fd8 add x8,x8,#0x10
+006b4fdc str x8,[sp, #0x2a0]
+  ref 00ca6e50 PTR_FUN_00ca6e50
+006b4fe0 mov w8,#0xe
+006b4fe4 strb w8,[sp, #0x2e9]
+006b4fe8 strh w27,[sp, #0x2ea]
+006b4fec mov w8,#0x74
+006b4ff0 strh w8,[sp, #0x2b8]
+006b4ff4 adrp x8,0xbb8000
+006b4ff8 add x8,x8,#0xde7
+006b4ffc ldr q0,[x8]
+  ref 00bb8de7 s_SubscriptionEvent_00bb8de7
+006b5000 adrp x8,0xc8f000
+006b5004 add x8,x8,#0x3b8
+006b5008 stur q0,[x28, #0x8]
+006b500c add x8,x8,#0x10
+006b5010 str w23,[sp, #0x24]
+006b5014 strb w23,[sp, #0x299]
+006b5018 strh w27,[sp, #0x29a]
+006b501c mov w9,#0x6465
+006b5020 strh w9,[sp, #0x260]
+006b5024 adrp x9,0xbb9000
+006b5028 add x9,x9,#0x62d
+006b502c ldr x9,[x9]
+  ref 00bb962d s_Subscribed_00bb962d
+006b5030 str x8,[sp, #0x250]
+  ref 00c8f3c8 PTR_FUN_00c8f3c8
+006b5034 str x9,[sp, #0x258]
+006b5038 strb wzr,[sp, #0x262]
+006b503c bl 0x009b63fc
+  ref 009b63fc /usr/lib/libc++.1.dylib::std::chrono::system_clock::now
+006b5040 sub x8,x0,x25
+006b5044 mov x25,#0xf7cf
+006b5048 movk x25,#0xe353, LSL #16
+006b504c movk x25,#0x9ba5, LSL #32
+006b5050 movk x25,#0x20c4, LSL #48
+006b5054 smulh x9,x8,x25
+006b5058 asr x10,x9,#0x7
+006b505c add x9,x10,x9, LSR #0x3f
+006b5060 cmp x9,#0x3e8
+006b5064 mov w28,#0x3e7
+006b5068 ccmp x8,x28,#0x4,cc
+006b506c mov x26,#0x34db
+006b5070 movk x26,#0xd7b6, LSL #16
+006b5074 movk x26,#0xde82, LSL #32
+006b5078 movk x26,#0x431b, LSL #48
+006b507c smulh x8,x8,x26
+006b5080 asr x9,x8,#0x12
+006b5084 add x8,x9,x8, LSR #0x3f
+006b5088 adrp x9,0xc8f000
+006b508c add x9,x9,#0x280
+006b5090 csinc x8,x8,xzr,le
+006b5094 add x23,x9,#0x10
+006b5098 str x23,[sp, #0x1f0]
+  ref 00c8f290 PTR_FUN_00c8f290
+006b509c str x8,[sp, #0x240]
+006b50a0 adrp x8,0xbb9000
+006b50a4 add x8,x8,#0x173
+006b50a8 strh w27,[sp, #0x248]
+006b50ac ldr q0,[x8]
+  ref 00bb9173 s_SecondsSinceLastUpdate_00bb9173
+006b50b0 stur q0,[x24, #0x68]
+006b50b4 ldur x8,[x8, #0xe]
+  ref 00bb9181 s_stUpdate_00bb9173+0xe
+006b50b8 stur x8,[x24, #0x76]
+006b50bc strb wzr,[sp, #0x20e]
+006b50c0 bl 0x009b63fc
+  ref 009b63fc /usr/lib/libc++.1.dylib::std::chrono::system_clock::now
+006b50c4 adrp x8,0xbb9000
+006b50c8 add x8,x8,#0x638
+006b50cc ldp q0,q1,[x8]
+  ref 00bb9638 s_SecondsSinceLastLastHeartbeatCyc_00bb9638
+  ref 00bb9648 s_LastHeartbeatCycleRan_00bb9638+0x10
+006b50d0 stur q0,[x24, #0x8]
+006b50d4 ldr x9,[sp, #0x18]
+006b50d8 sub x9,x0,x9
+006b50dc smulh x10,x9,x25
+006b50e0 asr x11,x10,#0x7
+006b50e4 add x10,x11,x10, LSR #0x3f
+006b50e8 cmp x10,#0x3e8
+006b50ec ccmp x9,x28,#0x4,cc
+006b50f0 smulh x9,x9,x26
+006b50f4 asr x10,x9,#0x12
+006b50f8 add x9,x10,x9, LSR #0x3f
+006b50fc csinc x9,x9,xzr,le
+006b5100 str x23,[sp, #0x190]
+  ref 00c8f290 PTR_FUN_00c8f290
+006b5104 str x9,[sp, #0x1e0]
+006b5108 strh w27,[sp, #0x1e8]
+006b510c stur q1,[x24, #0x18]
+006b5110 ldur x8,[x8, #0x1d]
+  ref 00bb9655 s_CycleRan_00bb9638+0x1d
+006b5114 stur x8,[x24, #0x25]
+006b5118 strb wzr,[sp, #0x1bd]
+006b511c add x8,sp,#0x28
+006b5120 mov x0,x19
+006b5124 bl 0x003986a0
+  ref 003986a0 FUN_003986a0
+006b5128 adrp x1,0xb80000
+006b512c add x1,x1,#0x7d5
+  ref 00b807d5 s_Doc_00b807d5
+006b5130 add x0,sp,#0x138
+006b5134 add x2,sp,#0x28
+006b5138 bl 0x003986f0
+  ref 003986f0 FUN_003986f0
+006b513c bl 0x0019c620
+  ref 0019c620 FUN_0019c620
+006b5140 ldrsb w8,[x0]
+006b5144 tbnz w8,#0x1f,0x006b51e0
+  ref 006b51e0 LAB_006b51e0
+006b5148 cmp w8,#0x0
+006b514c cset w0,ne
+006b5150 b 0x006b51e4
+  ref 006b51e4 LAB_006b51e4
+006b5154 adrp x8,0xbb9000
+006b5158 add x8,x8,#0x5f6
+006b515c str x8,[sp, #0x348]
+  ref 00bb95f6 s_HostNotifications::ReceivedHostU_00bb95f6
+006b5160 adrp x8,0xbb8000
+006b5164 add x8,x8,#0xebd
+006b5168 str w20,[sp, #0x3b8]
+006b516c mov w9,#0x4
+006b5170 strh w9,[sp, #0x3bc]
+006b5174 str xzr,[sp, #0x3d0]
+006b5178 str xzr,[sp, #0x3c0]
+006b517c str xzr,[sp, #0x3c8]
+006b5180 adrp x9,0xced000
+006b5184 add x9,x9,#0x9c0
+006b5188 add x9,x9,#0x10
+006b518c str x8,[sp, #0x3b0]
+  ref 00bb8ebd s_UpdateNotificationType_00bb8ebd
+006b5190 str x9,[sp, #0x3a8]
+  ref 00ced9d0 PTR_DAT_00ced9d0
+006b5194 mov w8,#0xf4de
+006b5198 movk w8,#0x2020, LSL #16
+006b519c orr w0,w8,#0x1
+006b51a0 add x4,sp,#0x348
+006b51a4 add x5,sp,#0x3a8
+006b51a8 mov w1,#0x657
+  ref 00000657 section_00000650.sectname+7
+006b51ac mov w2,#0xf
+006b51b0 mov x6,x19
+006b51b4 mov w3,#0x2
+006b51b8 bl 0x00032670
+  ref 00032670 FUN_00032670
+006b51bc adrp x8,0xc8b000
+006b51c0 add x8,x8,#0x198
+006b51c4 add x8,x8,#0x10
+006b51c8 str x8,[sp, #0x3a8]
+  ref 00c8b1a8 PTR_DAT_00c8b1a8
+006b51cc ldrsb w8,[sp, #0x3d7]
+006b51d0 tbz w8,#0x1f,0x006b5404
+  ref 006b5404 LAB_006b5404
+006b51d4 ldr x0,[sp, #0x3c0]
+006b51d8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+006b51dc b 0x006b5404
+  ref 006b5404 LAB_006b5404
+006b51e0 bl 0x009b5bd4
+  ref 009b5bd4 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::FeatureGate::Evaluate
+006b51e4 adrp x24,0xc8f000
+006b51e8 add x24,x24,#0x3b8
+006b51ec add x8,x24,#0x10
+006b51f0 str x8,[sp, #0xe8]
+  ref 00c8f3c8 PTR_FUN_00c8f3c8
+006b51f4 strb w0,[sp, #0x131]
+006b51f8 mov w8,#0x4
+006b51fc strh w8,[sp, #0x132]
+006b5200 mov w8,#0x65
+006b5204 strh w8,[sp, #0x100]
+006b5208 adrp x8,0xb98000
+006b520c add x8,x8,#0xbf3
+006b5210 ldr q0,[x8]
+  ref 00b98bf3 s_EnableSignalRCore_00b98bf3
+006b5214 stur q0,[x21, #0x58]
+006b5218 bl 0x0019c62c
+  ref 0019c62c FUN_0019c62c
+006b521c ldrsb w8,[x0]
+006b5220 ldr w23,[sp, #0x24]
+006b5224 tbnz w8,#0x1f,0x006b5234
+  ref 006b5234 LAB_006b5234
+006b5228 cmp w8,#0x0
+006b522c cset w0,ne
+006b5230 b 0x006b5238
+  ref 006b5238 LAB_006b5238
+006b5234 bl 0x009b5bd4
+  ref 009b5bd4 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::FeatureGate::Evaluate
+006b5238 add x8,x24,#0x10
+006b523c str x8,[sp, #0x98]
+  ref 00c8f3c8 PTR_FUN_00c8f3c8
+006b5240 strb w0,[sp, #0xe1]
+006b5244 mov w8,#0x4
+006b5248 strh w8,[sp, #0xe2]
+006b524c mov w8,#0x5374
+006b5250 movk w8,#0x6b64, LSL #16
+006b5254 stur w8,[x21, #0x17]
+006b5258 adrp x8,0xb98000
+006b525c add x8,x8,#0xc05
+006b5260 ldr q0,[x8]
+  ref 00b98c05 s_DeprecateCppRestSdk_00b98c05
+006b5264 stur q0,[sp, #0xa0]
+006b5268 strb wzr,[sp, #0xb3]
+006b526c add x8,sp,#0x48
+006b5270 add x9,sp,#0x40
+006b5274 stp x8,x9,[sp, #0x60]
+006b5278 strh wzr,[sp, #0x70]
+006b527c strb wzr,[sp, #0x72]
+006b5280 movi v0.2D,#0x0
+006b5284 stur q0,[sp, #0x77]
+006b5288 stur q0,[sp, #0x87]
+006b528c strb wzr,[sp, #0x97]
+006b5290 add x8,sp,#0x98
+006b5294 add x9,sp,#0xe8
+006b5298 stp x9,x8,[sp]
+006b529c add x0,sp,#0x60
+006b52a0 add x1,sp,#0x348
+006b52a4 add x2,sp,#0x2f0
+006b52a8 add x3,sp,#0x2a0
+006b52ac add x4,sp,#0x250
+006b52b0 add x5,sp,#0x1f0
+006b52b4 add x6,sp,#0x190
+006b52b8 add x7,sp,#0x138
+006b52bc bl 0x0039873c
+  ref 0039873c FUN_0039873c
+006b52c0 ldr x21,[sp, #0x90]
+006b52c4 cbz x21,0x006b52f0
+  ref 006b52f0 LAB_006b52f0
+006b52c8 add x8,x21,#0x8
+006b52cc mov x9,#-0x1
+006b52d0 ldaddal x9,x8,[x8]
+006b52d4 cbnz x8,0x006b52f0
+  ref 006b52f0 LAB_006b52f0
+006b52d8 ldr x8,[x21]
+006b52dc ldr x8,[x8, #0x10]
+006b52e0 mov x0,x21
+006b52e4 blr x8
+006b52e8 mov x0,x21
+006b52ec bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+006b52f0 ldr x21,[sp, #0x80]
+006b52f4 cbz x21,0x006b5320
+  ref 006b5320 LAB_006b5320
+006b52f8 add x8,x21,#0x8
+006b52fc mov x9,#-0x1
+006b5300 ldaddal x9,x8,[x8]
+006b5304 cbnz x8,0x006b5320
+  ref 006b5320 LAB_006b5320
+006b5308 ldr x8,[x21]
+006b530c ldr x8,[x8, #0x10]
+006b5310 mov x0,x21
+006b5314 blr x8
+006b5318 mov x0,x21
+006b531c bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+006b5320 ldr x0,[sp, #0x30]
+006b5324 cbz x0,0x006b5338
+  ref 006b5338 LAB_006b5338
+006b5328 str xzr,[sp, #0x30]
+006b532c ldr x8,[x0]
+006b5330 ldr x8,[x8, #0x10]
+006b5334 blr x8
+006b5338 tbz w23,#0x0,0x006b53c4
+  ref 006b53c4 LAB_006b53c4
+006b533c mov w8,#0x4258
+006b5340 movk w8,#0x1f71, LSL #16
+006b5344 orr w0,w8,#0x1
+006b5348 mov x1,x19
+006b534c mov x2,x20
+006b5350 mov w3,#0xe
+006b5354 bl 0x00143c5c
+  ref 00143c5c FUN_00143c5c
+006b5358 mov w0,#0x4258
+006b535c movk w0,#0x1f71, LSL #16
+006b5360 mov x1,x19
+006b5364 mov x2,x20
+006b5368 bl 0x006b20b0
+  ref 006b20b0 FUN_006b20b0
+006b536c mov w0,#0x10
+006b5370 mov w1,#0x0
+006b5374 bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+006b5378 cbz x0,0x006b5440
+  ref 006b5440 LAB_006b5440
+006b537c mov w8,#0x1
+006b5380 str w8,[x0, #0x8]
+006b5384 adrp x8,0xced000
+006b5388 add x8,x8,#0xfb0
+006b538c str x8,[x0]
+  ref 00cedfb0 PTR_FUN_00cedfb0
+006b5390 str x0,[sp, #0x348]
+006b5394 add x3,sp,#0x348
+006b5398 mov w0,#0x138f
+006b539c movk w0,#0x1f39, LSL #16
+006b53a0 mov x1,x19
+006b53a4 mov x2,x20
+006b53a8 bl 0x0014477c
+  ref 0014477c FUN_0014477c
+006b53ac ldr x0,[sp, #0x348]
+006b53b0 cbz x0,0x006b53c4
+  ref 006b53c4 LAB_006b53c4
+006b53b4 str xzr,[sp, #0x348]
+006b53b8 ldr x8,[x0]
+006b53bc ldr x8,[x8, #0x10]
+  ref 00cedfc0 PTR_FUN_00cedfc0
+006b53c0 blr x8
+  ref 00144abc FUN_00144abc
+006b53c4 ldrb w8,[sp, #0x448]
+006b53c8 cmp w8,#0x1
+006b53cc b.ne 0x006b53e0
+  ref 006b53e0 LAB_006b53e0
+006b53d0 ldrsb w8,[sp, #0x447]
+006b53d4 tbz w8,#0x1f,0x006b53e0
+  ref 006b53e0 LAB_006b53e0
+006b53d8 ldr x0,[sp, #0x430]
+006b53dc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+006b53e0 ldr x1,[sp, #0x3c0]
+006b53e4 add x0,x22,#0x10
+006b53e8 bl 0x0001be9c
+  ref 0001be9c FUN_0001be9c
+006b53ec ldr x0,[sp, #0x58]
+006b53f0 cbz x0,0x006b5404
+  ref 006b5404 LAB_006b5404
+006b53f4 str xzr,[sp, #0x58]
+006b53f8 ldr x8,[x0]
+006b53fc ldr x8,[x8, #0x10]
+006b5400 blr x8
+006b5404 ldur x8,[x29, #-0x60]
+006b5408 adrp x9,0xc8a000
+006b540c ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+006b5410 ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+006b5414 cmp x9,x8
+006b5418 b.ne 0x006b5444
+  ref 006b5444 LAB_006b5444
+006b541c add sp,sp,#0x480
+006b5420 ldp x29,x30,[sp, #0x50]
+006b5424 ldp x20,x19,[sp, #0x40]
+006b5428 ldp x22,x21,[sp, #0x30]
+006b542c ldp x24,x23,[sp, #0x20]
+006b5430 ldp x26,x25,[sp, #0x10]
+006b5434 ldp x28,x27,[sp], #0x60
+006b5438 ret
+006b543c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+006b5440 bl 0x009a4758
+  ref 009a4758 FUN_009a4758
+006b5444 bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail

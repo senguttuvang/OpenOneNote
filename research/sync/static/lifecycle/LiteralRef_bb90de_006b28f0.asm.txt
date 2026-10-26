@@ -1,0 +1,120 @@
+006b28f0 sub sp,sp,#0x70
+006b28f4 stp x22,x21,[sp, #0x40]
+006b28f8 stp x20,x19,[sp, #0x50]
+006b28fc stp x29,x30,[sp, #0x60]
+006b2900 add x29,sp,#0x60
+006b2904 mov x20,x1
+006b2908 mov x19,x0
+006b290c mov w22,#0x4263
+006b2910 movk w22,#0x1f71, LSL #16
+006b2914 add w0,w22,#0x1e
+006b2918 add x1,x19,#0xc
+006b291c mov x2,x20
+006b2920 bl 0x006b2010
+  ref 006b2010 FUN_006b2010
+006b2924 mov x21,x0
+006b2928 bl 0x003f61ac
+  ref 003f61ac FUN_003f61ac
+006b292c cmp x0,w21, UXTW 
+006b2930 b.ls 0x006b29d4
+  ref 006b29d4 LAB_006b29d4
+006b2934 mov w21,w21
+006b2938 bl 0x003f617c
+  ref 003f617c FUN_003f617c
+006b293c cmp x0,x21
+006b2940 b.ne 0x006b2a64
+  ref 006b2a64 LAB_006b2a64
+006b2944 adrp x8,0xbb9000
+006b2948 add x8,x8,#0xde
+006b294c adrp x9,0xbb8000
+006b2950 add x9,x9,#0xebd
+006b2954 stur x8,[x29, #-0x28]
+  ref 00bb90de s_HostNotifications:_Entering_grac_00bb90de
+006b2958 str w20,[sp, #0x18]
+006b295c mov w8,#0x4
+006b2960 strh w8,[sp, #0x1c]
+006b2964 stp xzr,xzr,[sp, #0x28]
+006b2968 str xzr,[sp, #0x20]
+006b296c adrp x8,0xced000
+006b2970 add x8,x8,#0x9c0
+006b2974 add x8,x8,#0x10
+006b2978 stp x8,x9,[sp, #0x8]
+  ref 00ced9d0 PTR_DAT_00ced9d0
+  ref 00bb8ebd s_UpdateNotificationType_00bb8ebd
+006b297c sub x4,x29,#0x28
+006b2980 add x5,sp,#0x8
+006b2984 add x6,x19,#0xc
+006b2988 mov w0,#0x3692
+006b298c movk w0,#0x1e8a, LSL #16
+006b2990 mov w1,#0x657
+  ref 00000657 section_00000650.sectname+7
+006b2994 mov w2,#0x32
+006b2998 mov w3,#0x2
+006b299c bl 0x00032670
+  ref 00032670 FUN_00032670
+006b29a0 adrp x8,0xc8b000
+006b29a4 add x8,x8,#0x198
+006b29a8 add x8,x8,#0x10
+006b29ac str x8,[sp, #0x8]
+  ref 00c8b1a8 PTR_DAT_00c8b1a8
+006b29b0 ldrsb w8,[sp, #0x37]
+006b29b4 tbz w8,#0x1f,0x006b29c0
+  ref 006b29c0 LAB_006b29c0
+006b29b8 ldr x0,[sp, #0x20]
+006b29bc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+006b29c0 str w22,[sp, #0x8]
+006b29c4 add x0,sp,#0x8
+006b29c8 add x1,x19,#0xc
+006b29cc bl 0x003f0284
+  ref 003f0284 FUN_003f0284
+006b29d0 b 0x006b2a64
+  ref 006b2a64 LAB_006b2a64
+006b29d4 add x8,sp,#0x8
+006b29d8 add x0,x19,#0xc
+006b29dc bl 0x00029adc
+  ref 00029adc FUN_00029adc
+006b29e0 ldr x0,[sp, #0x8]
+006b29e4 cbz x0,0x006b2a1c
+  ref 006b2a1c LAB_006b2a1c
+006b29e8 ldr x8,[x0]
+006b29ec ldr x8,[x8, #0x10]
+006b29f0 blr x8
+006b29f4 mov w8,#0x708c
+006b29f8 movk w8,#0x1f01, LSL #16
+006b29fc cmp w0,#0x1
+006b2a00 b.ne 0x006b2a38
+  ref 006b2a38 LAB_006b2a38
+006b2a04 add x0,x19,#0xc
+006b2a08 mov x1,x20
+006b2a0c mov w2,#0x3
+006b2a10 mov w3,#0x708c
+006b2a14 movk w3,#0x1f01, LSL #16
+006b2a18 b 0x006b2a48
+  ref 006b2a48 LAB_006b2a48
+006b2a1c mov w8,#0x708c
+006b2a20 movk w8,#0x1f01, LSL #16
+006b2a24 add x0,x19,#0xc
+006b2a28 orr w3,w8,#0x2
+006b2a2c mov x1,x20
+006b2a30 mov w2,#0x4
+006b2a34 b 0x006b2a48
+  ref 006b2a48 LAB_006b2a48
+006b2a38 add x0,x19,#0xc
+006b2a3c add w3,w8,#0x1
+006b2a40 mov x1,x20
+006b2a44 mov w2,#0x5
+006b2a48 bl 0x00142e50
+  ref 00142e50 FUN_00142e50
+006b2a4c ldr x0,[sp, #0x8]
+006b2a50 cbz x0,0x006b2a64
+  ref 006b2a64 LAB_006b2a64
+006b2a54 str xzr,[sp, #0x8]
+006b2a58 ldr x8,[x0]
+006b2a5c ldr x8,[x8, #0x8]
+006b2a60 blr x8
+006b2a64 ldp x29,x30,[sp, #0x60]
+006b2a68 ldp x20,x19,[sp, #0x50]
+006b2a6c ldp x22,x21,[sp, #0x40]
+006b2a70 add sp,sp,#0x70
+006b2a74 ret

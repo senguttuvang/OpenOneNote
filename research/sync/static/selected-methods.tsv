@@ -1,0 +1,11 @@
+address	label	decompiled	note
+9da38	CreateRequestFactory	true	
+9dab4	CreateRequestWorker	true	
+a6f34	CreateRequestBatch	true	
+1dc060	CreateRevisionManifestScaffold	true	
+23cf98	CreateCellStorageOverHttp_full	true	
+26afb8	CreateKnowledge	true	
+51c60c	SerializeDataElementPackage	true	
+542cbc	FGetCellKnowledge	true	
+7369b0	CreateCellStorageOverHttp_simple	true	
+79ff78	GetChangesSinceToken	true	

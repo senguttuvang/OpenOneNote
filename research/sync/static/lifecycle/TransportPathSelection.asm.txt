@@ -1,0 +1,979 @@
+0009c7a4 stp x28,x27,[sp, #-0x60]!
+0009c7a8 stp x26,x25,[sp, #0x10]
+0009c7ac stp x24,x23,[sp, #0x20]
+0009c7b0 stp x22,x21,[sp, #0x30]
+0009c7b4 stp x20,x19,[sp, #0x40]
+0009c7b8 stp x29,x30,[sp, #0x50]
+0009c7bc add x29,sp,#0x50
+0009c7c0 sub sp,sp,#0x4c0
+0009c7c4 mov x19,x0
+0009c7c8 mov x20,x8
+0009c7cc adrp x8,0xc8a000
+0009c7d0 ldr x8,[x8, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+0009c7d4 ldr x8,[x8]
+  ref 00e29500 ___stack_chk_guard
+0009c7d8 stur x8,[x29, #-0x68]
+0009c7dc add x0,x0,#0x68
+0009c7e0 bl 0x009b621c
+  ref 009b621c /usr/lib/libc++.1.dylib::std::recursive_mutex::lock
+0009c7e4 add x8,sp,#0x3d0
+0009c7e8 mov x0,x19
+0009c7ec bl 0x0009d450
+  ref 0009d450 FUN_0009d450
+0009c7f0 ldr w8,[sp, #0x3d0]
+0009c7f4 cmp w8,#0x1
+0009c7f8 b.ne 0x0009c810
+  ref 0009c810 LAB_0009c810
+0009c7fc add x8,sp,#0x3d0
+0009c800 add x0,x8,#0x8
+0009c804 mov x8,x20
+0009c808 bl 0x00735404
+  ref 00735404 FUN_00735404
+0009c80c b 0x0009d340
+  ref 0009d340 LAB_0009d340
+0009c810 cbnz w8,0x0009d390
+  ref 0009d390 LAB_0009d390
+0009c814 add x11,sp,#0x3d0
+0009c818 ldur q0,[x11, #0x8]
+0009c81c add x10,sp,#0xa0
+0009c820 mov w8,#0xc461
+0009c824 movk w8,#0x220d, LSL #16
+0009c828 str q0,[sp, #0xa0]
+0009c82c ldr x9,[sp, #0x3e8]
+0009c830 str xzr,[sp, #0x3e0]
+0009c834 str xzr,[sp, #0x3d8]
+0009c838 ldr q0,[sp, #0x3f0]
+0009c83c str xzr,[sp, #0x3f0]
+0009c840 str xzr,[sp, #0x3e8]
+0009c844 add x23,sp,#0xa0
+0009c848 add x27,sp,#0xa0
+0009c84c stur q0,[x10, #0x18]
+0009c850 ldr x10,[sp, #0x400]
+0009c854 str x9,[sp, #0xb0]
+0009c858 str x10,[sp, #0xc8]
+0009c85c str xzr,[sp, #0x3f8]
+0009c860 str xzr,[sp, #0x400]
+0009c864 strb wzr,[sp, #0xd0]
+0009c868 strb wzr,[sp, #0xe8]
+0009c86c ldrb w9,[sp, #0x420]
+0009c870 cmp w9,#0x1
+0009c874 b.ne 0x0009c8cc
+  ref 0009c8cc LAB_0009c8cc
+0009c878 add x21,x23,#0x30
+0009c87c ldur q0,[x11, #0x38]
+0009c880 str q0,[x21]
+0009c884 ldr x8,[sp, #0x418]
+0009c888 str x8,[x21, #0x10]
+0009c88c str xzr,[sp, #0x418]
+0009c890 str xzr,[sp, #0x408]
+0009c894 str xzr,[sp, #0x410]
+0009c898 mov w8,#0x1
+0009c89c strb w8,[sp, #0xe8]
+0009c8a0 ldrh w8,[sp, #0x428]
+0009c8a4 strh w8,[sp, #0xf0]
+0009c8a8 stp xzr,xzr,[sp, #0x88]
+0009c8ac mov w9,#0x101
+0009c8b0 str xzr,[sp, #0x98]
+0009c8b4 add x25,sp,#0x3d0
+0009c8b8 bics wzr,w9,w8
+0009c8bc b.ne 0x0009c92c
+  ref 0009c92c LAB_0009c92c
+0009c8c0 adrp x22,0xafa000
+0009c8c4 add x22,x22,#0xd9c
+0009c8c8 b 0x0009c934
+  ref 0009c934 LAB_0009c934
+0009c8cc ldrh w9,[sp, #0x428]
+0009c8d0 strh w9,[sp, #0xf0]
+0009c8d4 stp xzr,xzr,[sp, #0x88]
+0009c8d8 str xzr,[sp, #0x98]
+0009c8dc mov w10,#0x101
+0009c8e0 add x25,sp,#0x3d0
+0009c8e4 bics wzr,w10,w9
+0009c8e8 b.ne 0x0009c910
+  ref 0009c910 LAB_0009c910
+0009c8ec adrp x9,0xbcc000
+0009c8f0 add x9,x9,#0x8a6
+0009c8f4 str x9,[sp, #0x2a0]
+  ref 00bcc8a6 s_Server_is_SP_w/Cobalt_but_webUrl_00bcc8a6
+0009c8f8 add w0,w8,#0x2
+0009c8fc add x4,sp,#0x2a0
+0009c900 mov w1,#0x1ab
+0009c904 mov w2,#0xf
+0009c908 mov w3,#0x2
+0009c90c bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+0009c910 adrp x22,0xab1000
+0009c914 add x22,x22,#0x890
+0009c918 mov x0,x22
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+0009c91c bl 0x00001a9c
+  ref 00001a9c FUN_00001a9c
+0009c920 mov x2,x0
+0009c924 add x21,sp,#0xa0
+0009c928 b 0x0009c940
+  ref 0009c940 LAB_0009c940
+0009c92c adrp x22,0xab1000
+0009c930 add x22,x22,#0x890
+0009c934 mov x0,x22
+  ref 00afad9c u_/_vti_bin/Cobalt.ashx_00afad9c
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+0009c938 bl 0x00001a9c
+  ref 00001a9c FUN_00001a9c
+0009c93c mov x2,x0
+0009c940 mov x0,x21
+0009c944 mov x1,x22
+  ref 00afad9c u_/_vti_bin/Cobalt.ashx_00afad9c
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+0009c948 bl 0x001b59b8
+  ref 001b59b8 FUN_001b59b8
+0009c94c mov x1,x0
+0009c950 add x0,sp,#0x88
+0009c954 bl 0x0002b044
+  ref 0002b044 FUN_0002b044
+0009c958 add x0,sp,#0x3c0
+0009c95c add x1,sp,#0x80
+0009c960 add x2,sp,#0x78
+0009c964 bl 0x009b46bc
+  ref 009b46bc @rpath/mso20.framework/Versions/A/mso20::Mso::Http::GetCurrentUserAgentInfo
+0009c968 str xzr,[sp, #0x2a8]
+0009c96c str xzr,[sp, #0x2a0]
+0009c970 str wzr,[sp, #0x2b8]
+0009c974 str xzr,[sp, #0x2b0]
+0009c978 bl 0x009b50d0
+  ref 009b50d0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFastBufferAllocator
+0009c97c add x8,sp,#0x2a0
+0009c980 add x9,x8,#0x1c
+0009c984 mov w8,#0x102
+0009c988 dup v0.2S,w8
+0009c98c str x0,[sp, #0x2a0]
+0009c990 str x9,[sp, #0x18]
+0009c994 str x9,[sp, #0x2a8]
+0009c998 str d0,[sp, #0x2b0]
+0009c99c strh wzr,[sp, #0x2bc]
+0009c9a0 adrp x24,0xd99000
+0009c9a4 ldr w22,[x24, #0x320]
+  ref 00d99320 DAT_00d99320
+0009c9a8 ands w21,w22,#0xf
+0009c9ac b.ne 0x0009c9d8
+  ref 0009c9d8 LAB_0009c9d8
+0009c9b0 bl 0x009b4b24
+  ref 009b4b24 @rpath/mso20.framework/Versions/A/mso20::Mso::Process::GetVersion
+0009c9b4 ldrh w8,[x0, #0x2]
+0009c9b8 add w8,w8,#0x6
+0009c9bc ldrh w9,[x0, #0x6]
+0009c9c0 and w21,w8,#0xf
+0009c9c4 ldrh w10,[x0, #0x4]
+0009c9c8 lsl w22,w10,#0x12
+0009c9cc bfm w22,w9,#0x1c,#0xd
+0009c9d0 bfxil w22,w8,#0x0,#0x4
+0009c9d4 str w22,[x24, #0x320]
+  ref 00d99320 DAT_00d99320
+0009c9d8 bl 0x009b5100
+  ref 009b5100 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFixedBufferAllocator
+0009c9dc add x8,sp,#0x170
+0009c9e0 add x8,x8,#0x14
+0009c9e4 stp x0,x8,[sp, #0x170]
+0009c9e8 mov w26,#0x32
+0009c9ec str w26,[sp, #0x180]
+0009c9f0 add x0,sp,#0x170
+0009c9f4 add w1,w21,#0xa
+0009c9f8 mov w2,#0xa
+0009c9fc mov w3,#0x0
+0009ca00 mov x4,#0x0
+0009ca04 bl 0x009b52b0
+  ref 009b52b0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::SetWzFromNumber
+0009ca08 ldr x24,[sp, #0x178]
+0009ca0c ubfx w21,w22,#0x4,#0xe
+0009ca10 bl 0x009b5100
+  ref 009b5100 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFixedBufferAllocator
+0009ca14 add x8,sp,#0x108
+0009ca18 add x8,x8,#0x14
+0009ca1c stp x0,x8,[sp, #0x108]
+0009ca20 str w26,[sp, #0x118]
+0009ca24 add x0,sp,#0x108
+0009ca28 mov x1,x21
+0009ca2c mov w2,#0xa
+0009ca30 mov w3,#0x0
+0009ca34 mov x4,#0x0
+0009ca38 bl 0x009b52b0
+  ref 009b52b0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::SetWzFromNumber
+0009ca3c ldr x26,[sp, #0x110]
+0009ca40 lsr w21,w22,#0x12
+0009ca44 bl 0x009b5100
+  ref 009b5100 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFixedBufferAllocator
+0009ca48 sub x8,x29,#0xe0
+0009ca4c add x8,x8,#0x14
+0009ca50 stp x0,x8,[x29, #-0xe0]
+0009ca54 mov w8,#0x32
+0009ca58 stur w8,[x29, #-0xd0]
+0009ca5c sub x0,x29,#0xe0
+0009ca60 mov x1,x21
+0009ca64 mov w2,#0xa
+0009ca68 mov w3,#0x0
+0009ca6c mov x4,#0x0
+0009ca70 bl 0x009b52b0
+  ref 009b52b0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::SetWzFromNumber
+0009ca74 ldur x8,[x29, #-0xd8]
+0009ca78 stp x24,x26,[x29, #-0x90]
+0009ca7c stur x8,[x29, #-0x80]
+0009ca80 adrp x1,0xbfc000
+0009ca84 add x1,x1,#0xffe
+  ref 00bfcffe u_|0.0.|1.|2_00bfcffe
+0009ca88 add x0,sp,#0x2a0
+0009ca8c sub x2,x29,#0x90
+0009ca90 mov w3,#0x3
+0009ca94 mov x4,#0x0
+0009ca98 bl 0x009b52e0
+  ref 009b52e0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::SetWzFromPattern
+0009ca9c bl 0x009b5364
+  ref 009b5364 @rpath/mso20.framework/Versions/A/mso20::OGuid::Create
+0009caa0 mov x21,x0
+0009caa4 mov x22,x1
+0009caa8 bl 0x009b4ab8
+  ref 009b4ab8 @rpath/mso20.framework/Versions/A/mso20::Mso::Logging::GetCurrentCorrelation
+0009caac adrp x8,0xb7c000
+0009cab0 add x8,x8,#0x5a8
+0009cab4 ldp x9,x8,[x8]
+  ref 00b7c5a8 DAT_00b7c5a8
+  ref 00b7c5b0 DAT_00b7c5b0
+0009cab8 eor x9,x0,x9
+0009cabc eor x8,x1,x8
+0009cac0 orr x8,x9,x8
+0009cac4 cmp x8,#0x0
+0009cac8 csel x8,x0,x21,ne
+0009cacc str x8,[sp, #0x290]
+0009cad0 str x22,[sp, #0x298]
+0009cad4 add x0,sp,#0x77
+0009cad8 add x1,sp,#0x290
+0009cadc bl 0x0009d99c
+  ref 0009d99c FUN_0009d99c
+0009cae0 sub x8,x29,#0x90
+0009cae4 add x0,sp,#0x290
+0009cae8 mov w1,#0x0
+0009caec bl 0x009b5370
+  ref 009b5370 @rpath/mso20.framework/Versions/A/mso20::OGuid::ToString
+0009caf0 orr x8,xzr,#0x101010101010101
+0009caf4 and x8,x8,#-0xffffffff000001
+0009caf8 str x8,[sp, #0x68]
+0009cafc strb wzr,[sp, #0x74]
+0009cb00 str wzr,[sp, #0x70]
+0009cb04 stp xzr,xzr,[sp, #0x170]
+0009cb08 str wzr,[sp, #0x188]
+0009cb0c str xzr,[sp, #0x180]
+0009cb10 bl 0x009b50d0
+  ref 009b50d0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFastBufferAllocator
+0009cb14 add x8,sp,#0x170
+0009cb18 add x26,x8,#0x1c
+0009cb1c stp x0,x26,[sp, #0x170]
+0009cb20 mov w8,#0x102
+0009cb24 dup v0.2S,w8
+0009cb28 str d0,[sp, #0x180]
+0009cb2c strh wzr,[sp, #0x18c]
+0009cb30 mov w0,#0x3aa1
+0009cb34 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+0009cb38 cbz w0,0x0009cbec
+  ref 0009cbec LAB_0009cbec
+0009cb3c add x0,sp,#0x108
+0009cb40 mov w1,#0x1
+0009cb44 mov w2,#0x0
+0009cb48 mov w3,#0x6255
+0009cb4c movk w3,#0x1d89, LSL #16
+0009cb50 bl 0x0029dc34
+  ref 0029dc34 FUN_0029dc34
+0009cb54 bl 0x000c5f58
+  ref 000c5f58 FUN_000c5f58
+0009cb58 ldr x0,[x0, #0x10]
+0009cb5c sub x8,x29,#0xe0
+0009cb60 add x1,x19,#0x30
+0009cb64 mov w2,#0x6255
+0009cb68 movk w2,#0x1d89, LSL #16
+0009cb6c bl 0x0029de84
+  ref 0029de84 FUN_0029de84
+0009cb70 ldur x0,[x29, #-0xe0]
+0009cb74 cbz x0,0x0009d3b8
+  ref 0009d3b8 LAB_0009d3b8
+0009cb78 ldr x8,[x0]
+0009cb7c ldr x8,[x8, #0xf8]
+0009cb80 add x1,sp,#0x170
+0009cb84 blr x8
+0009cb88 ldur x0,[x29, #-0xe0]
+0009cb8c stur xzr,[x29, #-0xe0]
+0009cb90 cbz x0,0x0009cba0
+  ref 0009cba0 LAB_0009cba0
+0009cb94 ldr x8,[x0]
+0009cb98 ldr x8,[x8, #0x10]
+0009cb9c blr x8
+0009cba0 add x0,sp,#0x108
+0009cba4 bl 0x0029e094
+  ref 0029e094 FUN_0029e094
+0009cba8 ldr x8,[sp, #0x178]
+0009cbac ldrh w8,[x8]
+0009cbb0 cbnz w8,0x0009cbec
+  ref 0009cbec LAB_0009cbec
+0009cbb4 ldrsb w8,[sp, #0xb7]
+0009cbb8 ldr x9,[sp, #0xa0]
+0009cbbc cmp w8,#0x0
+0009cbc0 add x8,sp,#0xa0
+0009cbc4 csel x0,x9,x8,lt
+0009cbc8 mov w1,#0x0
+0009cbcc bl 0x009b42d8
+  ref 009b42d8 @rpath/mso30.framework/Versions/A/mso30::Mso::Authentication::GetIdentityForUrl
+0009cbd0 cbz x0,0x0009cbec
+  ref 0009cbec LAB_0009cbec
+0009cbd4 ldr x8,[x0]
+0009cbd8 ldr x8,[x8, #0x28]
+0009cbdc blr x8
+0009cbe0 add x1,sp,#0x170
+0009cbe4 mov x2,#0x0
+0009cbe8 bl 0x009b5250
+  ref 009b5250 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::CopyWzToWz
+0009cbec ldr x21,[x19, #0xa8]
+0009cbf0 cbnz x21,0x0009cc3c
+  ref 0009cc3c LAB_0009cc3c
+0009cbf4 add x8,sp,#0x108
+0009cbf8 bl 0x0009da38
+  ref 0009da38 FileIO::CobaltClient::CreateRequestFactory
+0009cbfc ldr x21,[sp, #0x108]
+0009cc00 str xzr,[sp, #0x108]
+0009cc04 ldr x0,[x19, #0xa8]
+0009cc08 str x21,[x19, #0xa8]
+0009cc0c cbz x0,0x0009cc38
+  ref 0009cc38 LAB_0009cc38
+0009cc10 ldr x8,[x0]
+0009cc14 ldr x8,[x8, #0x8]
+0009cc18 blr x8
+0009cc1c ldr x0,[sp, #0x108]
+0009cc20 cbz x0,0x0009cc34
+  ref 0009cc34 LAB_0009cc34
+0009cc24 str xzr,[sp, #0x108]
+0009cc28 ldr x8,[x0]
+0009cc2c ldr x8,[x8, #0x8]
+0009cc30 blr x8
+0009cc34 ldr x21,[x19, #0xa8]
+0009cc38 cbz x21,0x0009d394
+  ref 0009d394 LAB_0009d394
+0009cc3c ldr x1,[x19, #0x18]
+0009cc40 stp xzr,xzr,[sp, #0x110]
+0009cc44 str xzr,[sp, #0x108]
+0009cc48 mov x3,#0x0
+0009cc4c cbz x1,0x0009cc60
+  ref 0009cc60 LAB_0009cc60
+0009cc50 mov x8,x1
+0009cc54 add x3,x3,#0x1
+0009cc58 ldr x8,[x8]
+0009cc5c cbnz x8,0x0009cc54
+  ref 0009cc54 LAB_0009cc54
+0009cc60 add x0,sp,#0x108
+0009cc64 mov x2,#0x0
+0009cc68 bl 0x0009eba4
+  ref 0009eba4 FUN_0009eba4
+0009cc6c ldr x8,[x21]
+0009cc70 ldr x9,[x8, #0x10]
+0009cc74 add x22,sp,#0x108
+0009cc78 add x8,sp,#0x60
+0009cc7c add x1,sp,#0x108
+0009cc80 mov x0,x21
+0009cc84 blr x9
+0009cc88 stur x22,[x29, #-0xe0]
+0009cc8c sub x0,x29,#0xe0
+0009cc90 bl 0x0000fa28
+  ref 0000fa28 FUN_0000fa28
+0009cc94 add x8,sp,#0x108
+0009cc98 add x0,sp,#0x3c0
+0009cc9c mov w1,#0x0
+0009cca0 bl 0x009b5370
+  ref 009b5370 @rpath/mso20.framework/Versions/A/mso20::OGuid::ToString
+0009cca4 ldr x1,[sp, #0x80]
+0009cca8 sub x0,x29,#0xe0
+0009ccac bl 0x000019ec
+  ref 000019ec FUN_000019ec
+0009ccb0 ldr x1,[sp, #0x78]
+0009ccb4 add x0,sp,#0x40
+0009ccb8 bl 0x000019ec
+  ref 000019ec FUN_000019ec
+0009ccbc ldr x1,[sp, #0x2a8]
+0009ccc0 add x0,sp,#0x28
+0009ccc4 bl 0x000019ec
+  ref 000019ec FUN_000019ec
+0009ccc8 add x0,x19,#0x30
+0009cccc bl 0x0039e008
+  ref 0039e008 FUN_0039e008
+0009ccd0 ldr x9,[sp, #0x178]
+0009ccd4 add x10,sp,#0x68
+0009ccd8 add x8,sp,#0x58
+0009ccdc str x9,[sp, #0x10]
+0009cce0 strb w0,[sp, #0x8]
+0009cce4 str x10,[sp]
+0009cce8 add x0,sp,#0x88
+0009ccec add x1,sp,#0xa0
+0009ccf0 add x2,x23,#0x18
+0009ccf4 add x3,sp,#0x108
+0009ccf8 sub x4,x29,#0xe0
+0009ccfc add x5,sp,#0x40
+0009cd00 sub x6,x29,#0x90
+0009cd04 add x7,sp,#0x28
+0009cd08 bl 0x000a6f84
+  ref 000a6f84 FUN_000a6f84
+0009cd0c ldrsb w8,[sp, #0x3f]
+0009cd10 tbz w8,#0x1f,0x0009cd1c
+  ref 0009cd1c LAB_0009cd1c
+0009cd14 ldr x0,[sp, #0x28]
+0009cd18 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009cd1c ldrsb w8,[sp, #0x57]
+0009cd20 tbz w8,#0x1f,0x0009cd2c
+  ref 0009cd2c LAB_0009cd2c
+0009cd24 ldr x0,[sp, #0x40]
+0009cd28 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009cd2c ldursb w8,[x29, #-0xc9]
+0009cd30 tbz w8,#0x1f,0x0009cd3c
+  ref 0009cd3c LAB_0009cd3c
+0009cd34 ldur x0,[x29, #-0xe0]
+0009cd38 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009cd3c ldrsb w8,[sp, #0x11f]
+0009cd40 tbz w8,#0x1f,0x0009cd4c
+  ref 0009cd4c LAB_0009cd4c
+0009cd44 ldr x0,[sp, #0x108]
+0009cd48 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009cd4c ldr x21,[sp, #0x58]
+0009cd50 cbz x21,0x0009d398
+  ref 0009d398 LAB_0009d398
+0009cd54 ldr x0,[sp, #0x60]
+0009cd58 str x0,[sp, #0x108]
+0009cd5c cbz x0,0x0009cd6c
+  ref 0009cd6c LAB_0009cd6c
+0009cd60 ldr x8,[x0]
+0009cd64 ldr x8,[x8, #0x8]
+0009cd68 blr x8
+0009cd6c ldr x8,[x21]
+0009cd70 ldr x8,[x8, #0x18]
+0009cd74 add x1,sp,#0x108
+0009cd78 mov x0,x21
+0009cd7c blr x8
+0009cd80 ldr x0,[sp, #0x108]
+0009cd84 cbz x0,0x0009cd98
+  ref 0009cd98 LAB_0009cd98
+0009cd88 str xzr,[sp, #0x108]
+0009cd8c ldr x8,[x0]
+0009cd90 ldr x8,[x8, #0x10]
+0009cd94 blr x8
+0009cd98 adrp x8,0xbcc000
+0009cd9c add x8,x8,#0x8f2
+0009cda0 stur x8,[x29, #-0xe0]
+  ref 00bcc8f2 s_Sending_PropertyGet_request._00bcc8f2
+0009cda4 adrp x8,0xc8d000
+0009cda8 add x8,x8,#0xef0
+0009cdac add x21,x8,#0x10
+0009cdb0 adrp x8,0xb81000
+0009cdb4 add x8,x8,#0x26
+0009cdb8 stp x21,x8,[sp, #0x108]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+  ref 00b81026 s_ClientCorrelationId_00b81026
+0009cdbc ldr q0,[sp, #0x290]
+0009cdc0 stur q0,[x27, #0x78]
+0009cdc4 mov w8,#0x100
+0009cdc8 strh w8,[sp, #0x128]
+0009cdcc stp xzr,xzr,[sp, #0x138]
+0009cdd0 str xzr,[sp, #0x130]
+0009cdd4 sub x4,x29,#0xe0
+0009cdd8 add x5,x19,#0x30
+0009cddc add x6,sp,#0x108
+0009cde0 mov w0,#0xc461
+0009cde4 movk w0,#0x220d, LSL #16
+0009cde8 mov w1,#0x1ab
+0009cdec mov w2,#0x32
+0009cdf0 mov w3,#0x2
+0009cdf4 bl 0x000271a8
+  ref 000271a8 FUN_000271a8
+0009cdf8 str x21,[sp, #0x108]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009cdfc ldrsb w8,[sp, #0x147]
+0009ce00 tbz w8,#0x1f,0x0009ce0c
+  ref 0009ce0c LAB_0009ce0c
+0009ce04 ldr x0,[sp, #0x130]
+0009ce08 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009ce0c ldr x21,[x19, #0xb0]
+0009ce10 cbnz x21,0x0009ce80
+  ref 0009ce80 LAB_0009ce80
+0009ce14 sub x8,x29,#0xe0
+0009ce18 bl 0x0009e8cc
+  ref 0009e8cc thunk_FUN_0009e9a4
+0009ce1c add x8,sp,#0x108
+0009ce20 sub x0,x29,#0xe0
+0009ce24 bl 0x0009e8d0
+  ref 0009e8d0 FUN_0009e8d0
+0009ce28 ldr x8,[sp, #0x108]
+0009ce2c str xzr,[sp, #0x108]
+0009ce30 ldr x0,[x19, #0xb0]
+0009ce34 str x8,[x19, #0xb0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009ce38 cbz x0,0x0009ce60
+  ref 0009ce60 LAB_0009ce60
+0009ce3c ldr x8,[x0]
+0009ce40 ldr x8,[x8, #0x8]
+0009ce44 blr x8
+0009ce48 ldr x0,[sp, #0x108]
+0009ce4c cbz x0,0x0009ce60
+  ref 0009ce60 LAB_0009ce60
+0009ce50 str xzr,[sp, #0x108]
+0009ce54 ldr x8,[x0]
+0009ce58 ldr x8,[x8, #0x8]
+0009ce5c blr x8
+0009ce60 ldur x0,[x29, #-0xe0]
+  ref 00bcc8f2 s_Sending_PropertyGet_request._00bcc8f2
+0009ce64 cbz x0,0x0009ce78
+  ref 0009ce78 LAB_0009ce78
+0009ce68 stur xzr,[x29, #-0xe0]
+0009ce6c ldr x8,[x0]
+  ref 00bcc8f2 s_Sending_PropertyGet_request._00bcc8f2
+0009ce70 ldr x8,[x8, #0x8]
+  ref 20676e69646e655b DAT_20676e69646e655b
+0009ce74 blr x8
+0009ce78 ldr x21,[x19, #0xb0]
+0009ce7c cbz x21,0x0009d388
+  ref 0009d388 LAB_0009d388
+0009ce80 ldr x8,[x21]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009ce84 ldr x8,[x8]
+  ref 0004ef94 DAT_0004ef90+4
+0009ce88 mov x0,x21
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009ce8c blr x8
+  ref f9400029aa0003e8 SUB_f9400029aa0003e8
+0009ce90 mov w23,#0x0
+0009ce94 mov w0,#0x20
+0009ce98 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+0009ce9c mov x28,x0
+0009cea0 mov x27,x0
+0009cea4 str xzr,[x27, #0x8]!
+0009cea8 adrp x8,0xd02000
+0009ceac add x8,x8,#0xc8
+0009ceb0 str xzr,[x0, #0x10]
+0009ceb4 add x8,x8,#0x10
+0009ceb8 str x8,[x0]
+  ref 00d020d8 PTR_FUN_00d020d8
+0009cebc mov x22,x0
+0009cec0 strb wzr,[x22, #0x18]!
+0009cec4 cbnz w23,0x0009d39c
+  ref 0009d39c LAB_0009d39c
+0009cec8 ldr x8,[x21]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009cecc ldr x9,[x8, #0x10]
+  ref 0004efa4 DAT_0004efa4
+0009ced0 add x8,sp,#0x20
+0009ced4 add x1,sp,#0x58
+0009ced8 mov x0,x21
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009cedc blr x9
+  ref d61f0040aa0803e1 SUB_d61f0040aa0803e1
+0009cee0 bl 0x009b48a8
+  ref 009b48a8 @rpath/mso20.framework/Versions/A/mso20::Mso::Async::ConcurrentQueue
+0009cee4 mov x23,x0
+0009cee8 stur x21,[x29, #-0xe0]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009ceec ldr x8,[x21]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009cef0 ldr x8,[x8]
+  ref 0004ef94 DAT_0004ef90+4
+0009cef4 mov x0,x21
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009cef8 blr x8
+  ref f9400029aa0003e8 SUB_f9400029aa0003e8
+0009cefc ldr x0,[sp, #0x58]
+0009cf00 stur x0,[x29, #-0xd8]
+0009cf04 cbz x0,0x0009cf14
+  ref 0009cf14 LAB_0009cf14
+0009cf08 ldr x8,[x0]
+0009cf0c ldr x8,[x8, #0x8]
+0009cf10 blr x8
+0009cf14 sub x24,x29,#0xe0
+0009cf18 ldrsb w8,[sp, #0xb7]
+0009cf1c tbnz w8,#0x1f,0x0009cf34
+  ref 0009cf34 LAB_0009cf34
+0009cf20 ldr q0,[sp, #0xa0]
+0009cf24 stur q0,[x24, #0x10]
+0009cf28 ldr x8,[sp, #0xb0]
+0009cf2c stur x8,[x24, #0x20]
+0009cf30 b 0x0009cf40
+  ref 0009cf40 LAB_0009cf40
+0009cf34 ldp x1,x2,[sp, #0xa0]
+0009cf38 add x0,x24,#0x10
+0009cf3c bl 0x0002a254
+  ref 0002a254 FUN_0002a254
+0009cf40 stp x22,x28,[x29, #-0xb8]
+0009cf44 add x8,x28,#0x8
+0009cf48 mov w9,#0x1
+0009cf4c ldadd x9,x8,[x8]
+0009cf50 ldur q0,[x19, #0x30]
+0009cf54 stur q0,[x25, #0x98]
+0009cf58 ldr x8,[sp, #0x20]
+0009cf5c cbz x8,0x0009d3a0
+  ref 0009d3a0 LAB_0009d3a0
+0009cf60 stp xzr,xzr,[sp, #0x108]
+0009cf64 adrp x0,0xd02000
+0009cf68 add x0,x0,#0x38
+  ref 00d02038 DAT_00d02038
+0009cf6c add x8,sp,#0x40
+0009cf70 add x2,sp,#0x108
+0009cf74 mov w1,#0x50
+0009cf78 bl 0x009b49f8
+  ref 009b49f8 @rpath/mso20.framework/Versions/A/mso20::Mso::Futures::MakeFuture
+0009cf7c ldr x8,[sp, #0x110]
+0009cf80 cmp x8,#0x4f
+0009cf84 b.ls 0x0009d3a4
+  ref 0009d3a4 LAB_0009d3a4
+0009cf88 ldr x0,[sp, #0x108]
+0009cf8c mov x1,x23
+0009cf90 bl 0x009b4a28
+  ref 009b4a28 @rpath/mso20.framework/Versions/A/mso20::Mso::Futures::DispatchQueueExecutor::DispatchQueueExecutor
+0009cf94 ldr x8,[sp, #0x110]
+0009cf98 cmp x8,#0x4f
+0009cf9c b.ls 0x0009d3a8
+  ref 0009d3a8 LAB_0009d3a8
+0009cfa0 sub x8,x29,#0xe0
+0009cfa4 ldr x9,[sp, #0x108]
+0009cfa8 ldur q0,[x29, #-0xe0]
+0009cfac movi v1.2D,#0x0
+0009cfb0 stur q1,[x29, #-0xe0]
+0009cfb4 stur q0,[x9, #0x8]
+0009cfb8 ldur q0,[x24, #0x10]
+0009cfbc ldur x10,[x24, #0x20]
+0009cfc0 str x10,[x9, #0x28]
+0009cfc4 stur q0,[x9, #0x18]
+0009cfc8 stur q1,[x24, #0x18]
+0009cfcc stur xzr,[x24, #0x10]
+0009cfd0 ldur q0,[x25, #0x88]
+0009cfd4 str q0,[x9, #0x30]
+0009cfd8 stur q1,[x8, #0x28]
+0009cfdc ldur q0,[x8, #0x38]
+0009cfe0 str q0,[x9, #0x40]
+0009cfe4 ldr x23,[sp, #0x20]
+0009cfe8 cbz x23,0x0009d3ac
+  ref 0009d3ac LAB_0009d3ac
+0009cfec ldr x0,[sp, #0x40]
+0009cff0 str x0,[sp, #0x28]
+0009cff4 cbz x0,0x0009d004
+  ref 0009d004 LAB_0009d004
+0009cff8 ldr x8,[x0]
+0009cffc ldr x8,[x8, #0x8]
+0009d000 blr x8
+0009d004 ldr x8,[x23]
+0009d008 ldr x8,[x8, #0x38]
+0009d00c add x1,sp,#0x28
+0009d010 mov x0,x23
+0009d014 blr x8
+0009d018 ldr x0,[sp, #0x28]
+0009d01c cbz x0,0x0009d030
+  ref 0009d030 LAB_0009d030
+0009d020 str xzr,[sp, #0x28]
+0009d024 ldr x8,[x0]
+0009d028 ldr x8,[x8, #0x10]
+0009d02c blr x8
+0009d030 ldr x23,[sp, #0x40]
+0009d034 ldr x0,[sp, #0x60]
+0009d038 str x0,[sp, #0x108]
+0009d03c cbz x0,0x0009d04c
+  ref 0009d04c LAB_0009d04c
+0009d040 ldr x8,[x0]
+0009d044 ldr x8,[x8, #0x8]
+0009d048 blr x8
+0009d04c add x24,sp,#0x108
+0009d050 ldur q0,[x19, #0x30]
+0009d054 ldr q1,[sp, #0x290]
+0009d058 add x8,sp,#0xa0
+0009d05c stp q0,q1,[x8, #0x70]
+0009d060 add x25,sp,#0xa0
+0009d064 str x21,[sp, #0x130]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009d068 ldr x8,[x21]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009d06c ldr x8,[x8]
+  ref 0004ef94 DAT_0004ef90+4
+0009d070 mov x0,x21
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009d074 blr x8
+  ref f9400029aa0003e8 SUB_f9400029aa0003e8
+0009d078 stp x22,x28,[sp, #0x138]
+0009d07c add x8,x28,#0x8
+0009d080 mov w9,#0x1
+0009d084 ldadd x9,x8,[x8]
+0009d088 add x0,x24,#0x40
+0009d08c add x1,x19,#0x8
+0009d090 bl 0x0009c730
+  ref 0009c730 FUN_0009c730
+0009d094 cbz x23,0x0009d3b0
+  ref 0009d3b0 LAB_0009d3b0
+0009d098 stp xzr,xzr,[sp, #0x40]
+0009d09c adrp x0,0xd02000
+0009d0a0 add x0,x0,#0x68
+  ref 00d02068 DAT_00d02068
+0009d0a4 add x8,sp,#0x28
+0009d0a8 add x2,sp,#0x40
+0009d0ac mov w1,#0x70
+0009d0b0 bl 0x009b49f8
+  ref 009b49f8 @rpath/mso20.framework/Versions/A/mso20::Mso::Futures::MakeFuture
+0009d0b4 ldr x8,[sp, #0x48]
+0009d0b8 cmp x8,#0x6f
+0009d0bc b.ls 0x0009d3b4
+  ref 0009d3b4 LAB_0009d3b4
+0009d0c0 ldr x8,[sp, #0x40]
+0009d0c4 ldr x9,[sp, #0x108]
+0009d0c8 str xzr,[sp, #0x108]
+0009d0cc str x9,[x8, #0x8]
+0009d0d0 ldur q0,[x24, #0x8]
+0009d0d4 ldur q1,[x24, #0x18]
+0009d0d8 stp q0,q1,[x8, #0x10]
+0009d0dc ldur q0,[x25, #0x90]
+0009d0e0 str xzr,[sp, #0x130]
+0009d0e4 str q0,[x8, #0x30]
+0009d0e8 ldr x9,[sp, #0x140]
+0009d0ec str x9,[x8, #0x40]
+0009d0f0 stp xzr,xzr,[x24, #0x30]
+0009d0f4 add x0,x8,#0x48
+0009d0f8 add x1,x24,#0x40
+0009d0fc bl 0x00099500
+  ref 00099500 FUN_00099500
+0009d100 ldr x0,[sp, #0x28]
+0009d104 str x0,[sp, #0x100]
+0009d108 cbz x0,0x0009d118
+  ref 0009d118 LAB_0009d118
+0009d10c ldr x8,[x0]
+0009d110 ldr x8,[x8, #0x8]
+0009d114 blr x8
+0009d118 ldr x8,[x23]
+0009d11c ldr x8,[x8, #0x38]
+0009d120 add x1,sp,#0x100
+0009d124 mov x0,x23
+0009d128 blr x8
+0009d12c ldr x0,[sp, #0x100]
+0009d130 cbz x0,0x0009d144
+  ref 0009d144 LAB_0009d144
+0009d134 str xzr,[sp, #0x100]
+0009d138 ldr x8,[x0]
+0009d13c ldr x8,[x8, #0x10]
+0009d140 blr x8
+0009d144 ldr x8,[sp, #0x28]
+0009d148 str x8,[x20]
+0009d14c add x0,x24,#0x40
+0009d150 bl 0x000db8d0
+  ref 000db8d0 FUN_000db8d0
+0009d154 ldr x20,[sp, #0x140]
+0009d158 cbz x20,0x0009d184
+  ref 0009d184 LAB_0009d184
+0009d15c add x8,x20,#0x8
+0009d160 mov x9,#-0x1
+0009d164 ldaddal x9,x8,[x8]
+0009d168 cbnz x8,0x0009d184
+  ref 0009d184 LAB_0009d184
+0009d16c ldr x8,[x20]
+0009d170 ldr x8,[x8, #0x10]
+0009d174 mov x0,x20
+0009d178 blr x8
+0009d17c mov x0,x20
+0009d180 bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+0009d184 ldr x0,[sp, #0x130]
+0009d188 cbz x0,0x0009d19c
+  ref 0009d19c LAB_0009d19c
+0009d18c str xzr,[sp, #0x130]
+0009d190 ldr x8,[x0]
+0009d194 ldr x8,[x8, #0x8]
+0009d198 blr x8
+0009d19c ldr x0,[sp, #0x108]
+0009d1a0 cbz x0,0x0009d1b4
+  ref 0009d1b4 LAB_0009d1b4
+0009d1a4 str xzr,[sp, #0x108]
+0009d1a8 ldr x8,[x0]
+0009d1ac ldr x8,[x8, #0x10]
+0009d1b0 blr x8
+0009d1b4 ldr x8,[x23]
+0009d1b8 ldr x8,[x8, #0x10]
+0009d1bc mov x0,x23
+0009d1c0 blr x8
+0009d1c4 ldur x20,[x29, #-0xb0]
+0009d1c8 cbz x20,0x0009d1f4
+  ref 0009d1f4 LAB_0009d1f4
+0009d1cc add x8,x20,#0x8
+0009d1d0 mov x9,#-0x1
+0009d1d4 ldaddal x9,x8,[x8]
+0009d1d8 cbnz x8,0x0009d1f4
+  ref 0009d1f4 LAB_0009d1f4
+0009d1dc ldr x8,[x20]
+0009d1e0 ldr x8,[x8, #0x10]
+0009d1e4 mov x0,x20
+0009d1e8 blr x8
+0009d1ec mov x0,x20
+0009d1f0 bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+0009d1f4 ldursb w8,[x29, #-0xb9]
+0009d1f8 tbz w8,#0x1f,0x0009d204
+  ref 0009d204 LAB_0009d204
+0009d1fc ldur x0,[x29, #-0xd0]
+0009d200 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d204 ldur x0,[x29, #-0xd8]
+0009d208 cbz x0,0x0009d21c
+  ref 0009d21c LAB_0009d21c
+0009d20c stur xzr,[x29, #-0xd8]
+0009d210 ldr x8,[x0]
+0009d214 ldr x8,[x8, #0x10]
+0009d218 blr x8
+0009d21c ldur x0,[x29, #-0xe0]
+0009d220 cbz x0,0x0009d234
+  ref 0009d234 LAB_0009d234
+0009d224 stur xzr,[x29, #-0xe0]
+0009d228 ldr x8,[x0]
+0009d22c ldr x8,[x8, #0x8]
+0009d230 blr x8
+0009d234 ldr x0,[sp, #0x20]
+0009d238 cbz x0,0x0009d24c
+  ref 0009d24c LAB_0009d24c
+0009d23c str xzr,[sp, #0x20]
+0009d240 ldr x8,[x0]
+0009d244 ldr x8,[x8, #0x10]
+0009d248 blr x8
+0009d24c mov x8,#-0x1
+0009d250 ldaddal x8,x8,[x27]
+0009d254 cbnz x8,0x0009d270
+  ref 0009d270 LAB_0009d270
+0009d258 ldr x8,[x28]
+0009d25c ldr x8,[x8, #0x10]
+  ref 00d020e8 PTR_FUN_00d020e8
+0009d260 mov x0,x28
+0009d264 blr x8
+  ref 001a7cac FUN_001a7cac
+0009d268 mov x0,x28
+0009d26c bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+0009d270 ldr x8,[x21]
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009d274 ldr x8,[x8, #0x8]
+  ref 0004ef9c DAT_0004ef9c
+0009d278 mov x0,x21
+  ref 00c8df00 PTR_DAT_0004ef90+4_00c8df00
+0009d27c blr x8
+  ref aa0103e0f9406122 SUB_aa0103e0f9406122
+0009d280 ldr x0,[sp, #0x58]
+0009d284 cbz x0,0x0009d298
+  ref 0009d298 LAB_0009d298
+0009d288 str xzr,[sp, #0x58]
+0009d28c ldr x8,[x0]
+0009d290 ldr x8,[x8, #0x10]
+0009d294 blr x8
+0009d298 ldr x0,[sp, #0x60]
+0009d29c cbz x0,0x0009d2b0
+  ref 0009d2b0 LAB_0009d2b0
+0009d2a0 str xzr,[sp, #0x60]
+0009d2a4 ldr x8,[x0]
+0009d2a8 ldr x8,[x8, #0x10]
+0009d2ac blr x8
+0009d2b0 ldr x0,[sp, #0x178]
+0009d2b4 cmp x0,x26
+0009d2b8 b.eq 0x0009d2c0
+  ref 0009d2c0 LAB_0009d2c0
+0009d2bc bl 0x009b49d4
+  ref 009b49d4 @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::Free
+0009d2c0 ldursb w8,[x29, #-0x79]
+0009d2c4 tbz w8,#0x1f,0x0009d2d0
+  ref 0009d2d0 LAB_0009d2d0
+0009d2c8 ldur x0,[x29, #-0x90]
+0009d2cc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d2d0 ldrb w8,[sp, #0x77]
+0009d2d4 cmp w8,#0x1
+0009d2d8 b.ne 0x0009d2e0
+  ref 0009d2e0 LAB_0009d2e0
+0009d2dc bl 0x009b4aac
+  ref 009b4aac @rpath/mso20.framework/Versions/A/mso20::Mso::Logging::EndCurrentCorrelation
+0009d2e0 ldr x0,[sp, #0x2a8]
+0009d2e4 ldr x8,[sp, #0x18]
+0009d2e8 cmp x0,x8
+0009d2ec b.eq 0x0009d2f4
+  ref 0009d2f4 LAB_0009d2f4
+0009d2f0 bl 0x009b49d4
+  ref 009b49d4 @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::Free
+0009d2f4 ldrsb w8,[sp, #0x9f]
+0009d2f8 tbz w8,#0x1f,0x0009d304
+  ref 0009d304 LAB_0009d304
+0009d2fc ldr x0,[sp, #0x88]
+0009d300 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d304 ldrb w8,[sp, #0xe8]
+0009d308 cmp w8,#0x1
+0009d30c b.ne 0x0009d320
+  ref 0009d320 LAB_0009d320
+0009d310 ldrsb w8,[sp, #0xe7]
+0009d314 tbz w8,#0x1f,0x0009d320
+  ref 0009d320 LAB_0009d320
+0009d318 ldr x0,[sp, #0xd0]
+0009d31c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d320 ldrsb w8,[sp, #0xcf]
+0009d324 tbz w8,#0x1f,0x0009d330
+  ref 0009d330 LAB_0009d330
+0009d328 ldr x0,[sp, #0xb8]
+0009d32c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d330 ldrsb w8,[sp, #0xb7]
+0009d334 tbz w8,#0x1f,0x0009d340
+  ref 0009d340 LAB_0009d340
+0009d338 ldr x0,[sp, #0xa0]
+0009d33c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+0009d340 add x0,sp,#0x3d0
+0009d344 bl 0x000db94c
+  ref 000db94c FUN_000db94c
+0009d348 add x0,x19,#0x68
+0009d34c bl 0x009b6228
+  ref 009b6228 /usr/lib/libc++.1.dylib::std::recursive_mutex::unlock
+0009d350 ldur x8,[x29, #-0x68]
+0009d354 adrp x9,0xc8a000
+0009d358 ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+0009d35c ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+0009d360 cmp x9,x8
+0009d364 b.ne 0x0009d3bc
+  ref 0009d3bc LAB_0009d3bc
+0009d368 add sp,sp,#0x4c0
+0009d36c ldp x29,x30,[sp, #0x50]
+0009d370 ldp x20,x19,[sp, #0x40]
+0009d374 ldp x22,x21,[sp, #0x30]
+0009d378 ldp x24,x23,[sp, #0x20]
+0009d37c ldp x26,x25,[sp, #0x10]
+0009d380 ldp x28,x27,[sp], #0x60
+0009d384 ret
+0009d388 mov w23,#0x1
+0009d38c b 0x0009ce94
+  ref 0009ce94 LAB_0009ce94
+0009d390 bl 0x009a46c4
+  ref 009a46c4 FUN_009a46c4
+0009d394 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+0009d398 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+0009d39c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+0009d3a0 bl 0x009a4b44
+  ref 009a4b44 FUN_009a4b44
+0009d3a4 bl 0x009a465c
+  ref 009a465c FUN_009a465c
+0009d3a8 bl 0x009a465c
+  ref 009a465c FUN_009a465c
+0009d3ac bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+0009d3b0 bl 0x009a4cbc
+  ref 009a4cbc FUN_009a4cbc
+0009d3b4 bl 0x009a465c
+  ref 009a465c FUN_009a465c
+0009d3b8 bl 0x009a49bc
+  ref 009a49bc FUN_009a49bc
+0009d3bc bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail

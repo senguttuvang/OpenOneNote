@@ -1,0 +1,5 @@
+direction	address	name
+caller	0009dab4	CreateRequestWorker
+callee	009b49bc	AllocateEx
+callee	009a4680	FUN_009a4680
+callee	0009e850	FUN_0009e850

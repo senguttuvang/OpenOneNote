@@ -1,0 +1,676 @@
+{
+  "capturedBuild" : "16.114.1 (16.114.26102031)",
+  "files" : [
+    {
+      "bytes" : 3406,
+      "path" : "reconstruction\/onenote-internals\/README.md",
+      "sha256" : "36507384ddd302dfcefd05998a2d60d725a106c573917ca7cd18af0e47374c8a"
+    },
+    {
+      "bytes" : 6958,
+      "path" : "reconstruction\/onenote-internals\/change-tracking.md",
+      "sha256" : "f2be1002c42d3f6e21ed7ccfd34997d5c93dbcbe42a6107f59cdd6925d74af0a"
+    },
+    {
+      "bytes" : 5365,
+      "path" : "reconstruction\/onenote-internals\/document-model.md",
+      "sha256" : "a16ee808718ff97c3d320cc0d66fc9ae0802667dda3503b37d45e7e436976e2a"
+    },
+    {
+      "bytes" : 5360,
+      "path" : "reconstruction\/onenote-internals\/local-storage.md",
+      "sha256" : "207c3e80fd4f6b2a0bba39150e84dfb617155639b1a81a966797b8ed5fa59cfe"
+    },
+    {
+      "bytes" : 4777,
+      "path" : "reconstruction\/onenote-internals\/prior-art.md",
+      "sha256" : "368ecf0386eae42fbd6a55b6471a0a1f2677388f444d8047b3ca969c0dba259c"
+    },
+    {
+      "bytes" : 5254,
+      "path" : "reconstruction\/onenote-internals\/revisions-and-recovery.md",
+      "sha256" : "5d5793292e6b3faa0b3c4335975f634ae3485834063d8d6ce76d249711be3530"
+    },
+    {
+      "bytes" : 4861,
+      "path" : "reconstruction\/onenote-internals\/sequences.md",
+      "sha256" : "be36b8c25a707f7b6ef657f062c53afa2ddf4324c958b488755463cdcbc248bf"
+    },
+    {
+      "bytes" : 4703,
+      "path" : "reconstruction\/onenote-internals\/swift-contracts.md",
+      "sha256" : "71cdcf76259c560e0e8a82eb161ef3a3077c8301e5dc9f6e973f8c33928f0eaa"
+    },
+    {
+      "bytes" : 5697,
+      "path" : "reconstruction\/onenote-internals\/transport-and-access.md",
+      "sha256" : "8d29d69ad21d9033d2b7a3a941ed0dbba2044477e37f659185b37fd7af92f819"
+    },
+    {
+      "bytes" : 8983,
+      "path" : "research\/sync\/README.md",
+      "sha256" : "8ace09038de161327d03812d2eb21e04741f1f9e77bf2703c95358b596fcf712"
+    },
+    {
+      "bytes" : 818,
+      "path" : "research\/sync\/runtime\/after-outer-replace.sanitized.html",
+      "sha256" : "7783e14584bdf7c41bcbf88d587f652636189a4dcf07fcf9eea582665f92d3f2"
+    },
+    {
+      "bytes" : 666,
+      "path" : "research\/sync\/runtime\/attachment.sanitized.html",
+      "sha256" : "dec8c6bdac7ea72c3d8777eea09df3e95fc400dbd5acad0ec28a1f21a5b123b1"
+    },
+    {
+      "bytes" : 9769,
+      "path" : "research\/sync\/runtime\/graph-events.jsonl",
+      "sha256" : "31664064cbe2361fc987a66117bd4016414211fd5614fd048f4d133a32e183fb"
+    },
+    {
+      "bytes" : 445,
+      "path" : "research\/sync\/runtime\/native-final.json",
+      "sha256" : "390983182d7d088d3af50a3b9a64b23bb57f515e9558f59f92ee4dbd5ded50e3"
+    },
+    {
+      "bytes" : 440,
+      "path" : "research\/sync\/runtime\/native-observation.json",
+      "sha256" : "a0d438e0140dca6d74aa1641f3d451e1dea5f5145de26bc3105662a160e6e1d3"
+    },
+    {
+      "bytes" : 1633,
+      "path" : "research\/sync\/runtime\/readback.sanitized.html",
+      "sha256" : "e94866ceffd6550ad62179a6b33537d264799fb51eae1ddec6c7d8a3c4e736f1"
+    },
+    {
+      "bytes" : 1633,
+      "path" : "research\/sync\/runtime\/remote-beta.sanitized.html",
+      "sha256" : "e94866ceffd6550ad62179a6b33537d264799fb51eae1ddec6c7d8a3c4e736f1"
+    },
+    {
+      "bytes" : 929,
+      "path" : "research\/sync\/runtime\/stale-final.sanitized.html",
+      "sha256" : "75936cd6372799fd9d019a27e589adc03531e590dfe20c83513c346307035625"
+    },
+    {
+      "bytes" : 1755,
+      "path" : "research\/sync\/runtime\/storage-after-graph.json",
+      "sha256" : "19def1a975980e98e62a2560ad30273d5c32fa8002ec1e5cf52f5108bf18d692"
+    },
+    {
+      "bytes" : 1755,
+      "path" : "research\/sync\/runtime\/storage-before.json",
+      "sha256" : "fe9e755a56cce919ba6cb5628e6eccb22daa490ea343048be46bf264f039b5e0"
+    },
+    {
+      "bytes" : 9202,
+      "path" : "research\/sync\/runtime\/storage-schema.json",
+      "sha256" : "85d0f441f20d7d52f5eff4b1b4e2f11aa612d51a12d41f1c40f760cf3855a3de"
+    },
+    {
+      "bytes" : 1550,
+      "path" : "research\/sync\/static\/CreateCellStorageOverHttp_full.c",
+      "sha256" : "2637b3e83e4a8cbbdcb6f300baff7d1d13589bf19b93d98631bc25211a46d107"
+    },
+    {
+      "bytes" : 184,
+      "path" : "research\/sync\/static\/CreateCellStorageOverHttp_full.refs.tsv",
+      "sha256" : "b97e02c3c3101bc64b2ab8b09c80b443aa27268655453b1276b9817bade9f0de"
+    },
+    {
+      "bytes" : 846,
+      "path" : "research\/sync\/static\/CreateCellStorageOverHttp_simple.c",
+      "sha256" : "5b04babaa8703b63c93e6c009c88d2c46410637b57d70d702e44ecd3bf921eb2"
+    },
+    {
+      "bytes" : 139,
+      "path" : "research\/sync\/static\/CreateCellStorageOverHttp_simple.refs.tsv",
+      "sha256" : "701b459082ec21e3a2111a7135fa908d7eebf629b21e6567fd7352430ab8f770"
+    },
+    {
+      "bytes" : 395,
+      "path" : "research\/sync\/static\/CreateKnowledge.c",
+      "sha256" : "c25123b0595b3d9d1224a83907c63770e2e2b2b62db50d41a62d634ca5e433dd"
+    },
+    {
+      "bytes" : 313,
+      "path" : "research\/sync\/static\/CreateKnowledge.refs.tsv",
+      "sha256" : "a186566cc5f768bf2cd7aebf414046585bb5e24fac68fcfe00181d1d5ebed2d8"
+    },
+    {
+      "bytes" : 1456,
+      "path" : "research\/sync\/static\/CreateRequestBatch.c",
+      "sha256" : "62b3c54ce08f4b658b4221b0a8a3cedfe607ffd07c2b88f554cf0641e8b907cd"
+    },
+    {
+      "bytes" : 52,
+      "path" : "research\/sync\/static\/CreateRequestBatch.refs.tsv",
+      "sha256" : "5d4b64eefde8e5069730ec23961e3069ee81ae3c1442682c3295e7be35542e9c"
+    },
+    {
+      "bytes" : 449,
+      "path" : "research\/sync\/static\/CreateRequestFactory.c",
+      "sha256" : "a2241a27008427693f59f78dfee7460f0a29a9da2f397087cdcae3709c23cf84"
+    },
+    {
+      "bytes" : 81,
+      "path" : "research\/sync\/static\/CreateRequestFactory.refs.tsv",
+      "sha256" : "f116fd7a8386813d94f3756bc852f885cc673e6b12a338c30d09a26762baef1f"
+    },
+    {
+      "bytes" : 447,
+      "path" : "research\/sync\/static\/CreateRequestWorker.c",
+      "sha256" : "8b03bda21b7d6d119eb40fba24705d41019efa0bf771177df28469483310bedb"
+    },
+    {
+      "bytes" : 52,
+      "path" : "research\/sync\/static\/CreateRequestWorker.refs.tsv",
+      "sha256" : "1b9ba6c16e46c5a6d352ab91d862b2795b847ac6c3b776a90658e783689c63a2"
+    },
+    {
+      "bytes" : 1679,
+      "path" : "research\/sync\/static\/CreateRevisionManifestScaffold.c",
+      "sha256" : "1d0b8f60617be9c694754be129bfcd9519480eb4220510f43ed31abb9f9a9fbe"
+    },
+    {
+      "bytes" : 168,
+      "path" : "research\/sync\/static\/CreateRevisionManifestScaffold.refs.tsv",
+      "sha256" : "00564503c195c529cf8dcb574518804c65c155282a93104f8e256e0cbc4a9516"
+    },
+    {
+      "bytes" : 752,
+      "path" : "research\/sync\/static\/FGetCellKnowledge.c",
+      "sha256" : "9aa0f2d72f7c0fa9f5c4f1bf2fd19042329896c91c4492e8882e40b1b097eaec"
+    },
+    {
+      "bytes" : 110,
+      "path" : "research\/sync\/static\/FGetCellKnowledge.refs.tsv",
+      "sha256" : "e26c9832a68ac0e30ae2775bc66ba1932e8e52f961bf9a612043c99170bdb195"
+    },
+    {
+      "bytes" : 19482,
+      "path" : "research\/sync\/static\/GetChangesSinceToken.c",
+      "sha256" : "cc7a0c42c032b0186039c5f2375694f23dc4e0167839a2e91cb5d640008caed2"
+    },
+    {
+      "bytes" : 1023,
+      "path" : "research\/sync\/static\/GetChangesSinceToken.refs.tsv",
+      "sha256" : "01a8a3abe1d11f3706dda06509003c16b4a53280576ad35a55b6d422b88b06d9"
+    },
+    {
+      "bytes" : 3502,
+      "path" : "research\/sync\/static\/SerializeDataElementPackage.c",
+      "sha256" : "6298e5bee7cbe30dd292a06495dccdc19fc68ca4d47044400367f8418496e6cd"
+    },
+    {
+      "bytes" : 260,
+      "path" : "research\/sync\/static\/SerializeDataElementPackage.refs.tsv",
+      "sha256" : "c5de1eab9ad5f890591b8ca30a72fb2a80d07b95d2e5bbac8fa8a2aa15e101ae"
+    },
+    {
+      "bytes" : 30562,
+      "path" : "research\/sync\/static\/analysis.sanitized.log",
+      "sha256" : "c8ada045565e3aa34b6997bb65ecadf7d1d94d243005b055b3d9ea02dd68ec5d"
+    },
+    {
+      "bytes" : 1267,
+      "path" : "research\/sync\/static\/follow\/BatchImplementation.asm.txt",
+      "sha256" : "03a1061461cfc92875098b44dcc5116ff715218aaf4a6ce343b83af9288238d1"
+    },
+    {
+      "bytes" : 837,
+      "path" : "research\/sync\/static\/follow\/BatchImplementation.c",
+      "sha256" : "378d278bd77f6e6056cdb2531641dcbfd7c85ec210f3f5263efc66159ebd695a"
+    },
+    {
+      "bytes" : 143,
+      "path" : "research\/sync\/static\/follow\/BatchImplementation.refs.tsv",
+      "sha256" : "cb25a8b0cab9e032b76a3f9ca7a35f44a3f2c0f0c8bb86804fb5ff98d79b8577"
+    },
+    {
+      "bytes" : 337,
+      "path" : "research\/sync\/static\/follow\/CellStorageAllocation.asm.txt",
+      "sha256" : "bcdf9f7bf57b65bdefd4f37f2ba8ee1c463375d5a628c61c66fb457dfd9271da"
+    },
+    {
+      "bytes" : 430,
+      "path" : "research\/sync\/static\/follow\/CellStorageAllocation.c",
+      "sha256" : "5e30a0f1d5318a81e2d1428882f570702901ad07d1cd74fb2209ac50ca75dddb"
+    },
+    {
+      "bytes" : 165,
+      "path" : "research\/sync\/static\/follow\/CellStorageAllocation.refs.tsv",
+      "sha256" : "71ce089521bdc82392889b5bd6ab8ade465986396ef6e3cafd027a5d53762169"
+    },
+    {
+      "bytes" : 618,
+      "path" : "research\/sync\/static\/follow\/CellStorageFlagMutation.asm.txt",
+      "sha256" : "5ec70330105ae64a89504761d774c34ee59b40d4271216685c67a8f3d5e15027"
+    },
+    {
+      "bytes" : 427,
+      "path" : "research\/sync\/static\/follow\/CellStorageFlagMutation.c",
+      "sha256" : "e3a8e009a4a5fdb95ac08ec1668f6c56c944ea927f48d66f5c3ea43cc93b9dfd"
+    },
+    {
+      "bytes" : 109,
+      "path" : "research\/sync\/static\/follow\/CellStorageFlagMutation.refs.tsv",
+      "sha256" : "d9c69f3735717fc3e6f7786667e24a9592caac1f27b9a250c84697bd166547cb"
+    },
+    {
+      "bytes" : 844,
+      "path" : "research\/sync\/static\/follow\/CellStorageInitialization.asm.txt",
+      "sha256" : "332dd5e2dcb989d36c7354f6523bf4e1742ca0fd2ab4423e7f052124a18bb9a0"
+    },
+    {
+      "bytes" : 701,
+      "path" : "research\/sync\/static\/follow\/CellStorageInitialization.c",
+      "sha256" : "7db951b0eb61985b84aa86906b9595b75be0033c43444f9d4458306cc6c93dd3"
+    },
+    {
+      "bytes" : 134,
+      "path" : "research\/sync\/static\/follow\/CellStorageInitialization.refs.tsv",
+      "sha256" : "49d43ad5b9c35dcc3da14965f465ce4cbabe5f61471311e527ea6901629f5b6f"
+    },
+    {
+      "bytes" : 1126,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenChannelCreation.asm.txt",
+      "sha256" : "c8bc9d611124a8738bd5d9c9847ae822627a107231a7e64116f5cfe60f6b1d19"
+    },
+    {
+      "bytes" : 809,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenChannelCreation.c",
+      "sha256" : "924c8ce0f0c8e304618af97cb1b05ec2c32fee94f619d7eb2f6f5f2e33ee9560"
+    },
+    {
+      "bytes" : 188,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenChannelCreation.refs.tsv",
+      "sha256" : "0d82be5923d0d4bfa37fe76c1857066c66be961070686f53e7492435f91870da"
+    },
+    {
+      "bytes" : 1437,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenServiceCall.asm.txt",
+      "sha256" : "1c0be29eb9daac1e9710445968536145656032e820fbdf9a3af52024db8a5ea1"
+    },
+    {
+      "bytes" : 1535,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenServiceCall.c",
+      "sha256" : "6ff9e3b7b3ba978bb0c00b0753a6241dd0e5b63cc6f4124036c13e21fa957a4f"
+    },
+    {
+      "bytes" : 118,
+      "path" : "research\/sync\/static\/follow\/ChangeTokenServiceCall.refs.tsv",
+      "sha256" : "676098c73f9526ede0c24f876183e5142b2bef714ec373dc03259523b04b842b"
+    },
+    {
+      "bytes" : 620,
+      "path" : "research\/sync\/static\/follow\/FactoryImplementation.asm.txt",
+      "sha256" : "b9e75f899cbeed549fec815d5c6625bad68365548cce82dcac613152d6cc09e1"
+    },
+    {
+      "bytes" : 555,
+      "path" : "research\/sync\/static\/follow\/FactoryImplementation.c",
+      "sha256" : "9d6b4b47057a78709efeabbeacfd1bde6e7b10a145b45060a8f5b9086f20e499"
+    },
+    {
+      "bytes" : 145,
+      "path" : "research\/sync\/static\/follow\/FactoryImplementation.refs.tsv",
+      "sha256" : "b02a38df054361ecf8a2b4d6cae7664867e637f5522e32ddf16c9062e38bd69c"
+    },
+    {
+      "bytes" : 45759,
+      "path" : "research\/sync\/static\/follow\/SerializeDataElement.asm.txt",
+      "sha256" : "5d81480ba7d3a190472c2f30669cc367ee841256749b34b563bb5d2da07840ff"
+    },
+    {
+      "bytes" : 32301,
+      "path" : "research\/sync\/static\/follow\/SerializeDataElement.c",
+      "sha256" : "00be5c78750641cd6721852cf9883f011840714a249ed890f26a5d437e3780dd"
+    },
+    {
+      "bytes" : 1174,
+      "path" : "research\/sync\/static\/follow\/SerializeDataElement.refs.tsv",
+      "sha256" : "adabbaccec3d281145b360e0fd74cba04141fd7afb4f127c7fa973a31341ed88"
+    },
+    {
+      "bytes" : 519,
+      "path" : "research\/sync\/static\/follow\/WorkerImplementation.asm.txt",
+      "sha256" : "9ed04a30ffc284088a2bea07c858c61ce71b90685e1b390271d79377e138919d"
+    },
+    {
+      "bytes" : 495,
+      "path" : "research\/sync\/static\/follow\/WorkerImplementation.c",
+      "sha256" : "cd63e26d02281c1b06ce8d5c9201da9ab691bc57eca3676586bcbb0b01a5577a"
+    },
+    {
+      "bytes" : 144,
+      "path" : "research\/sync\/static\/follow\/WorkerImplementation.refs.tsv",
+      "sha256" : "1145d5065693132498d5f0090b019a110be78d66beae8deb2c2da6fc1e3e097b"
+    },
+    {
+      "bytes" : 89,
+      "path" : "research\/sync\/static\/follow\/input.sha256",
+      "sha256" : "a5a8bb00555f7da5c37700bccbfe47512b736fcb8b100162b709e4125a9675d0"
+    },
+    {
+      "bytes" : 350,
+      "path" : "research\/sync\/static\/follow\/selected-methods.tsv",
+      "sha256" : "4cebb6dabb3ba8c4eef33f870db09c330a8f0aa9badf93944d35c9dc223001cb"
+    },
+    {
+      "bytes" : 1170,
+      "path" : "research\/sync\/static\/follow\/selected-symbols.txt",
+      "sha256" : "5155729241e4937304900e343af570de3c7d07ec2ebdd40c8958d5e03dd74c4a"
+    },
+    {
+      "bytes" : 89,
+      "path" : "research\/sync\/static\/input.sha256",
+      "sha256" : "a5a8bb00555f7da5c37700bccbfe47512b736fcb8b100162b709e4125a9675d0"
+    },
+    {
+      "bytes" : 46065,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_000e9bf0.asm.txt",
+      "sha256" : "7e136a6fedf1c04b5c235a4d6026686edc312a907fdcea80bed8537165eefc89"
+    },
+    {
+      "bytes" : 22007,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_000e9bf0.c",
+      "sha256" : "8f4745d19d7098b86a83bcce0574342a424bfe3775169bc65914b015d4278966"
+    },
+    {
+      "bytes" : 2190,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_000e9bf0.refs.tsv",
+      "sha256" : "7f82504dc03e862ec36b9490c847e7263b67a7c9edadd68a307d6f23fac6c32a"
+    },
+    {
+      "bytes" : 31166,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c2c58.asm.txt",
+      "sha256" : "912a12a5a348383bc8181bb1dca309d74165bcff40c0ebfa137e9b155a8d9963"
+    },
+    {
+      "bytes" : 14651,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c2c58.c",
+      "sha256" : "8ddfb30526b0e7878bb0be798a84291013f878ce38ace2eabc1416cec8a9d66a"
+    },
+    {
+      "bytes" : 1398,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c2c58.refs.tsv",
+      "sha256" : "89e70240098782f8bbb906cac6c9ddbf639e60e425ee4cb39dbd933a905bcf4a"
+    },
+    {
+      "bytes" : 24225,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c389c.asm.txt",
+      "sha256" : "37193b45ef905d3757f65bf854e00d5e62fd3115d8f4ef2042827ba7248af23a"
+    },
+    {
+      "bytes" : 11848,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c389c.c",
+      "sha256" : "253d69c8d6fa4b74ba3610dbecb6afa20517b67de61ba20fa603a567c9b64b62"
+    },
+    {
+      "bytes" : 1705,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_001c389c.refs.tsv",
+      "sha256" : "d2c3692a18eb537b5b79dd1efec7082fe6e68ebf417a57462add4534ba7705d5"
+    },
+    {
+      "bytes" : 46666,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_00763168.asm.txt",
+      "sha256" : "5439b6b37a5de79200460ce8e61e12eaa09c2400efb6527432aef33abed3ac57"
+    },
+    {
+      "bytes" : 24027,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_00763168.c",
+      "sha256" : "fd17bd8173d1e355fb34efb880798fb6dd7527e579148ce8c5fd82aaa97bfde8"
+    },
+    {
+      "bytes" : 2103,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_b98ddb_00763168.refs.tsv",
+      "sha256" : "703de808537438d4610176c93c7a5373984fbb1f3b12e996949db196b9606f07"
+    },
+    {
+      "bytes" : 6208,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_ba22c2_00108e14.asm.txt",
+      "sha256" : "b92883e705344f66935a46094ef381e7ff76a03fc4ec95180a7fb7184ea1d3ed"
+    },
+    {
+      "bytes" : 3483,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_ba22c2_00108e14.c",
+      "sha256" : "dd2781529b095ec3b5de422aac766290f986cc3c29a111e38e578a5154f17038"
+    },
+    {
+      "bytes" : 482,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_ba22c2_00108e14.refs.tsv",
+      "sha256" : "e032fabf4adecb943240a13a5f375dbb6b1c6cf47f23eca4c0e5e9ba0da61a86"
+    },
+    {
+      "bytes" : 3185,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb90de_006b28f0.asm.txt",
+      "sha256" : "786a8405015ad51633987e6baa0e34e0fe91cc84763cc8f526224346280b1c71"
+    },
+    {
+      "bytes" : 1876,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb90de_006b28f0.c",
+      "sha256" : "ff4dbeef4add334af332e799804fad8940d8ebf3899d777ef9274d9ea47ed726"
+    },
+    {
+      "bytes" : 287,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb90de_006b28f0.refs.tsv",
+      "sha256" : "901c3172a2563eb7839ffe185c84ab8176398eb9e9017c1377e8cf89934bc614"
+    },
+    {
+      "bytes" : 13220,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb95f6_006b4e58.asm.txt",
+      "sha256" : "924b7977dfba6d1a57c02b50b13b64f0357fcb37dec0f4a5787161e55f5bbaf5"
+    },
+    {
+      "bytes" : 16502,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb95f6_006b4e58.c",
+      "sha256" : "671ea34d85f2408781f22036709fde20b17e0b6d0b2c216e1aecbac566cb427f"
+    },
+    {
+      "bytes" : 743,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb95f6_006b4e58.refs.tsv",
+      "sha256" : "8d059272e150f70d78351392e9ffed84a88a17a97cad572f99a3710bcdc6be2e"
+    },
+    {
+      "bytes" : 15562,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb9732_003a3ee8.asm.txt",
+      "sha256" : "6ceb9d058152064b813ade21f6e0b743f9bc46e031f7c7b53212fb80d257bcf9"
+    },
+    {
+      "bytes" : 9021,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb9732_003a3ee8.c",
+      "sha256" : "c3fc5430b16d8481ea8e5e77d5618885422913f9733ad772170a265bd4abb2c1"
+    },
+    {
+      "bytes" : 422,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb9732_003a3ee8.refs.tsv",
+      "sha256" : "77d44d5bf3a272b0be1c0c8f2129bc1274e6d502e6bcc11f1fc8d3b40474886f"
+    },
+    {
+      "bytes" : 22621,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb97cd_003a2b04.asm.txt",
+      "sha256" : "8591435cf3382fe591ae445cf0b688f8ee99ae562127b3e3a8ab123f646b9c84"
+    },
+    {
+      "bytes" : 15185,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb97cd_003a2b04.c",
+      "sha256" : "ee43c1550f2edd8aaecbbf845a34d8ca996e2faf774c7e2ef3e49b9361c4c3f0"
+    },
+    {
+      "bytes" : 727,
+      "path" : "research\/sync\/static\/lifecycle\/LiteralRef_bb97cd_003a2b04.refs.tsv",
+      "sha256" : "47190fe78e29d6754e4af459f802f27c24e8613d97128c10a4e601353e141c2a"
+    },
+    {
+      "bytes" : 28261,
+      "path" : "research\/sync\/static\/lifecycle\/TransportPathSelection.asm.txt",
+      "sha256" : "4e91a2feb2b6f583f0e2dc073b3ec4479410d93d63afe212f6cacc70fcbb9b61"
+    },
+    {
+      "bytes" : 19838,
+      "path" : "research\/sync\/static\/lifecycle\/TransportPathSelection.c",
+      "sha256" : "2a7b8e7521e8918f9678a09a9e99d73f9c48fa8d79ec5006207c0576e9f678f1"
+    },
+    {
+      "bytes" : 1676,
+      "path" : "research\/sync\/static\/lifecycle\/TransportPathSelection.refs.tsv",
+      "sha256" : "ba77f9ac15f659cd189af94288263ef2e0a20086eda82b4657b8d3548f67aa74"
+    },
+    {
+      "bytes" : 54022,
+      "path" : "research\/sync\/static\/lifecycle\/WorkerProtocolSelection.asm.txt",
+      "sha256" : "787de606142174f6429f15264c7e7bc73792b8cae6bfd3ddeb4c31a72251868e"
+    },
+    {
+      "bytes" : 50669,
+      "path" : "research\/sync\/static\/lifecycle\/WorkerProtocolSelection.c",
+      "sha256" : "98db20bae1ec5805ca21080c36e5b4bbe905b9852481c77e2ae50629324436eb"
+    },
+    {
+      "bytes" : 2150,
+      "path" : "research\/sync\/static\/lifecycle\/WorkerProtocolSelection.refs.tsv",
+      "sha256" : "7a351489ceb7bcc49ffc864b35ef0ae1be17298d67a7a42fbaacc2313a8b70c6"
+    },
+    {
+      "bytes" : 89,
+      "path" : "research\/sync\/static\/lifecycle\/input.sha256",
+      "sha256" : "a5a8bb00555f7da5c37700bccbfe47512b736fcb8b100162b709e4125a9675d0"
+    },
+    {
+      "bytes" : 7644,
+      "path" : "research\/sync\/static\/lifecycle\/scheduler-symbols.tsv",
+      "sha256" : "f2cc4ce478bcffe0a04d49055413c219436a77f2b1595ac17e80686a936f4f91"
+    },
+    {
+      "bytes" : 480,
+      "path" : "research\/sync\/static\/lifecycle\/selected-methods.tsv",
+      "sha256" : "71e61c1d54dd9270ceeb892314c74dd0d40d7333e29c77c1df4bd06bd1d6f600"
+    },
+    {
+      "bytes" : 1170,
+      "path" : "research\/sync\/static\/lifecycle\/selected-symbols.txt",
+      "sha256" : "5155729241e4937304900e343af570de3c7d07ec2ebdd40c8958d5e03dd74c4a"
+    },
+    {
+      "bytes" : 626,
+      "path" : "research\/sync\/static\/lifecycle\/transport-references.tsv",
+      "sha256" : "b01684a8978852e9879c73378da984633278483c5af18b4f0dd54b463cb6b519"
+    },
+    {
+      "bytes" : 395,
+      "path" : "research\/sync\/static\/selected-methods.tsv",
+      "sha256" : "08b3c132231153564ce07300572a83f35af91dd38ac29323c23010b63897b835"
+    },
+    {
+      "bytes" : 1170,
+      "path" : "research\/sync\/static\/selected-symbols.txt",
+      "sha256" : "5155729241e4937304900e343af570de3c7d07ec2ebdd40c8958d5e03dd74c4a"
+    },
+    {
+      "bytes" : 1352,
+      "path" : "research\/sync\/static\/trace\/BatchConstruction.asm.txt",
+      "sha256" : "7c13cffaf2459b9d7c697bb889fac087ae1fdeaed3023cf8e1428958cc06e9e4"
+    },
+    {
+      "bytes" : 1224,
+      "path" : "research\/sync\/static\/trace\/BatchConstruction.c",
+      "sha256" : "1278e80925c44dd44e47741ece19e88235f7799d68e8b2a05a18d1e9cbb08034"
+    },
+    {
+      "bytes" : 110,
+      "path" : "research\/sync\/static\/trace\/BatchConstruction.refs.tsv",
+      "sha256" : "113acae988815e9a37b11cb779de47c06e2a10a20572713e0330097ea9dc9da9"
+    },
+    {
+      "bytes" : 863,
+      "path" : "research\/sync\/static\/trace\/WorkerConstruction.asm.txt",
+      "sha256" : "c242495adcc092b6876d1fdf40158634d371f4669d13b5fe2873a3cc1215ee61"
+    },
+    {
+      "bytes" : 678,
+      "path" : "research\/sync\/static\/trace\/WorkerConstruction.c",
+      "sha256" : "9b475d9d591ab342de3b8a3f0a833fda3582ae04f62c94e306c1fdc4413f1931"
+    },
+    {
+      "bytes" : 145,
+      "path" : "research\/sync\/static\/trace\/WorkerConstruction.refs.tsv",
+      "sha256" : "0b0d724bcfb24013541f0bdeda4ed860cfea90b8fa006d5157253168d47494ce"
+    },
+    {
+      "bytes" : 89,
+      "path" : "research\/sync\/static\/trace\/input.sha256",
+      "sha256" : "a5a8bb00555f7da5c37700bccbfe47512b736fcb8b100162b709e4125a9675d0"
+    },
+    {
+      "bytes" : 7644,
+      "path" : "research\/sync\/static\/trace\/scheduler-symbols.tsv",
+      "sha256" : "f2cc4ce478bcffe0a04d49055413c219436a77f2b1595ac17e80686a936f4f91"
+    },
+    {
+      "bytes" : 91,
+      "path" : "research\/sync\/static\/trace\/selected-methods.tsv",
+      "sha256" : "0fe899fbae79f3a62d8bafed618a8499e7e26788b6adf25d56004e5a394cf47b"
+    },
+    {
+      "bytes" : 1170,
+      "path" : "research\/sync\/static\/trace\/selected-symbols.txt",
+      "sha256" : "5155729241e4937304900e343af570de3c7d07ec2ebdd40c8958d5e03dd74c4a"
+    },
+    {
+      "bytes" : 626,
+      "path" : "research\/sync\/static\/trace\/transport-references.tsv",
+      "sha256" : "b01684a8978852e9879c73378da984633278483c5af18b4f0dd54b463cb6b519"
+    },
+    {
+      "bytes" : 169693,
+      "path" : "research\/sync\/static\/transport-literals.tsv",
+      "sha256" : "97ebfe876259b2bc7cef57e5bb307daa642cf36b3921b3b7c6523c2a87e8cdef"
+    },
+    {
+      "bytes" : 3866,
+      "path" : "research\/sync\/tooling\/ExportEvidence.swift",
+      "sha256" : "89f04625cf058f4ceaa4e4af39d9ffe2cd86e9194bb5a7143abe50b04b2bc1c9"
+    },
+    {
+      "bytes" : 20570,
+      "path" : "research\/sync\/tooling\/GraphExperiment.swift",
+      "sha256" : "5872feb82287ab61e84b5d7edbba53a98104b1adbb58f4b3b680b34260f058c7"
+    },
+    {
+      "bytes" : 3436,
+      "path" : "research\/sync\/tooling\/NativeObservation.swift",
+      "sha256" : "ddabd53b2b0704cf01337bf366c13c07218db8ed538fbf21e48c0b14a71842e5"
+    },
+    {
+      "bytes" : 6010,
+      "path" : "research\/sync\/tooling\/README.md",
+      "sha256" : "bb97b125f344cdce1c2487cb1aacf745d3e10201e039e664bff5c8745b3849b4"
+    },
+    {
+      "bytes" : 9620,
+      "path" : "research\/sync\/tooling\/StaticAnalysis.swift",
+      "sha256" : "6404be64637e63463ac33ad9070d0823b35d45598bdea85abd064517ad4b7ac7"
+    },
+    {
+      "bytes" : 1829,
+      "path" : "research\/sync\/tooling\/StaticStrings.swift",
+      "sha256" : "5190bd3513d5b1b469ce3fdf3b472c913b7062ea1d54ae17b66aa426692bafba"
+    },
+    {
+      "bytes" : 3645,
+      "path" : "research\/sync\/tooling\/StorageProbe.swift",
+      "sha256" : "a1ba43c8958fededaf4f2831d6fd616e537b0ae0a8be36225be1d16a7110b8d1"
+    },
+    {
+      "bytes" : 3797,
+      "path" : "research\/sync\/tooling\/StorageSchema.swift",
+      "sha256" : "970892c893f89057e0b540ffad5a7d68ba3491b541cde54e159b7c90fd95854c"
+    },
+    {
+      "bytes" : 4490,
+      "path" : "research\/sync\/tooling\/VerifyEvidence.swift",
+      "sha256" : "9b4b265e7ae2492a7de54d718d77f74cce6deafd3c3eb7146146f1d04e87f0bd"
+    }
+  ],
+  "schemaVersion" : 1
+}

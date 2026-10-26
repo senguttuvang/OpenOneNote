@@ -1,0 +1,53 @@
+000a713c sub sp,sp,#0x50
+000a7140 stp x20,x19,[sp, #0x30]
+000a7144 stp x29,x30,[sp, #0x40]
+000a7148 add x29,sp,#0x40
+000a714c mov x9,x7
+000a7150 mov x19,x0
+000a7154 ldrb w8,[x29, #0x20]
+000a7158 sturb w8,[x29, #-0x11]
+000a715c mov w8,#0x1
+000a7160 str w8,[x0, #0x8]
+000a7164 adrp x8,0xc91000
+000a7168 add x8,x8,#0x760
+000a716c ldp x7,x10,[x29, #0x10]
+000a7170 str x8,[x0]
+  ref 00c91760 PTR_thunk_FUN_000a9434_00c91760
+000a7174 movi v0.2D,#0x0
+000a7178 stp q0,q0,[x0, #0x10]
+000a717c str xzr,[x0, #0x30]
+000a7180 add x8,x29,#0x28
+000a7184 str x8,[sp, #0x10]
+000a7188 sub x8,x29,#0x11
+000a718c stp x10,x8,[sp]
+000a7190 add x8,sp,#0x20
+000a7194 mov x0,x1
+000a7198 mov x1,x2
+000a719c mov x2,x3
+000a71a0 mov x3,x4
+000a71a4 mov x4,x5
+000a71a8 mov x5,x6
+000a71ac mov x6,x9
+000a71b0 bl 0x000a7204
+  ref 000a7204 FUN_000a7204
+000a71b4 ldr x8,[sp, #0x20]
+000a71b8 str xzr,[sp, #0x20]
+000a71bc ldr x0,[x19, #0x30]
+000a71c0 str x8,[x19, #0x30]
+000a71c4 cbz x0,0x000a71ec
+  ref 000a71ec LAB_000a71ec
+000a71c8 ldr x8,[x0]
+000a71cc ldr x8,[x8, #0x8]
+000a71d0 blr x8
+000a71d4 ldr x0,[sp, #0x20]
+000a71d8 cbz x0,0x000a71ec
+  ref 000a71ec LAB_000a71ec
+000a71dc str xzr,[sp, #0x20]
+000a71e0 ldr x8,[x0]
+000a71e4 ldr x8,[x8, #0x8]
+000a71e8 blr x8
+000a71ec mov x0,x19
+000a71f0 ldp x29,x30,[sp, #0x40]
+000a71f4 ldp x20,x19,[sp, #0x30]
+000a71f8 add sp,sp,#0x50
+000a71fc ret

@@ -1,0 +1,5 @@
+direction	address	name
+caller	000a6f34	CreateRequestBatch
+callee	009b49bc	AllocateEx
+callee	000a713c	FUN_000a713c
+callee	009a4680	FUN_009a4680

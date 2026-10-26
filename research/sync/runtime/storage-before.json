@@ -1,0 +1,92 @@
+{
+  "capturedAt" : "2026-10-26T10:38:40Z",
+  "failures" : 0,
+  "roots" : {
+    "office-onenote" : {
+      "plist" : {
+        "bytes" : 3600102,
+        "files" : 1,
+        "headers" : {
+          "xml" : 1
+        }
+      }
+    },
+    "sandbox-cache" : {
+      "db" : {
+        "bytes" : 49152,
+        "files" : 1,
+        "headers" : {
+          "sqlite3" : 1
+        }
+      },
+      "no-extension" : {
+        "bytes" : 7565903,
+        "files" : 76,
+        "headers" : {
+          "unclassified" : 76
+        }
+      },
+      "other-extension" : {
+        "bytes" : 939040,
+        "files" : 4,
+        "headers" : {
+          "unclassified" : 4
+        }
+      },
+      "plist" : {
+        "bytes" : 86398,
+        "files" : 4,
+        "headers" : {
+          "binary-plist" : 4
+        }
+      },
+      "sqlite" : {
+        "bytes" : 4096,
+        "files" : 1,
+        "headers" : {
+          "sqlite3" : 1
+        }
+      }
+    },
+    "sandbox-support" : {
+      "bin" : {
+        "bytes" : 1267391463,
+        "files" : 10887,
+        "headers" : {
+          "unclassified" : 10861,
+          "zip" : 26
+        }
+      },
+      "db" : {
+        "bytes" : 82714624,
+        "files" : 30,
+        "headers" : {
+          "sqlite3" : 30
+        }
+      },
+      "no-extension" : {
+        "bytes" : 72,
+        "files" : 1,
+        "headers" : {
+          "unclassified" : 1
+        }
+      },
+      "one" : {
+        "bytes" : 585878796,
+        "files" : 531,
+        "headers" : {
+          "empty" : 2,
+          "onestore-guid-prefix" : 529
+        }
+      },
+      "other-extension" : {
+        "bytes" : 34675,
+        "files" : 32,
+        "headers" : {
+          "empty" : 27,
+          "unclassified" : 5
+        }
+      }
+    }
+  }
+}
