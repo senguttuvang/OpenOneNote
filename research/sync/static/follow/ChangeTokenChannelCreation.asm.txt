@@ -1,0 +1,43 @@
+0079e734 stp x24,x23,[sp, #-0x40]!
+0079e738 stp x22,x21,[sp, #0x10]
+0079e73c stp x20,x19,[sp, #0x20]
+0079e740 stp x29,x30,[sp, #0x30]
+0079e744 add x29,sp,#0x30
+0079e748 mov x21,x4
+0079e74c mov x23,x3
+0079e750 mov x19,x2
+0079e754 mov x20,x1
+0079e758 mov x22,x0
+0079e75c bl 0x009b417c
+  ref 009b417c @rpath/mso30.framework/Versions/A/mso30::Mso::WebServices::CreateSoapWebService
+0079e760 ldr x0,[x22]
+0079e764 cbz x0,0x0079e7b8
+  ref 0079e7b8 LAB_0079e7b8
+0079e768 ldr x8,[x0]
+0079e76c ldr x8,[x8, #0x70]
+0079e770 mov x1,x23
+0079e774 blr x8
+0079e778 ldr x0,[x22]
+0079e77c ldr x8,[x0]
+0079e780 ldr x8,[x8, #0x78]
+0079e784 mov x1,x21
+0079e788 blr x8
+0079e78c ldr x0,[x22]
+0079e790 ldr x8,[x0]
+0079e794 ldr x8,[x8, #0x18]
+0079e798 mov x1,x20
+0079e79c mov x2,x19
+0079e7a0 mov x3,#0x0
+0079e7a4 mov w4,#0x0
+0079e7a8 mov w5,#0x0
+0079e7ac blr x8
+0079e7b0 and w0,w0,w0, ASR #0x1f
+0079e7b4 b 0x0079e7bc
+  ref 0079e7bc LAB_0079e7bc
+0079e7b8 mov w0,#0x640
+  ref 00000640 section_00000600.flags
+0079e7bc ldp x29,x30,[sp, #0x30]
+0079e7c0 ldp x20,x19,[sp, #0x20]
+0079e7c4 ldp x22,x21,[sp, #0x10]
+0079e7c8 ldp x24,x23,[sp], #0x40
+0079e7cc ret

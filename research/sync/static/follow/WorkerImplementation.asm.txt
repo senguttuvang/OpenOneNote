@@ -1,0 +1,18 @@
+0009dae8 stp x20,x19,[sp, #-0x20]!
+0009daec stp x29,x30,[sp, #0x10]
+0009daf0 add x29,sp,#0x10
+0009daf4 mov x19,x8
+0009daf8 mov w0,#0x128
+0009dafc mov w1,#0x0
+0009db00 bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+0009db04 cbz x0,0x0009db1c
+  ref 0009db1c LAB_0009db1c
+0009db08 bl 0x0009e850
+  ref 0009e850 FUN_0009e850
+0009db0c str x0,[x19]
+0009db10 ldp x29,x30,[sp, #0x10]
+0009db14 ldp x20,x19,[sp], #0x20
+0009db18 ret
+0009db1c bl 0x009a4680
+  ref 009a4680 FUN_009a4680

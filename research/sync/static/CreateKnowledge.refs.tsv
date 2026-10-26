@@ -1,0 +1,11 @@
+direction	address	name
+caller	007185d0	FUN_007185d0
+caller	0053ca50	FUN_0053ca50
+caller	005334e4	FUN_005334e4
+caller	00716b2c	FUN_00716b2c
+caller	0053303c	FUN_0053303c
+caller	0053edf0	FUN_0053edf0
+caller	005354b0	FUN_005354b0
+caller	0025fd8c	FUN_0025fd8c
+caller	0053fa70	FUN_0053fa70
+callee	0023e620	FUN_0023e620

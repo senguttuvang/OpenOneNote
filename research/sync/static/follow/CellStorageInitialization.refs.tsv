@@ -1,0 +1,4 @@
+direction	address	name
+caller	0023cf98	CreateCellStorageOverHttp
+caller	007369b0	CreateCellStorageOverHttp
+callee	009b5250	CopyWzToWz

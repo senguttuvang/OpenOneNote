@@ -1,0 +1,20 @@
+00736a88 stp x20,x19,[sp, #-0x20]!
+00736a8c stp x29,x30,[sp, #0x10]
+00736a90 add x29,sp,#0x10
+00736a94 mov x20,x1
+00736a98 mov x19,x0
+00736a9c add x0,x0,#0xf8
+00736aa0 bl 0x009b621c
+  ref 009b621c /usr/lib/libc++.1.dylib::std::recursive_mutex::lock
+00736aa4 strb w20,[x19, #0xf0]
+00736aa8 cmn x19,#0x60
+00736aac b.eq 0x00736ac0
+  ref 00736ac0 LAB_00736ac0
+00736ab0 add x0,x19,#0xf8
+00736ab4 ldp x29,x30,[sp, #0x10]
+00736ab8 ldp x20,x19,[sp], #0x20
+00736abc b 0x009b6228
+  ref 009b6228 /usr/lib/libc++.1.dylib::std::recursive_mutex::unlock
+00736ac0 ldp x29,x30,[sp, #0x10]
+00736ac4 ldp x20,x19,[sp], #0x20
+00736ac8 ret

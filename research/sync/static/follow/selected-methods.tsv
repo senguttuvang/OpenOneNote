@@ -1,0 +1,10 @@
+address	label	decompiled	note
+9da6c	FactoryImplementation	true	
+9dae8	WorkerImplementation	true	
+a708c	BatchImplementation	true	
+23d100	CellStorageAllocation	true	
+23d464	CellStorageInitialization	true	
+281f20	SerializeDataElement	true	
+79dc78	ChangeTokenServiceCall	true	
+79e734	ChangeTokenChannelCreation	true	
+736a88	CellStorageFlagMutation	true	

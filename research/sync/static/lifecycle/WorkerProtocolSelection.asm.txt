@@ -1,0 +1,2024 @@
+00106af0 stp x28,x27,[sp, #-0x60]!
+00106af4 stp x26,x25,[sp, #0x10]
+00106af8 stp x24,x23,[sp, #0x20]
+00106afc stp x22,x21,[sp, #0x30]
+00106b00 stp x20,x19,[sp, #0x40]
+00106b04 stp x29,x30,[sp, #0x50]
+00106b08 add x29,sp,#0x50
+00106b0c sub sp,sp,#0x250
+00106b10 mov x20,x8
+00106b14 ldr x8,[x29, #0x18]
+00106b18 adrp x9,0xc8a000
+00106b1c ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+00106b20 ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+00106b24 stur x9,[x29, #-0x60]
+00106b28 ldr w22,[x1]
+00106b2c ldr x9,[x3]
+00106b30 ldr w8,[x8]
+00106b34 str x9,[sp, #0xd0]
+00106b38 str w8,[sp, #0xcc]
+00106b3c ldr x8,[x0, #0x20]
+00106b40 cbz x8,0x00106cf8
+  ref 00106cf8 LAB_00106cf8
+00106b44 add x9,x8,#0x8
+00106b48 ldapr w10,[x9]
+00106b4c cbz w10,0x00106cf8
+  ref 00106cf8 LAB_00106cf8
+00106b50 mov x24,x6
+00106b54 mov x27,x5
+00106b58 mov x26,x4
+00106b5c mov x25,x2
+00106b60 mov x21,x0
+00106b64 ldr x13,[x29, #0x10]
+00106b68 mov x9,x10
+00106b6c add w11,w10,#0x1
+00106b70 add x12,x8,#0x8
+00106b74 casal w9,w11,[x12]
+00106b78 cmp w9,w10
+00106b7c b.eq 0x00106b8c
+  ref 00106b8c LAB_00106b8c
+00106b80 mov x10,x9
+00106b84 cbnz w9,0x00106b6c
+  ref 00106b6c LAB_00106b6c
+00106b88 b 0x00106cf8
+  ref 00106cf8 LAB_00106cf8
+00106b8c ldr x8,[x21, #0x18]
+00106b90 cbz x8,0x00106cf8
+  ref 00106cf8 LAB_00106cf8
+00106b94 stp x13,x7,[sp, #0x10]
+00106b98 str x8,[sp, #0x20]
+00106b9c ldr x0,[x21, #0x10]
+00106ba0 cbz x0,0x00108370
+  ref 00108370 LAB_00108370
+00106ba4 adrp x1,0xa8e000
+00106ba8 add x1,x1,#0x250
+  ref 00a8e250 DAT_00a8e250
+00106bac add x8,sp,#0x120
+00106bb0 bl 0x00108660
+  ref 00108660 FUN_00108660
+00106bb4 ldr x0,[sp, #0x120]
+00106bb8 cbz x0,0x00108374
+  ref 00108374 LAB_00108374
+00106bbc ldr x8,[x0]
+00106bc0 ldr x8,[x8, #0x210]
+00106bc4 blr x8
+00106bc8 mov x19,x0
+00106bcc ldr x0,[sp, #0x120]
+00106bd0 cbz x0,0x00106be4
+  ref 00106be4 LAB_00106be4
+00106bd4 str xzr,[sp, #0x120]
+00106bd8 ldr x8,[x0]
+00106bdc ldr x8,[x8, #0x10]
+00106be0 blr x8
+00106be4 cmp w22,#0x0
+00106be8 csinc w8,w19,wzr,ne
+00106bec tbz w8,#0x0,0x00106d60
+  ref 00106d60 LAB_00106d60
+00106bf0 ldr x28,[x21, #0x10]
+00106bf4 cbz x28,0x00108378
+  ref 00108378 LAB_00108378
+00106bf8 str x28,[sp, #0x120]
+00106bfc adrp x1,0xa8e000
+00106c00 add x1,x1,#0x250
+  ref 00a8e250 DAT_00a8e250
+00106c04 add x8,sp,#0x80
+00106c08 add x0,sp,#0x120
+00106c0c bl 0x0010869c
+  ref 0010869c FUN_0010869c
+00106c10 ldr x0,[sp, #0x80]
+00106c14 cbz x0,0x00106d90
+  ref 00106d90 LAB_00106d90
+00106c18 ldr x8,[x0]
+00106c1c ldr x9,[x8, #0x30]
+00106c20 add x8,sp,#0x50
+00106c24 blr x9
+00106c28 add x8,sp,#0x100
+00106c2c mov x0,x28
+00106c30 bl 0x002b4d38
+  ref 002b4d38 FUN_002b4d38
+00106c34 add x8,sp,#0x28
+00106c38 mov x0,x28
+00106c3c bl 0x0015d5dc
+  ref 0015d5dc FUN_0015d5dc
+00106c40 ldr x0,[sp, #0x80]
+00106c44 cbz x0,0x0010837c
+  ref 0010837c LAB_0010837c
+00106c48 ldr x8,[x0]
+00106c4c ldr x9,[x8, #0xa0]
+00106c50 add x8,sp,#0xf8
+00106c54 blr x9
+00106c58 ldr x8,[sp, #0xf8]
+00106c5c cbz x8,0x00106db8
+  ref 00106db8 LAB_00106db8
+00106c60 stp xzr,xzr,[sp, #0x120]
+00106c64 str wzr,[sp, #0x138]
+00106c68 str xzr,[sp, #0x130]
+00106c6c bl 0x009b50d0
+  ref 009b50d0 @rpath/mso30.framework/Versions/A/mso30::MsoCF::GetFastBufferAllocator
+00106c70 add x8,sp,#0x120
+00106c74 add x23,x8,#0x1c
+00106c78 stp x0,x23,[sp, #0x120]
+00106c7c mov w8,#0x102
+00106c80 dup v0.2S,w8
+00106c84 str d0,[sp, #0x130]
+00106c88 strh wzr,[sp, #0x13c]
+00106c8c ldr x0,[sp, #0xf8]
+00106c90 cbz x0,0x00108380
+  ref 00108380 LAB_00108380
+00106c94 ldr x8,[x0]
+00106c98 ldr x8,[x8, #0x30]
+00106c9c add x1,sp,#0x120
+00106ca0 blr x8
+00106ca4 ldr x8,[sp, #0x128]
+00106ca8 cbz x8,0x00106d98
+  ref 00106d98 LAB_00106d98
+00106cac adrp x8,0xba2000
+00106cb0 add x8,x8,#0x687
+00106cb4 str x8,[sp, #0xe0]
+  ref 00ba2687 s_GetSessionInfo:_Using_web_url_00ba2687
+00106cb8 mov w8,#0x630b
+00106cbc movk w8,#0x1f64, LSL #16
+00106cc0 add w0,w8,#0x8
+00106cc4 add x4,sp,#0xe0
+00106cc8 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00106ccc mov w2,#0x32
+00106cd0 mov w3,#0x2
+00106cd4 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00106cd8 ldr x1,[sp, #0x128]
+00106cdc add x0,sp,#0xe0
+00106ce0 bl 0x000019ec
+  ref 000019ec FUN_000019ec
+00106ce4 ldrsb x8,[sp, #0xf7]
+00106ce8 tbnz x8,#0x3f,0x00106e4c
+  ref 00106e4c LAB_00106e4c
+00106cec cbz w8,0x00106e84
+  ref 00106e84 LAB_00106e84
+00106cf0 add x9,sp,#0xe0
+00106cf4 b 0x00106e58
+  ref 00106e58 LAB_00106e58
+00106cf8 adrp x8,0xba2000
+00106cfc add x8,x8,#0x565
+00106d00 str x8,[sp, #0x120]
+  ref 00ba2565 s_GetDefaultOpWorkerFactory:_Graph_00ba2565
+00106d04 mov w8,#0x630b
+00106d08 movk w8,#0x1f64, LSL #16
+00106d0c add w0,w8,#0x2
+00106d10 add x4,sp,#0x120
+00106d14 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00106d18 mov w2,#0x32
+00106d1c mov w3,#0x2
+00106d20 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00106d24 str xzr,[x20]
+00106d28 ldur x8,[x29, #-0x60]
+00106d2c adrp x9,0xc8a000
+00106d30 ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+00106d34 ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+00106d38 cmp x9,x8
+00106d3c b.ne 0x001083ec
+  ref 001083ec LAB_001083ec
+00106d40 add sp,sp,#0x250
+00106d44 ldp x29,x30,[sp, #0x50]
+00106d48 ldp x20,x19,[sp, #0x40]
+00106d4c ldp x22,x21,[sp, #0x30]
+00106d50 ldp x24,x23,[sp, #0x20]
+00106d54 ldp x26,x25,[sp, #0x10]
+00106d58 ldp x28,x27,[sp], #0x60
+00106d5c ret
+00106d60 adrp x8,0xba2000
+00106d64 add x8,x8,#0x590
+00106d68 str x8,[sp, #0x120]
+  ref 00ba2590 s_GetDefaultOpWorkerFactory:_Proto_00ba2590
+00106d6c add x4,sp,#0x120
+00106d70 mov w0,#0x8885
+00106d74 movk w0,#0x1f29, LSL #16
+00106d78 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00106d7c mov w2,#0xf
+00106d80 mov w3,#0x2
+00106d84 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00106d88 str xzr,[x20]
+00106d8c b 0x0010835c
+  ref 0010835c LAB_0010835c
+00106d90 str xzr,[sp, #0xc0]
+00106d94 b 0x001071e0
+  ref 001071e0 LAB_001071e0
+00106d98 mov x0,#0x0
+00106d9c bl 0x009b49d4
+  ref 009b49d4 @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::Free
+00106da0 ldr x0,[sp, #0xf8]
+00106da4 str xzr,[sp, #0xf8]
+00106da8 cbz x0,0x00106db8
+  ref 00106db8 LAB_00106db8
+00106dac ldr x8,[x0]
+00106db0 ldr x8,[x8, #0x10]
+00106db4 blr x8
+00106db8 ldrb w8,[sp, #0x3f]
+00106dbc sxtb w9,w8
+00106dc0 ldr x10,[sp, #0x30]
+00106dc4 cmp w9,#0x0
+00106dc8 csel x8,x10,x8,lt
+00106dcc cbz x8,0x00106e18
+  ref 00106e18 LAB_00106e18
+00106dd0 adrp x8,0xba2000
+00106dd4 add x8,x8,#0x6a5
+00106dd8 str x8,[sp, #0x120]
+  ref 00ba26a5 s_GetSessionInfo:_Using_file_url_00ba26a5
+00106ddc mov w8,#0x5090
+00106de0 movk w8,#0x1f01, LSL #16
+00106de4 orr w0,w8,#0x6
+00106de8 add x4,sp,#0x120
+00106dec mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00106df0 mov w2,#0x32
+00106df4 mov w3,#0x2
+00106df8 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00106dfc ldrsb w8,[sp, #0x3f]
+00106e00 tbnz w8,#0x1f,0x00106f0c
+  ref 00106f0c LAB_00106f0c
+00106e04 ldur q0,[sp, #0x28]
+00106e08 str q0,[sp, #0x120]
+00106e0c ldr x8,[sp, #0x38]
+00106e10 str x8,[sp, #0x130]
+00106e14 b 0x00106f18
+  ref 00106f18 LAB_00106f18
+00106e18 adrp x8,0xba2000
+00106e1c add x8,x8,#0x6c4
+00106e20 str x8,[sp, #0x120]
+  ref 00ba26c4 s_GetSessionInfo:_Missing_web_and_f_00ba26c4
+00106e24 mov w8,#0x5090
+00106e28 movk w8,#0x1f01, LSL #16
+00106e2c orr w0,w8,#0x4
+00106e30 add x4,sp,#0x120
+00106e34 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00106e38 mov w2,#0xa
+00106e3c mov w3,#0x2
+00106e40 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00106e44 str xzr,[sp, #0xc0]
+00106e48 b 0x00106fc0
+  ref 00106fc0 LAB_00106fc0
+00106e4c ldr x8,[sp, #0xe8]
+00106e50 cbz x8,0x00106e84
+  ref 00106e84 LAB_00106e84
+00106e54 ldr x9,[sp, #0xe0]
+00106e58 add x9,x9,x8, LSL #0x1
+00106e5c ldurh w9,[x9, #-0x2]
+  ref 00ba2685 s_l_00ba2658+0x2d
+00106e60 cmp w9,#0x2f
+00106e64 b.ne 0x00106e84
+  ref 00106e84 LAB_00106e84
+00106e68 sub x1,x8,#0x1
+00106e6c add x0,sp,#0xe0
+00106e70 mov x2,#-0x1
+00106e74 bl 0x0015dec8
+  ref 0015dec8 FUN_0015dec8
+00106e78 mov x1,x0
+00106e7c add x0,sp,#0xe0
+00106e80 bl 0x0002b044
+  ref 0002b044 FUN_0002b044
+00106e84 adrp x19,0xab1000
+00106e88 add x19,x19,#0x890
+00106e8c mov x0,x19
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+00106e90 bl 0x00001a9c
+  ref 00001a9c FUN_00001a9c
+00106e94 mov x2,x0
+00106e98 add x0,sp,#0xe0
+00106e9c mov x1,x19
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+00106ea0 bl 0x001b59b8
+  ref 001b59b8 FUN_001b59b8
+00106ea4 mov x1,x0
+00106ea8 add x0,sp,#0xe0
+00106eac bl 0x0002b044
+  ref 0002b044 FUN_0002b044
+00106eb0 ldr x8,[sp, #0x50]
+00106eb4 str x8,[sp, #0xd8]
+00106eb8 add x8,sp,#0xc0
+00106ebc add x0,sp,#0xe0
+00106ec0 add x1,sp,#0x28
+00106ec4 add x2,sp,#0xd8
+00106ec8 add x3,sp,#0x100
+00106ecc bl 0x0041c9ec
+  ref 0041c9ec FUN_0041c9ec
+00106ed0 ldrsb w8,[sp, #0xf7]
+00106ed4 tbz w8,#0x1f,0x00106ee0
+  ref 00106ee0 LAB_00106ee0
+00106ed8 ldr x0,[sp, #0xe0]
+  ref 00ba2687 s_GetSessionInfo:_Using_web_url_00ba2687
+00106edc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00106ee0 ldr x0,[sp, #0x128]
+00106ee4 cmp x0,x23
+00106ee8 b.eq 0x00106ef0
+  ref 00106ef0 LAB_00106ef0
+00106eec bl 0x009b49d4
+  ref 009b49d4 @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::Free
+00106ef0 ldr x0,[sp, #0xf8]
+00106ef4 str xzr,[sp, #0xf8]
+00106ef8 cbz x0,0x00106fc0
+  ref 00106fc0 LAB_00106fc0
+00106efc ldr x8,[x0]
+00106f00 ldr x8,[x8, #0x10]
+00106f04 blr x8
+00106f08 b 0x00106fc0
+  ref 00106fc0 LAB_00106fc0
+00106f0c ldp x1,x2,[sp, #0x28]
+00106f10 add x0,sp,#0x120
+00106f14 bl 0x0002a254
+  ref 0002a254 FUN_0002a254
+00106f18 ldrsb x8,[sp, #0x137]
+00106f1c tbnz x8,#0x3f,0x00106f2c
+  ref 00106f2c LAB_00106f2c
+00106f20 cbz w8,0x00106f64
+  ref 00106f64 LAB_00106f64
+00106f24 add x9,sp,#0x120
+00106f28 b 0x00106f38
+  ref 00106f38 LAB_00106f38
+00106f2c ldr x8,[sp, #0x128]
+00106f30 cbz x8,0x00106f64
+  ref 00106f64 LAB_00106f64
+00106f34 ldr x9,[sp, #0x120]
+00106f38 add x9,x9,x8, LSL #0x1
+00106f3c ldurh w9,[x9, #-0x2]
+00106f40 cmp w9,#0x2f
+00106f44 b.ne 0x00106f64
+  ref 00106f64 LAB_00106f64
+00106f48 sub x1,x8,#0x1
+00106f4c add x0,sp,#0x120
+00106f50 mov x2,#-0x1
+00106f54 bl 0x0015dec8
+  ref 0015dec8 FUN_0015dec8
+00106f58 mov x1,x0
+00106f5c add x0,sp,#0x120
+00106f60 bl 0x0002b044
+  ref 0002b044 FUN_0002b044
+00106f64 adrp x19,0xab1000
+00106f68 add x19,x19,#0x890
+00106f6c mov x0,x19
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+00106f70 bl 0x00001a9c
+  ref 00001a9c FUN_00001a9c
+00106f74 mov x2,x0
+00106f78 add x0,sp,#0x120
+00106f7c mov x1,x19
+  ref 00ab1890 u_/_vti_bin/cellstorage.svc/CellSt_00ab1890
+00106f80 bl 0x001b59b8
+  ref 001b59b8 FUN_001b59b8
+00106f84 mov x1,x0
+00106f88 add x0,sp,#0x120
+00106f8c bl 0x0002b044
+  ref 0002b044 FUN_0002b044
+00106f90 ldr x8,[sp, #0x50]
+00106f94 str x8,[sp, #0xe0]
+00106f98 add x8,sp,#0xc0
+00106f9c add x0,sp,#0x120
+00106fa0 add x1,sp,#0x28
+00106fa4 add x2,sp,#0xe0
+00106fa8 add x3,sp,#0x100
+00106fac bl 0x0041c9ec
+  ref 0041c9ec FUN_0041c9ec
+00106fb0 ldrsb w8,[sp, #0x137]
+00106fb4 tbz w8,#0x1f,0x00106fc0
+  ref 00106fc0 LAB_00106fc0
+00106fb8 ldr x0,[sp, #0x120]
+00106fbc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00106fc0 ldrsb w8,[sp, #0x3f]
+00106fc4 tbz w8,#0x1f,0x00106fd0
+  ref 00106fd0 LAB_00106fd0
+00106fc8 ldr x0,[sp, #0x28]
+00106fcc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00106fd0 ldrsb w8,[sp, #0x11f]
+00106fd4 tbz w8,#0x1f,0x00106fe0
+  ref 00106fe0 LAB_00106fe0
+00106fd8 ldr x0,[sp, #0x108]
+00106fdc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00106fe0 ldr x0,[sp, #0x50]
+00106fe4 cbz x0,0x00106ff8
+  ref 00106ff8 LAB_00106ff8
+00106fe8 str xzr,[sp, #0x50]
+00106fec ldr x8,[x0]
+00106ff0 ldr x8,[x8, #0x10]
+00106ff4 blr x8
+00106ff8 ldr x0,[sp, #0x80]
+00106ffc cbz x0,0x00107010
+  ref 00107010 LAB_00107010
+00107000 str xzr,[sp, #0x80]
+00107004 ldr x8,[x0]
+00107008 ldr x8,[x8, #0x10]
+0010700c blr x8
+00107010 ldr x8,[sp, #0xc0]
+00107014 cbz x8,0x001071e0
+  ref 001071e0 LAB_001071e0
+00107018 ldr x0,[x21, #0x10]
+0010701c cbz x0,0x00108384
+  ref 00108384 LAB_00108384
+00107020 add x8,sp,#0xe0
+00107024 bl 0x0015d5dc
+  ref 0015d5dc FUN_0015d5dc
+00107028 add x8,sp,#0xf8
+0010702c bl 0x000603c0
+  ref 000603c0 FUN_000603c0
+00107030 ldr x0,[x21, #0x10]
+00107034 cbz x0,0x00108388
+  ref 00108388 LAB_00108388
+00107038 ldr x8,[x0]
+0010703c ldr x8,[x8, #0x18]
+00107040 blr x8
+00107044 mov x1,x0
+00107048 add x8,sp,#0xd8
+0010704c add x2,sp,#0xcc
+00107050 ldr x0,[sp, #0x20]
+00107054 bl 0x00060444
+  ref 00060444 FUN_00060444
+00107058 cmp w22,#0x1
+0010705c b.eq 0x00107210
+  ref 00107210 LAB_00107210
+00107060 cbnz w22,0x001083fc
+  ref 001083fc LAB_001083fc
+00107064 adrp x1,0xab0000
+00107068 add x1,x1,#0x978
+  ref 00ab0978 DAT_00ab0978
+0010706c add x8,sp,#0x50
+00107070 mov x0,x25
+00107074 bl 0x005f82d4
+  ref 005f82d4 FUN_005f82d4
+00107078 ldr x0,[x21, #0x10]
+0010707c cbz x0,0x0010838c
+  ref 0010838c LAB_0010838c
+00107080 ldr x8,[x0]
+00107084 ldr x8,[x8, #0x18]
+00107088 blr x8
+0010708c mov x19,x0
+00107090 ldr x22,[sp, #0x50]
+00107094 mov w0,#0x30
+00107098 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+0010709c mov x23,x0
+001070a0 str xzr,[x0, #0x10]
+001070a4 adrp x8,0xccf000
+001070a8 add x8,x8,#0x588
+001070ac add x8,x8,#0x10
+001070b0 stp x8,xzr,[x0], #0x18
+  ref 00ccf598 PTR_FUN_00ccf598
+001070b4 mov x1,x19
+001070b8 mov x2,x22
+001070bc bl 0x005f3214
+  ref 005f3214 FUN_005f3214
+001070c0 stp x0,x23,[sp, #0x120]
+001070c4 add x8,sp,#0x120
+001070c8 stp xzr,xzr,[sp, #0x30]
+001070cc str xzr,[sp, #0x28]
+001070d0 add x0,sp,#0x28
+001070d4 add x1,sp,#0x120
+001070d8 add x2,x8,#0x10
+001070dc mov w3,#0x1
+001070e0 bl 0x005f8594
+  ref 005f8594 FUN_005f8594
+001070e4 add x0,sp,#0x120
+001070e8 bl 0x0005c2a0
+  ref 0005c2a0 FUN_0005c2a0
+001070ec ldr x0,[x21, #0x10]
+001070f0 adrp x1,0xa8e000
+001070f4 add x1,x1,#0x240
+  ref 00a8e240 DAT_00a8e240
+001070f8 add x8,sp,#0x120
+001070fc bl 0x005f8310
+  ref 005f8310 FUN_005f8310
+00107100 ldr x0,[sp, #0x120]
+00107104 cbz x0,0x00108398
+  ref 00108398 LAB_00108398
+00107108 ldr x8,[x0]
+0010710c ldr x8,[x8, #0x28]
+00107110 blr x8
+00107114 mov x19,x0
+00107118 ldr x0,[sp, #0x120]
+0010711c cbz x0,0x00107130
+  ref 00107130 LAB_00107130
+00107120 str xzr,[sp, #0x120]
+00107124 ldr x8,[x0]
+00107128 ldr x8,[x8, #0x10]
+0010712c blr x8
+00107130 mov w8,#0x14
+00107134 mov w9,#0x3
+00107138 cmp w19,#0x1
+0010713c csel w8,w9,w8,eq
+00107140 mov w9,#0x1
+00107144 str w8,[sp, #0x120]
+00107148 str w9,[sp, #0x124]
+0010714c add x8,sp,#0x120
+00107150 add x8,x8,#0x8
+00107154 bl 0x003e86ac
+  ref 003e86ac FUN_003e86ac
+00107158 ldr x0,[sp, #0x50]
+0010715c cbz x0,0x0010839c
+  ref 0010839c LAB_0010839c
+00107160 ldr x8,[x0]
+00107164 ldr x8,[x8, #0x58]
+00107168 blr x8
+0010716c bl 0x005f6254
+  ref 005f6254 FUN_005f6254
+00107170 str w0,[sp, #0x100]
+00107174 add x8,sp,#0xb8
+00107178 add x1,sp,#0x100
+0010717c add x2,sp,#0x120
+00107180 mov x0,x26
+00107184 bl 0x005f834c
+  ref 005f834c FUN_005f834c
+00107188 ldr w8,[sp, #0xcc]
+0010718c cmp w8,#0x4
+00107190 b.ne 0x00107d7c
+  ref 00107d7c LAB_00107d7c
+00107194 ldr x0,[sp, #0x50]
+00107198 cbz x0,0x001083d4
+  ref 001083d4 LAB_001083d4
+0010719c ldr x8,[x0]
+001071a0 ldr x8,[x8, #0x58]
+001071a4 blr x8
+001071a8 cmp w0,#0x1
+001071ac b.ne 0x00107d78
+  ref 00107d78 LAB_00107d78
+001071b0 adrp x8,0xba2000
+001071b4 add x8,x8,#0x5f3
+001071b8 str x8,[sp, #0x100]
+  ref 00ba25f3 s_GetDefaultOpWorkerFactory:_PutBl_00ba25f3
+001071bc add x4,sp,#0x100
+001071c0 mov w0,#0x9084
+001071c4 movk w0,#0x1e55, LSL #16
+001071c8 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+001071cc mov w2,#0xf
+001071d0 mov w3,#0x2
+001071d4 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+001071d8 str xzr,[x20]
+001071dc b 0x00107f68
+  ref 00107f68 LAB_00107f68
+001071e0 adrp x8,0xba2000
+001071e4 add x8,x8,#0x5c0
+001071e8 str x8,[sp, #0x120]
+  ref 00ba25c0 s_GetDefaultOpWorkerFactory:_Incom_00ba25c0
+001071ec add x4,sp,#0x120
+001071f0 mov w0,#0x5090
+001071f4 movk w0,#0x1f01, LSL #16
+001071f8 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+001071fc mov w2,#0xa
+00107200 mov w3,#0x2
+00107204 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00107208 str xzr,[x20]
+0010720c b 0x00108344
+  ref 00108344 LAB_00108344
+00107210 stp xzr,xzr,[sp, #0x80]
+00107214 str xzr,[sp, #0x90]
+00107218 ldp x1,x2,[x27]
+0010721c sub x8,x2,x1
+00107220 asr x3,x8,#0x4
+00107224 add x0,sp,#0x80
+00107228 bl 0x001d3f10
+  ref 001d3f10 FUN_001d3f10
+0010722c adrp x1,0xaa5000
+00107230 add x1,x1,#0x7b0
+  ref 00aa57b0 DAT_00aa57b0
+00107234 add x8,sp,#0xb8
+00107238 mov x0,x25
+0010723c bl 0x0006057c
+  ref 0006057c FUN_0006057c
+00107240 add x8,sp,#0xb0
+00107244 bl 0x000d92a8
+  ref 000d92a8 FUN_000d92a8
+00107248 ldr x0,[x21, #0x10]
+0010724c cbz x0,0x00108390
+  ref 00108390 LAB_00108390
+00107250 ldr x8,[x0]
+00107254 ldr x8,[x8, #0x18]
+00107258 blr x8
+0010725c ldr x19,[sp, #0xb0]
+00107260 cbz x19,0x00108394
+  ref 00108394 LAB_00108394
+00107264 mov x23,x0
+00107268 ldr x22,[sp, #0xb8]
+0010726c mov w0,#0x58
+00107270 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107274 mov x28,x0
+00107278 str xzr,[x0, #0x10]
+0010727c adrp x8,0xccf000
+00107280 add x8,x8,#0x5d8
+00107284 add x8,x8,#0x10
+00107288 stp x8,xzr,[x0]
+  ref 00ccf5e8 PTR_FUN_00ccf5e8
+0010728c add x27,x0,#0x18
+00107290 mov x0,x27
+00107294 mov x1,x23
+00107298 mov x2,x22
+0010729c mov x3,x19
+001072a0 bl 0x00060614
+  ref 00060614 FUN_00060614
+001072a4 add x8,sp,#0x80
+001072a8 add x8,x8,#0x10
+001072ac str x8,[sp, #0x8]
+001072b0 ldp x10,x8,[sp, #0x88]
+001072b4 cmp x10,x8
+001072b8 b.cs 0x001072c8
+  ref 001072c8 LAB_001072c8
+001072bc stp x27,x28,[x10]
+001072c0 add x22,x10,#0x10
+001072c4 b 0x00107350
+  ref 00107350 LAB_00107350
+001072c8 ldr x9,[sp, #0x80]
+001072cc sub x19,x10,x9
+001072d0 asr x10,x19,#0x4
+001072d4 add x10,x10,#0x1
+001072d8 lsr x11,x10,#0x3c
+001072dc cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001072e0 orr x11,xzr,#0x7ffffffffffffff0
+001072e4 sub x8,x8,x9
+001072e8 asr x9,x8,#0x3
+001072ec cmp x9,x10
+001072f0 csel x9,x9,x10,hi
+001072f4 cmp x8,x11
+001072f8 mov x8,#0xfffffffffffffff
+001072fc csel x1,x9,x8,cc
+00107300 ldr x0,[sp, #0x8]
+00107304 str x0,[sp, #0x140]
+00107308 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+0010730c add x8,x0,x19
+00107310 add x23,x0,x1, LSL #0x4
+00107314 stp x27,x28,[x8]
+00107318 add x22,x8,#0x10
+0010731c ldp x1,x9,[sp, #0x80]
+00107320 sub x2,x9,x1
+00107324 sub x19,x8,x2
+00107328 mov x0,x19
+0010732c bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107330 ldr x8,[sp, #0x80]
+00107334 ldr x9,[sp, #0x90]
+00107338 stp x19,x22,[sp, #0x80]
+0010733c str x23,[sp, #0x90]
+00107340 stp x8,x9,[sp, #0x130]
+00107344 stp x8,x8,[sp, #0x120]
+00107348 add x0,sp,#0x120
+0010734c bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107350 str x22,[sp, #0x88]
+00107354 bl 0x009b5400
+  ref 009b5400 @rpath/mso30.framework/Versions/A/mso30::FileIO::Clp::IsFilePolicySupported
+00107358 cbz w0,0x00107450
+  ref 00107450 LAB_00107450
+0010735c ldr x0,[x21, #0x10]
+00107360 cbz x0,0x001083d0
+  ref 001083d0 LAB_001083d0
+00107364 ldr x8,[x0]
+00107368 ldr x8,[x8, #0x18]
+0010736c blr x8
+00107370 mov x19,x0
+00107374 ldr x22,[sp, #0xb8]
+00107378 mov w0,#0x48
+0010737c bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107380 mov x28,x0
+00107384 str xzr,[x0, #0x10]
+00107388 adrp x8,0xccf000
+0010738c add x8,x8,#0x628
+00107390 add x8,x8,#0x10
+00107394 stp x8,xzr,[x0]
+  ref 00ccf638 PTR_FUN_00ccf638
+00107398 add x27,x0,#0x18
+0010739c mov x0,x27
+001073a0 mov x1,x19
+001073a4 mov x2,x22
+001073a8 bl 0x00606110
+  ref 00606110 FUN_00606110
+001073ac ldp x10,x8,[sp, #0x88]
+001073b0 cmp x10,x8
+001073b4 b.cs 0x001073c4
+  ref 001073c4 LAB_001073c4
+001073b8 stp x27,x28,[x10]
+001073bc add x22,x10,#0x10
+001073c0 b 0x0010744c
+  ref 0010744c LAB_0010744c
+001073c4 ldr x9,[sp, #0x80]
+001073c8 sub x19,x10,x9
+001073cc asr x10,x19,#0x4
+001073d0 add x10,x10,#0x1
+001073d4 lsr x11,x10,#0x3c
+001073d8 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001073dc orr x11,xzr,#0x7ffffffffffffff0
+001073e0 sub x8,x8,x9
+001073e4 asr x9,x8,#0x3
+001073e8 cmp x9,x10
+001073ec csel x9,x9,x10,hi
+001073f0 cmp x8,x11
+001073f4 mov x8,#0xfffffffffffffff
+001073f8 csel x1,x9,x8,cc
+001073fc ldr x0,[sp, #0x8]
+00107400 str x0,[sp, #0x140]
+00107404 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+00107408 add x8,x0,x19
+0010740c add x23,x0,x1, LSL #0x4
+00107410 stp x27,x28,[x8]
+00107414 add x22,x8,#0x10
+00107418 ldp x1,x9,[sp, #0x80]
+0010741c sub x2,x9,x1
+00107420 sub x19,x8,x2
+00107424 mov x0,x19
+00107428 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+0010742c ldr x8,[sp, #0x80]
+00107430 ldr x9,[sp, #0x90]
+00107434 stp x19,x22,[sp, #0x80]
+00107438 str x23,[sp, #0x90]
+0010743c stp x8,x9,[sp, #0x130]
+00107440 stp x8,x8,[sp, #0x120]
+00107444 add x0,sp,#0x120
+00107448 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+0010744c str x22,[sp, #0x88]
+00107450 ldr x19,[sp, #0xb0]
+00107454 cbz x19,0x001083a0
+  ref 001083a0 LAB_001083a0
+00107458 mov w0,#0x28
+0010745c bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107460 mov x28,x0
+00107464 str xzr,[x0, #0x10]
+00107468 adrp x8,0xccf000
+0010746c add x8,x8,#0x678
+00107470 add x8,x8,#0x10
+00107474 stp x8,xzr,[x0]
+  ref 00ccf688 PTR_FUN_00ccf688
+00107478 add x27,x0,#0x18
+0010747c mov x0,x27
+00107480 mov x1,x19
+00107484 bl 0x000606f4
+  ref 000606f4 FUN_000606f4
+00107488 ldp x10,x8,[sp, #0x88]
+0010748c cmp x10,x8
+00107490 b.cs 0x001074a0
+  ref 001074a0 LAB_001074a0
+00107494 stp x27,x28,[x10]
+00107498 add x22,x10,#0x10
+0010749c b 0x00107528
+  ref 00107528 LAB_00107528
+001074a0 ldr x9,[sp, #0x80]
+001074a4 sub x19,x10,x9
+001074a8 asr x10,x19,#0x4
+001074ac add x10,x10,#0x1
+001074b0 lsr x11,x10,#0x3c
+001074b4 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001074b8 orr x11,xzr,#0x7ffffffffffffff0
+001074bc sub x8,x8,x9
+001074c0 asr x9,x8,#0x3
+001074c4 cmp x9,x10
+001074c8 csel x9,x9,x10,hi
+001074cc cmp x8,x11
+001074d0 mov x8,#0xfffffffffffffff
+001074d4 csel x1,x9,x8,cc
+001074d8 ldr x0,[sp, #0x8]
+001074dc str x0,[sp, #0x140]
+001074e0 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001074e4 add x8,x0,x19
+001074e8 add x23,x0,x1, LSL #0x4
+001074ec stp x27,x28,[x8]
+001074f0 add x22,x8,#0x10
+001074f4 ldp x1,x9,[sp, #0x80]
+001074f8 sub x2,x9,x1
+001074fc sub x19,x8,x2
+00107500 mov x0,x19
+00107504 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107508 ldr x8,[sp, #0x80]
+0010750c ldr x9,[sp, #0x90]
+00107510 stp x19,x22,[sp, #0x80]
+00107514 str x23,[sp, #0x90]
+00107518 stp x8,x9,[sp, #0x130]
+0010751c stp x8,x8,[sp, #0x120]
+00107520 add x0,sp,#0x120
+00107524 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107528 str x22,[sp, #0x88]
+0010752c ldr x0,[x21, #0x10]
+00107530 cbz x0,0x001083a4
+  ref 001083a4 LAB_001083a4
+00107534 ldr x8,[x0]
+00107538 ldr x8,[x8, #0x18]
+0010753c blr x8
+00107540 ldr x19,[sp, #0xb0]
+00107544 cbz x19,0x001083a8
+  ref 001083a8 LAB_001083a8
+00107548 mov x23,x0
+0010754c ldr x22,[sp, #0xd8]
+00107550 mov w0,#0x48
+00107554 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107558 mov x28,x0
+0010755c adrp x8,0xccf000
+00107560 add x8,x8,#0x6c8
+00107564 stp xzr,xzr,[x0, #0x8]
+00107568 add x8,x8,#0x10
+0010756c str x8,[x0]
+  ref 00ccf6d8 PTR_FUN_00ccf6d8
+00107570 add x27,x0,#0x18
+00107574 ldr w4,[sp, #0xcc]
+00107578 mov x0,x27
+0010757c mov x1,x23
+00107580 mov x2,x19
+00107584 mov x3,x22
+00107588 bl 0x00060730
+  ref 00060730 FUN_00060730
+0010758c ldp x10,x8,[sp, #0x88]
+00107590 cmp x10,x8
+00107594 b.cs 0x001075a4
+  ref 001075a4 LAB_001075a4
+00107598 stp x27,x28,[x10]
+0010759c add x22,x10,#0x10
+001075a0 b 0x0010762c
+  ref 0010762c LAB_0010762c
+001075a4 ldr x9,[sp, #0x80]
+001075a8 sub x19,x10,x9
+001075ac asr x10,x19,#0x4
+001075b0 add x10,x10,#0x1
+001075b4 lsr x11,x10,#0x3c
+001075b8 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001075bc orr x11,xzr,#0x7ffffffffffffff0
+001075c0 sub x8,x8,x9
+001075c4 asr x9,x8,#0x3
+001075c8 cmp x9,x10
+001075cc csel x9,x9,x10,hi
+001075d0 cmp x8,x11
+001075d4 mov x8,#0xfffffffffffffff
+001075d8 csel x1,x9,x8,cc
+001075dc ldr x0,[sp, #0x8]
+001075e0 str x0,[sp, #0x140]
+001075e4 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001075e8 add x8,x0,x19
+001075ec add x23,x0,x1, LSL #0x4
+001075f0 stp x27,x28,[x8]
+001075f4 add x22,x8,#0x10
+001075f8 ldp x1,x9,[sp, #0x80]
+001075fc sub x2,x9,x1
+00107600 sub x19,x8,x2
+00107604 mov x0,x19
+00107608 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+0010760c ldr x8,[sp, #0x80]
+00107610 ldr x9,[sp, #0x90]
+00107614 stp x19,x22,[sp, #0x80]
+00107618 str x23,[sp, #0x90]
+0010761c stp x8,x9,[sp, #0x130]
+00107620 stp x8,x8,[sp, #0x120]
+00107624 add x0,sp,#0x120
+00107628 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+0010762c str x22,[sp, #0x88]
+00107630 ldr x0,[x21, #0x10]
+00107634 cbz x0,0x001083ac
+  ref 001083ac LAB_001083ac
+00107638 ldr x8,[x0]
+0010763c ldr x8,[x8, #0x18]
+00107640 blr x8
+00107644 ldr x22,[sp, #0xb0]
+00107648 cbz x22,0x001083b0
+  ref 001083b0 LAB_001083b0
+0010764c mov x19,x0
+00107650 mov w0,#0x30
+00107654 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107658 mov x28,x0
+0010765c str xzr,[x0, #0x10]
+00107660 adrp x8,0xccf000
+00107664 add x8,x8,#0x718
+00107668 add x8,x8,#0x10
+0010766c stp x8,xzr,[x0]
+  ref 00ccf728 PTR_FUN_00ccf728
+00107670 add x27,x0,#0x18
+00107674 mov x0,x27
+00107678 mov x1,x19
+0010767c mov x2,x22
+00107680 bl 0x000607b0
+  ref 000607b0 FUN_000607b0
+00107684 ldp x10,x8,[sp, #0x88]
+00107688 cmp x10,x8
+0010768c b.cs 0x0010769c
+  ref 0010769c LAB_0010769c
+00107690 stp x27,x28,[x10]
+00107694 add x22,x10,#0x10
+00107698 b 0x00107724
+  ref 00107724 LAB_00107724
+0010769c ldr x9,[sp, #0x80]
+001076a0 sub x19,x10,x9
+001076a4 asr x10,x19,#0x4
+001076a8 add x10,x10,#0x1
+001076ac lsr x11,x10,#0x3c
+001076b0 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001076b4 orr x11,xzr,#0x7ffffffffffffff0
+001076b8 sub x8,x8,x9
+001076bc asr x9,x8,#0x3
+001076c0 cmp x9,x10
+001076c4 csel x9,x9,x10,hi
+001076c8 cmp x8,x11
+001076cc mov x8,#0xfffffffffffffff
+001076d0 csel x1,x9,x8,cc
+001076d4 ldr x0,[sp, #0x8]
+001076d8 str x0,[sp, #0x140]
+001076dc bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001076e0 add x8,x0,x19
+001076e4 add x23,x0,x1, LSL #0x4
+001076e8 stp x27,x28,[x8]
+001076ec add x22,x8,#0x10
+001076f0 ldp x1,x9,[sp, #0x80]
+001076f4 sub x2,x9,x1
+001076f8 sub x19,x8,x2
+001076fc mov x0,x19
+00107700 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107704 ldr x8,[sp, #0x80]
+00107708 ldr x9,[sp, #0x90]
+0010770c stp x19,x22,[sp, #0x80]
+00107710 str x23,[sp, #0x90]
+00107714 stp x8,x9,[sp, #0x130]
+00107718 stp x8,x8,[sp, #0x120]
+0010771c add x0,sp,#0x120
+00107720 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107724 str x22,[sp, #0x88]
+00107728 ldr x0,[sp, #0xb8]
+0010772c cbz x0,0x001083b4
+  ref 001083b4 LAB_001083b4
+00107730 ldr x8,[x0]
+00107734 ldr x8,[x8, #0x58]
+00107738 blr x8
+0010773c mov x19,x0
+00107740 ldr x22,[sp, #0xd8]
+00107744 mov w0,#0x30
+00107748 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+0010774c mov x28,x0
+00107750 str xzr,[x0, #0x10]
+00107754 adrp x8,0xccf000
+00107758 add x8,x8,#0x768
+0010775c add x8,x8,#0x10
+00107760 stp x8,xzr,[x0]
+  ref 00ccf778 PTR_FUN_00ccf778
+00107764 add x27,x0,#0x18
+00107768 mov x0,x27
+0010776c mov x1,x19
+00107770 mov x2,x22
+00107774 bl 0x000607f0
+  ref 000607f0 FUN_000607f0
+00107778 ldp x10,x8,[sp, #0x88]
+0010777c cmp x10,x8
+00107780 b.cs 0x00107790
+  ref 00107790 LAB_00107790
+00107784 stp x27,x28,[x10]
+00107788 add x22,x10,#0x10
+0010778c b 0x00107818
+  ref 00107818 LAB_00107818
+00107790 ldr x9,[sp, #0x80]
+00107794 sub x19,x10,x9
+00107798 asr x10,x19,#0x4
+0010779c add x10,x10,#0x1
+001077a0 lsr x11,x10,#0x3c
+001077a4 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+001077a8 orr x11,xzr,#0x7ffffffffffffff0
+001077ac sub x8,x8,x9
+001077b0 asr x9,x8,#0x3
+001077b4 cmp x9,x10
+001077b8 csel x9,x9,x10,hi
+001077bc cmp x8,x11
+001077c0 mov x8,#0xfffffffffffffff
+001077c4 csel x1,x9,x8,cc
+001077c8 ldr x0,[sp, #0x8]
+001077cc str x0,[sp, #0x140]
+001077d0 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001077d4 add x8,x0,x19
+001077d8 add x23,x0,x1, LSL #0x4
+001077dc stp x27,x28,[x8]
+001077e0 add x22,x8,#0x10
+001077e4 ldp x1,x9,[sp, #0x80]
+001077e8 sub x2,x9,x1
+001077ec sub x19,x8,x2
+001077f0 mov x0,x19
+001077f4 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+001077f8 ldr x8,[sp, #0x80]
+001077fc ldr x9,[sp, #0x90]
+00107800 stp x19,x22,[sp, #0x80]
+00107804 str x23,[sp, #0x90]
+00107808 stp x8,x9,[sp, #0x130]
+0010780c stp x8,x8,[sp, #0x120]
+00107810 add x0,sp,#0x120
+00107814 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107818 str x22,[sp, #0x88]
+0010781c ldr x0,[sp, #0xb8]
+00107820 cbz x0,0x001083b8
+  ref 001083b8 LAB_001083b8
+00107824 ldr x8,[x0]
+00107828 ldr x8,[x8, #0x58]
+0010782c blr x8
+00107830 mov x19,x0
+00107834 ldr x22,[sp, #0xd8]
+00107838 mov w0,#0x30
+0010783c bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107840 mov x28,x0
+00107844 str xzr,[x0, #0x10]
+00107848 adrp x8,0xccf000
+0010784c add x8,x8,#0x7b8
+00107850 add x8,x8,#0x10
+00107854 stp x8,xzr,[x0]
+  ref 00ccf7c8 PTR_FUN_00ccf7c8
+00107858 add x27,x0,#0x18
+0010785c mov x0,x27
+00107860 mov x1,x19
+00107864 mov x2,x22
+00107868 bl 0x00060834
+  ref 00060834 FUN_00060834
+0010786c ldp x10,x8,[sp, #0x88]
+00107870 cmp x10,x8
+00107874 b.cs 0x00107884
+  ref 00107884 LAB_00107884
+00107878 stp x27,x28,[x10]
+0010787c add x22,x10,#0x10
+00107880 b 0x0010790c
+  ref 0010790c LAB_0010790c
+00107884 ldr x9,[sp, #0x80]
+00107888 sub x19,x10,x9
+0010788c asr x10,x19,#0x4
+00107890 add x10,x10,#0x1
+00107894 lsr x11,x10,#0x3c
+00107898 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+0010789c orr x11,xzr,#0x7ffffffffffffff0
+001078a0 sub x8,x8,x9
+001078a4 asr x9,x8,#0x3
+001078a8 cmp x9,x10
+001078ac csel x9,x9,x10,hi
+001078b0 cmp x8,x11
+001078b4 mov x8,#0xfffffffffffffff
+001078b8 csel x1,x9,x8,cc
+001078bc ldr x0,[sp, #0x8]
+001078c0 str x0,[sp, #0x140]
+001078c4 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001078c8 add x8,x0,x19
+001078cc add x23,x0,x1, LSL #0x4
+001078d0 stp x27,x28,[x8]
+001078d4 add x22,x8,#0x10
+001078d8 ldp x1,x9,[sp, #0x80]
+001078dc sub x2,x9,x1
+001078e0 sub x19,x8,x2
+001078e4 mov x0,x19
+001078e8 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+001078ec ldr x8,[sp, #0x80]
+001078f0 ldr x9,[sp, #0x90]
+001078f4 stp x19,x22,[sp, #0x80]
+001078f8 str x23,[sp, #0x90]
+001078fc stp x8,x9,[sp, #0x130]
+00107900 stp x8,x8,[sp, #0x120]
+00107904 add x0,sp,#0x120
+00107908 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+0010790c str x22,[sp, #0x88]
+00107910 ldr x19,[sp, #0xd8]
+00107914 mov w0,#0x28
+00107918 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+0010791c mov x28,x0
+00107920 str xzr,[x0, #0x10]
+00107924 adrp x8,0xccf000
+00107928 add x8,x8,#0x808
+0010792c add x8,x8,#0x10
+00107930 stp x8,xzr,[x0]
+  ref 00ccf818 PTR_FUN_00ccf818
+00107934 add x27,x0,#0x18
+00107938 mov x0,x27
+0010793c mov x1,x19
+00107940 bl 0x00060878
+  ref 00060878 FUN_00060878
+00107944 ldp x10,x8,[sp, #0x88]
+00107948 cmp x10,x8
+0010794c b.cs 0x0010795c
+  ref 0010795c LAB_0010795c
+00107950 stp x27,x28,[x10]
+00107954 add x22,x10,#0x10
+00107958 b 0x001079e4
+  ref 001079e4 LAB_001079e4
+0010795c ldr x9,[sp, #0x80]
+00107960 sub x19,x10,x9
+00107964 asr x10,x19,#0x4
+00107968 add x10,x10,#0x1
+0010796c lsr x11,x10,#0x3c
+00107970 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+00107974 orr x11,xzr,#0x7ffffffffffffff0
+00107978 sub x8,x8,x9
+0010797c asr x9,x8,#0x3
+00107980 cmp x9,x10
+00107984 csel x9,x9,x10,hi
+00107988 cmp x8,x11
+0010798c mov x8,#0xfffffffffffffff
+00107990 csel x1,x9,x8,cc
+00107994 ldr x0,[sp, #0x8]
+00107998 str x0,[sp, #0x140]
+0010799c bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+001079a0 add x8,x0,x19
+001079a4 add x23,x0,x1, LSL #0x4
+001079a8 stp x27,x28,[x8]
+001079ac add x22,x8,#0x10
+001079b0 ldp x1,x9,[sp, #0x80]
+001079b4 sub x2,x9,x1
+001079b8 sub x19,x8,x2
+001079bc mov x0,x19
+001079c0 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+001079c4 ldr x8,[sp, #0x80]
+001079c8 ldr x9,[sp, #0x90]
+001079cc stp x19,x22,[sp, #0x80]
+001079d0 str x23,[sp, #0x90]
+001079d4 stp x8,x9,[sp, #0x130]
+001079d8 stp x8,x8,[sp, #0x120]
+001079dc add x0,sp,#0x120
+001079e0 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+001079e4 str x22,[sp, #0x88]
+001079e8 ldr x19,[sp, #0xd8]
+001079ec mov w0,#0x28
+001079f0 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+001079f4 mov x28,x0
+001079f8 str xzr,[x0, #0x10]
+001079fc adrp x8,0xccf000
+00107a00 add x8,x8,#0x858
+00107a04 add x8,x8,#0x10
+00107a08 stp x8,xzr,[x0]
+  ref 00ccf868 PTR_FUN_00ccf868
+00107a0c add x27,x0,#0x18
+00107a10 mov x0,x27
+00107a14 mov x1,x19
+00107a18 bl 0x000608b4
+  ref 000608b4 FUN_000608b4
+00107a1c ldp x10,x8,[sp, #0x88]
+00107a20 cmp x10,x8
+00107a24 b.cs 0x00107a34
+  ref 00107a34 LAB_00107a34
+00107a28 stp x27,x28,[x10]
+00107a2c add x22,x10,#0x10
+00107a30 b 0x00107abc
+  ref 00107abc LAB_00107abc
+00107a34 ldr x9,[sp, #0x80]
+00107a38 sub x19,x10,x9
+00107a3c asr x10,x19,#0x4
+00107a40 add x10,x10,#0x1
+00107a44 lsr x11,x10,#0x3c
+00107a48 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+00107a4c orr x11,xzr,#0x7ffffffffffffff0
+00107a50 sub x8,x8,x9
+00107a54 asr x9,x8,#0x3
+00107a58 cmp x9,x10
+00107a5c csel x9,x9,x10,hi
+00107a60 cmp x8,x11
+00107a64 mov x8,#0xfffffffffffffff
+00107a68 csel x1,x9,x8,cc
+00107a6c ldr x0,[sp, #0x8]
+00107a70 str x0,[sp, #0x140]
+00107a74 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+00107a78 add x8,x0,x19
+00107a7c add x23,x0,x1, LSL #0x4
+00107a80 stp x27,x28,[x8]
+00107a84 add x22,x8,#0x10
+00107a88 ldp x1,x9,[sp, #0x80]
+00107a8c sub x2,x9,x1
+00107a90 sub x19,x8,x2
+00107a94 mov x0,x19
+00107a98 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107a9c ldr x8,[sp, #0x80]
+00107aa0 ldr x9,[sp, #0x90]
+00107aa4 stp x19,x22,[sp, #0x80]
+00107aa8 str x23,[sp, #0x90]
+00107aac stp x8,x9,[sp, #0x130]
+00107ab0 stp x8,x8,[sp, #0x120]
+00107ab4 add x0,sp,#0x120
+00107ab8 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107abc str x22,[sp, #0x88]
+00107ac0 adrp x8,0xd9a000
+00107ac4 ldrsb w8,[x8, #0x60]
+  ref 00d9a060 DAT_00d9a060
+00107ac8 tbnz w8,#0x1f,0x00107ad4
+  ref 00107ad4 LAB_00107ad4
+00107acc cbnz w8,0x00107ae4
+  ref 00107ae4 LAB_00107ae4
+00107ad0 b 0x00107bbc
+  ref 00107bbc LAB_00107bbc
+00107ad4 adrp x0,0xd9a000
+00107ad8 add x0,x0,#0x60
+  ref 00d9a060 DAT_00d9a060
+00107adc bl 0x009b5bc8
+  ref 009b5bc8 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::ChangeGate::Evaluate
+00107ae0 cbz w0,0x00107bbc
+  ref 00107bbc LAB_00107bbc
+00107ae4 ldr x19,[sp, #0xd8]
+00107ae8 mov w0,#0x28
+00107aec bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107af0 mov x28,x0
+00107af4 str xzr,[x0, #0x10]
+00107af8 adrp x8,0xccf000
+00107afc add x8,x8,#0x8a8
+00107b00 add x8,x8,#0x10
+00107b04 stp x8,xzr,[x0]
+  ref 00ccf8b8 PTR_FUN_00ccf8b8
+00107b08 add x27,x0,#0x18
+00107b0c mov x0,x27
+00107b10 mov x1,x19
+00107b14 bl 0x000608f0
+  ref 000608f0 FUN_000608f0
+00107b18 ldp x10,x8,[sp, #0x88]
+00107b1c cmp x10,x8
+00107b20 b.cs 0x00107b30
+  ref 00107b30 LAB_00107b30
+00107b24 stp x27,x28,[x10]
+00107b28 add x22,x10,#0x10
+00107b2c b 0x00107bb8
+  ref 00107bb8 LAB_00107bb8
+00107b30 ldr x9,[sp, #0x80]
+00107b34 sub x19,x10,x9
+00107b38 asr x10,x19,#0x4
+00107b3c add x10,x10,#0x1
+00107b40 lsr x11,x10,#0x3c
+00107b44 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+00107b48 orr x11,xzr,#0x7ffffffffffffff0
+00107b4c sub x8,x8,x9
+00107b50 asr x9,x8,#0x3
+00107b54 cmp x9,x10
+00107b58 csel x9,x9,x10,hi
+00107b5c cmp x8,x11
+00107b60 mov x8,#0xfffffffffffffff
+00107b64 csel x1,x9,x8,cc
+00107b68 ldr x0,[sp, #0x8]
+00107b6c str x0,[sp, #0x140]
+00107b70 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+00107b74 add x8,x0,x19
+00107b78 add x23,x0,x1, LSL #0x4
+00107b7c stp x27,x28,[x8]
+00107b80 add x22,x8,#0x10
+00107b84 ldp x1,x9,[sp, #0x80]
+00107b88 sub x2,x9,x1
+00107b8c sub x19,x8,x2
+00107b90 mov x0,x19
+00107b94 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107b98 ldr x8,[sp, #0x80]
+00107b9c ldr x9,[sp, #0x90]
+00107ba0 stp x19,x22,[sp, #0x80]
+00107ba4 str x23,[sp, #0x90]
+00107ba8 stp x8,x9,[sp, #0x130]
+00107bac stp x8,x8,[sp, #0x120]
+00107bb0 add x0,sp,#0x120
+00107bb4 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107bb8 str x22,[sp, #0x88]
+00107bbc bl 0x0006092c
+  ref 0006092c FUN_0006092c
+00107bc0 ldrsb w8,[x0]
+00107bc4 tbnz w8,#0x1f,0x00107bd0
+  ref 00107bd0 LAB_00107bd0
+00107bc8 cbnz w8,0x00107bd8
+  ref 00107bd8 LAB_00107bd8
+00107bcc b 0x00107cb0
+  ref 00107cb0 LAB_00107cb0
+00107bd0 bl 0x009b5bd4
+  ref 009b5bd4 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::FeatureGate::Evaluate
+00107bd4 cbz w0,0x00107cb0
+  ref 00107cb0 LAB_00107cb0
+00107bd8 ldr x19,[sp, #0xd8]
+00107bdc mov w0,#0x28
+00107be0 bl 0x009b660c
+  ref 009b660c <EXTERNAL>::operator.new
+00107be4 mov x28,x0
+00107be8 str xzr,[x0, #0x10]
+00107bec adrp x8,0xccf000
+00107bf0 add x8,x8,#0x8f8
+00107bf4 add x8,x8,#0x10
+00107bf8 stp x8,xzr,[x0]
+  ref 00ccf908 PTR_FUN_00ccf908
+00107bfc add x27,x0,#0x18
+00107c00 mov x0,x27
+00107c04 mov x1,x19
+00107c08 bl 0x00060938
+  ref 00060938 FUN_00060938
+00107c0c ldp x10,x8,[sp, #0x88]
+00107c10 cmp x10,x8
+00107c14 b.cs 0x00107c24
+  ref 00107c24 LAB_00107c24
+00107c18 stp x27,x28,[x10]
+00107c1c add x22,x10,#0x10
+00107c20 b 0x00107cac
+  ref 00107cac LAB_00107cac
+00107c24 ldr x9,[sp, #0x80]
+00107c28 sub x19,x10,x9
+00107c2c asr x10,x19,#0x4
+00107c30 add x10,x10,#0x1
+00107c34 lsr x11,x10,#0x3c
+00107c38 cbnz x11,0x001083f4
+  ref 001083f4 LAB_001083f4
+00107c3c orr x11,xzr,#0x7ffffffffffffff0
+00107c40 sub x8,x8,x9
+00107c44 asr x9,x8,#0x3
+00107c48 cmp x9,x10
+00107c4c csel x9,x9,x10,hi
+00107c50 cmp x8,x11
+00107c54 mov x8,#0xfffffffffffffff
+00107c58 csel x1,x9,x8,cc
+00107c5c ldr x0,[sp, #0x8]
+00107c60 str x0,[sp, #0x140]
+00107c64 bl 0x0000baf8
+  ref 0000baf8 FUN_0000baf8
+00107c68 add x8,x0,x19
+00107c6c add x23,x0,x1, LSL #0x4
+00107c70 stp x27,x28,[x8]
+00107c74 add x22,x8,#0x10
+00107c78 ldp x1,x9,[sp, #0x80]
+00107c7c sub x2,x9,x1
+00107c80 sub x19,x8,x2
+00107c84 mov x0,x19
+00107c88 bl 0x009b6a50
+  ref 009b6a50 _memcpy
+00107c8c ldr x8,[sp, #0x80]
+00107c90 ldr x9,[sp, #0x90]
+00107c94 stp x19,x22,[sp, #0x80]
+00107c98 str x23,[sp, #0x90]
+00107c9c stp x8,x9,[sp, #0x130]
+00107ca0 stp x8,x8,[sp, #0x120]
+00107ca4 add x0,sp,#0x120
+00107ca8 bl 0x0000bb2c
+  ref 0000bb2c FUN_0000bb2c
+00107cac str x22,[sp, #0x88]
+00107cb0 adrp x1,0xaa5000
+00107cb4 add x1,x1,#0x7b0
+  ref 00aa57b0 DAT_00aa57b0
+00107cb8 add x8,sp,#0xa8
+00107cbc mov x0,x25
+00107cc0 bl 0x0006057c
+  ref 0006057c FUN_0006057c
+00107cc4 adrp x8,0xab0000
+00107cc8 ldr d0,[x8, #0xdf0]
+  ref 00ab0df0 DAT_00ab0df0
+00107ccc str d0,[sp, #0x120]
+00107cd0 add x8,sp,#0x120
+00107cd4 add x8,x8,#0x8
+00107cd8 bl 0x003e86ac
+  ref 003e86ac FUN_003e86ac
+00107cdc adrp x8,0xab0000
+00107ce0 ldr d0,[x8, #0xdf8]
+  ref 00ab0df8 DAT_00ab0df8
+00107ce4 str d0,[sp, #0x100]
+00107ce8 add x8,sp,#0x100
+00107cec add x8,x8,#0x8
+00107cf0 bl 0x003e86ac
+  ref 003e86ac FUN_003e86ac
+00107cf4 bl 0x00060974
+  ref 00060974 FUN_00060974
+00107cf8 ldrsb w8,[x0]
+00107cfc tbnz w8,#0x1f,0x00107d50
+  ref 00107d50 LAB_00107d50
+00107d00 cbz w8,0x00107d58
+  ref 00107d58 LAB_00107d58
+00107d04 ldr x0,[sp, #0xa8]
+00107d08 cbz x0,0x001083cc
+  ref 001083cc LAB_001083cc
+00107d0c ldr x8,[x0]
+00107d10 ldr x8,[x8, #0x58]
+00107d14 blr x8
+00107d18 cbz w0,0x00107fbc
+  ref 00107fbc LAB_00107fbc
+00107d1c ldr x0,[sp, #0xa8]
+00107d20 cbz x0,0x001083e0
+  ref 001083e0 LAB_001083e0
+00107d24 ldr x8,[x0]
+00107d28 ldr x8,[x8, #0x58]
+00107d2c blr x8
+00107d30 bl 0x00060980
+  ref 00060980 FUN_00060980
+00107d34 str w0,[sp, #0x28]
+00107d38 add x8,sp,#0xa0
+00107d3c add x1,sp,#0x28
+00107d40 add x2,sp,#0x120
+00107d44 mov x0,x26
+00107d48 bl 0x005f834c
+  ref 005f834c FUN_005f834c
+00107d4c b 0x001080f8
+  ref 001080f8 LAB_001080f8
+00107d50 bl 0x009b5bc8
+  ref 009b5bc8 @rpath/mso20.framework/Versions/A/mso20::Mso::AB::Optimized::ChangeGate::Evaluate
+00107d54 tbnz w0,#0x0,0x00107d04
+  ref 00107d04 LAB_00107d04
+00107d58 ldr x0,[sp, #0xa8]
+00107d5c cbz x0,0x001083d8
+  ref 001083d8 LAB_001083d8
+00107d60 ldr x8,[x0]
+00107d64 ldr x8,[x8, #0x58]
+00107d68 blr x8
+00107d6c cbz w0,0x00108020
+  ref 00108020 LAB_00108020
+00107d70 mov w8,#0x1
+00107d74 b 0x001080bc
+  ref 001080bc LAB_001080bc
+00107d78 ldr w8,[sp, #0xcc]
+00107d7c cbnz w8,0x00107de0
+  ref 00107de0 LAB_00107de0
+00107d80 ldr x0,[sp, #0x50]
+00107d84 cbz x0,0x001083e4
+  ref 001083e4 LAB_001083e4
+00107d88 ldr x8,[x0]
+00107d8c ldr x8,[x8, #0x58]
+00107d90 blr x8
+00107d94 cbnz w0,0x00107de0
+  ref 00107de0 LAB_00107de0
+00107d98 ldrsb w8,[sp, #0xf7]
+00107d9c ldr x9,[sp, #0xe0]
+00107da0 cmp w8,#0x0
+00107da4 add x8,sp,#0xe0
+00107da8 csel x2,x9,x8,lt
+  ref 00ba2687 s_GetSessionInfo:_Using_web_url_00ba2687
+00107dac add x0,sp,#0x100
+00107db0 mov w1,#0x3
+00107db4 bl 0x00060064
+  ref 00060064 FUN_00060064
+00107db8 ldr x8,[sp, #0xc0]
+00107dbc cbz x8,0x001083f0
+  ref 001083f0 LAB_001083f0
+00107dc0 add x1,sp,#0x100
+00107dc4 add x2,x8,#0x48
+00107dc8 mov w0,#0x1
+00107dcc bl 0x009b3b28
+  ref 009b3b28 @rpath/mso20.framework/Versions/A/mso20::Measurements::MergeIdentifiers
+00107dd0 ldrsb w8,[sp, #0x11f]
+00107dd4 tbz w8,#0x1f,0x00107de0
+  ref 00107de0 LAB_00107de0
+00107dd8 ldr x0,[sp, #0x108]
+00107ddc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00107de0 ldr x8,[sp, #0xd0]
+00107de4 cbz x8,0x00107e04
+  ref 00107e04 LAB_00107e04
+00107de8 adrp x1,0xab0000
+00107dec add x1,x1,#0xe28
+  ref 00ab0e28 DAT_00ab0e28
+00107df0 add x8,sp,#0xb0
+00107df4 add x0,sp,#0xd0
+00107df8 bl 0x005f7984
+  ref 005f7984 FUN_005f7984
+00107dfc ldr x8,[sp, #0xb0]
+00107e00 b 0x00107e08
+  ref 00107e08 LAB_00107e08
+00107e04 str xzr,[sp, #0xb0]
+00107e08 str x8,[sp, #0x100]
+00107e0c ldr x2,[sp, #0xd8]
+00107e10 ldr x3,[sp, #0xb8]
+00107e14 add x8,sp,#0xa8
+00107e18 add x1,sp,#0x100
+00107e1c add x4,sp,#0x28
+00107e20 mov x0,x25
+00107e24 mov x5,x24
+00107e28 ldr x6,[sp, #0x18]
+00107e2c bl 0x005f83a4
+  ref 005f83a4 FUN_005f83a4
+00107e30 add x8,sp,#0xa0
+00107e34 ldr x0,[sp, #0x20]
+00107e38 bl 0x00061438
+  ref 00061438 FUN_00061438
+00107e3c add x8,sp,#0x80
+00107e40 ldr x0,[sp, #0x10]
+00107e44 bl 0x000615a0
+  ref 000615a0 FUN_000615a0
+00107e48 ldr x22,[sp, #0xa0]
+00107e4c cbz x22,0x001083c4
+  ref 001083c4 LAB_001083c4
+00107e50 ldr x0,[x21, #0x10]
+00107e54 cbz x0,0x001083c8
+  ref 001083c8 LAB_001083c8
+00107e58 ldr x8,[x0]
+00107e5c ldr x8,[x8, #0x18]
+00107e60 blr x8
+00107e64 mov x1,x0
+00107e68 add x8,sp,#0x78
+00107e6c add x0,sp,#0xe0
+00107e70 bl 0x000616f4
+  ref 000616f4 FUN_000616f4
+00107e74 ldr x19,[sp, #0x78]
+00107e78 ldr x0,[x21, #0x10]
+00107e7c add x8,sp,#0x100
+00107e80 bl 0x002b4d38
+  ref 002b4d38 FUN_002b4d38
+00107e84 add x8,sp,#0x98
+00107e88 add x1,sp,#0x80
+00107e8c add x2,sp,#0xcc
+00107e90 add x5,sp,#0x100
+00107e94 ldr x0,[sp, #0x20]
+00107e98 mov x3,x22
+00107e9c mov x4,x19
+00107ea0 bl 0x001e8398
+  ref 001e8398 FUN_001e8398
+00107ea4 ldrsb w8,[sp, #0x11f]
+00107ea8 tbz w8,#0x1f,0x00107eb4
+  ref 00107eb4 LAB_00107eb4
+00107eac ldr x0,[sp, #0x108]
+00107eb0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00107eb4 ldr x0,[sp, #0x78]
+00107eb8 cbz x0,0x00107ecc
+  ref 00107ecc LAB_00107ecc
+00107ebc str xzr,[sp, #0x78]
+00107ec0 ldr x8,[x0]
+00107ec4 ldr x8,[x8, #0x8]
+00107ec8 blr x8
+00107ecc ldr x0,[sp, #0x80]
+00107ed0 cbz x0,0x00107edc
+  ref 00107edc LAB_00107edc
+00107ed4 str x0,[sp, #0x88]
+00107ed8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00107edc add x8,sp,#0x100
+00107ee0 bl 0x001e8784
+  ref 001e8784 FUN_001e8784
+00107ee4 ldr x0,[sp, #0x50]
+00107ee8 ldr x1,[sp, #0xa8]
+00107eec ldp x2,x5,[sp, #0xb8]
+00107ef0 ldp x3,x6,[sp, #0xf8]
+00107ef4 ldr x4,[sp, #0x98]
+00107ef8 mov x8,x20
+00107efc bl 0x004b9f18
+  ref 004b9f18 FUN_004b9f18
+00107f00 ldr x0,[sp, #0x100]
+00107f04 cbz x0,0x00107f18
+  ref 00107f18 LAB_00107f18
+00107f08 str xzr,[sp, #0x100]
+00107f0c ldr x8,[x0]
+00107f10 ldr x8,[x8, #0x8]
+00107f14 blr x8
+00107f18 ldr x0,[sp, #0x98]
+00107f1c cbz x0,0x00107f30
+  ref 00107f30 LAB_00107f30
+00107f20 str xzr,[sp, #0x98]
+00107f24 ldr x8,[x0]
+00107f28 ldr x8,[x8, #0x10]
+00107f2c blr x8
+00107f30 ldr x0,[sp, #0xa0]
+00107f34 cbz x0,0x00107f48
+  ref 00107f48 LAB_00107f48
+00107f38 str xzr,[sp, #0xa0]
+00107f3c ldr x8,[x0]
+00107f40 ldr x8,[x8, #0x8]
+00107f44 blr x8
+00107f48 add x0,sp,#0xa8
+00107f4c bl 0x000d2a70
+  ref 000d2a70 FUN_000d2a70
+00107f50 ldr x0,[sp, #0xb0]
+00107f54 cbz x0,0x00107f68
+  ref 00107f68 LAB_00107f68
+00107f58 str xzr,[sp, #0xb0]
+00107f5c ldr x8,[x0]
+00107f60 ldr x8,[x8, #0x10]
+00107f64 blr x8
+00107f68 ldr x0,[sp, #0xb8]
+00107f6c cbz x0,0x00107f80
+  ref 00107f80 LAB_00107f80
+00107f70 str xzr,[sp, #0xb8]
+00107f74 ldr x8,[x0]
+00107f78 ldr x8,[x8, #0x10]
+00107f7c blr x8
+00107f80 ldr x0,[sp, #0x128]
+00107f84 cbz x0,0x00107f90
+  ref 00107f90 LAB_00107f90
+00107f88 str x0,[sp, #0x130]
+00107f8c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00107f90 add x8,sp,#0x28
+00107f94 str x8,[sp, #0x120]
+00107f98 add x0,sp,#0x120
+00107f9c bl 0x00132428
+  ref 00132428 FUN_00132428
+00107fa0 ldr x0,[sp, #0x50]
+00107fa4 cbz x0,0x00108314
+  ref 00108314 LAB_00108314
+00107fa8 str xzr,[sp, #0x50]
+00107fac ldr x8,[x0]
+00107fb0 ldr x8,[x8, #0x10]
+00107fb4 blr x8
+00107fb8 b 0x00108314
+  ref 00108314 LAB_00108314
+00107fbc ldr x0,[x21, #0x10]
+00107fc0 adrp x1,0xa8e000
+00107fc4 add x1,x1,#0x250
+  ref 00a8e250 DAT_00a8e250
+00107fc8 add x8,sp,#0x28
+00107fcc bl 0x00108660
+  ref 00108660 FUN_00108660
+00107fd0 ldr x0,[sp, #0x28]
+00107fd4 cbz x0,0x001083e8
+  ref 001083e8 LAB_001083e8
+00107fd8 ldr x8,[x0]
+00107fdc ldr x8,[x8, #0xd8]
+00107fe0 blr x8
+00107fe4 mov x19,x0
+00107fe8 ldr x0,[sp, #0x28]
+00107fec cbz x0,0x00108000
+  ref 00108000 LAB_00108000
+00107ff0 str xzr,[sp, #0x28]
+00107ff4 ldr x8,[x0]
+00107ff8 ldr x8,[x8, #0x10]
+00107ffc blr x8
+00108000 lsr x8,x19,#0x20
+00108004 cmp w19,#0x0
+00108008 cset w9,ne
+0010800c and w8,w8,w9
+00108010 strb w8,[sp, #0x50]
+00108014 ldr x0,[sp, #0xa8]
+00108018 cbnz x0,0x001080c8
+  ref 001080c8 LAB_001080c8
+0010801c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+00108020 mov w9,#0xa68b
+00108024 movk w9,#0x1e39, LSL #16
+00108028 ldr x19,[sp, #0x20]
+0010802c ldr x8,[x19]
+00108030 ldr x10,[x8, #0x40]
+00108034 add x8,sp,#0x28
+00108038 add w1,w9,#0x1
+0010803c mov x0,x19
+00108040 mov w2,#0x80
+00108044 mov w3,#0x0
+00108048 blr x10
+0010804c ldr x0,[sp, #0x28]
+00108050 cbz x0,0x0010805c
+  ref 0010805c LAB_0010805c
+00108054 mov w19,#0x0
+00108058 b 0x001080a8
+  ref 001080a8 LAB_001080a8
+0010805c ldr x8,[x19]
+00108060 ldr x9,[x8, #0x40]
+00108064 add x8,sp,#0x50
+00108068 mov x0,x19
+0010806c mov w1,#0xa68b
+00108070 movk w1,#0x1e39, LSL #16
+00108074 mov w2,#0x7f
+00108078 mov w3,#0x0
+0010807c blr x9
+00108080 ldr x0,[sp, #0x50]
+00108084 cmp x0,#0x0
+00108088 cset w19,eq
+0010808c cbz x0,0x001080a0
+  ref 001080a0 LAB_001080a0
+00108090 str xzr,[sp, #0x50]
+00108094 ldr x8,[x0]
+00108098 ldr x8,[x8, #0x10]
+0010809c blr x8
+001080a0 ldr x0,[sp, #0x28]
+001080a4 cbz x0,0x001080b8
+  ref 001080b8 LAB_001080b8
+001080a8 str xzr,[sp, #0x28]
+001080ac ldr x8,[x0]
+001080b0 ldr x8,[x8, #0x10]
+001080b4 blr x8
+001080b8 eor w8,w19,#0x1
+001080bc strb w8,[sp, #0x50]
+001080c0 ldr x0,[sp, #0xa8]
+001080c4 cbz x0,0x001083dc
+  ref 001083dc LAB_001083dc
+001080c8 ldr x8,[x0]
+001080cc ldr x8,[x8, #0x58]
+001080d0 blr x8
+001080d4 bl 0x00060980
+  ref 00060980 FUN_00060980
+001080d8 str w0,[sp, #0x28]
+001080dc add x8,sp,#0xa0
+001080e0 add x1,sp,#0x28
+001080e4 add x2,sp,#0x120
+001080e8 add x3,sp,#0x100
+001080ec add x4,sp,#0x50
+001080f0 mov x0,x26
+001080f4 bl 0x000609b0
+  ref 000609b0 FUN_000609b0
+001080f8 ldr x8,[sp, #0xd0]
+001080fc cbz x8,0x0010811c
+  ref 0010811c LAB_0010811c
+00108100 adrp x1,0xab0000
+00108104 add x1,x1,#0xe18
+  ref 00ab0e18 DAT_00ab0e18
+00108108 add x8,sp,#0x98
+0010810c add x0,sp,#0xd0
+00108110 bl 0x00106454
+  ref 00106454 FUN_00106454
+00108114 ldr x8,[sp, #0x98]
+00108118 b 0x00108120
+  ref 00108120 LAB_00108120
+0010811c str xzr,[sp, #0x98]
+00108120 str x8,[sp, #0x28]
+00108124 ldr x2,[sp, #0xd8]
+00108128 ldr x3,[sp, #0xa0]
+0010812c add x8,sp,#0x78
+00108130 add x1,sp,#0x28
+00108134 add x4,sp,#0x80
+00108138 mov x0,x25
+0010813c mov x5,x24
+00108140 ldr x6,[sp, #0x18]
+00108144 bl 0x00060ae8
+  ref 00060ae8 FUN_00060ae8
+00108148 add x8,sp,#0x70
+0010814c ldr x0,[sp, #0x20]
+00108150 bl 0x00061438
+  ref 00061438 FUN_00061438
+00108154 add x8,sp,#0x50
+00108158 ldr x0,[sp, #0x10]
+0010815c bl 0x000615a0
+  ref 000615a0 FUN_000615a0
+00108160 ldr x22,[sp, #0x70]
+00108164 cbz x22,0x001083bc
+  ref 001083bc LAB_001083bc
+00108168 ldr x0,[x21, #0x10]
+0010816c cbz x0,0x001083c0
+  ref 001083c0 LAB_001083c0
+00108170 ldr x8,[x0]
+00108174 ldr x8,[x8, #0x18]
+00108178 blr x8
+0010817c mov x1,x0
+00108180 add x8,sp,#0x48
+00108184 add x0,sp,#0xe0
+00108188 bl 0x000616f4
+  ref 000616f4 FUN_000616f4
+0010818c ldr x19,[sp, #0x48]
+00108190 ldr x0,[x21, #0x10]
+00108194 add x8,sp,#0x28
+00108198 bl 0x002b4d38
+  ref 002b4d38 FUN_002b4d38
+0010819c add x8,sp,#0x68
+001081a0 add x1,sp,#0x50
+001081a4 add x2,sp,#0xcc
+001081a8 add x5,sp,#0x28
+001081ac ldr x0,[sp, #0x20]
+001081b0 mov x3,x22
+001081b4 mov x4,x19
+001081b8 bl 0x001e8398
+  ref 001e8398 FUN_001e8398
+001081bc ldrsb w8,[sp, #0x47]
+001081c0 tbz w8,#0x1f,0x001081cc
+  ref 001081cc LAB_001081cc
+001081c4 ldr x0,[sp, #0x30]
+001081c8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+001081cc ldr x0,[sp, #0x48]
+001081d0 cbz x0,0x001081e4
+  ref 001081e4 LAB_001081e4
+001081d4 str xzr,[sp, #0x48]
+001081d8 ldr x8,[x0]
+001081dc ldr x8,[x8, #0x8]
+001081e0 blr x8
+001081e4 ldr x0,[sp, #0x50]
+001081e8 cbz x0,0x001081f4
+  ref 001081f4 LAB_001081f4
+001081ec str x0,[sp, #0x58]
+001081f0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+001081f4 add x8,sp,#0x28
+001081f8 bl 0x001e8784
+  ref 001e8784 FUN_001e8784
+001081fc ldp x2,x0,[sp, #0xa0]
+00108200 ldr x1,[sp, #0x78]
+00108204 ldr x3,[sp, #0xf8]
+00108208 ldr x4,[sp, #0x68]
+0010820c ldr x5,[sp, #0xc0]
+00108210 ldr x6,[sp, #0x28]
+00108214 mov x8,x20
+00108218 bl 0x001e87cc
+  ref 001e87cc FUN_001e87cc
+0010821c ldr x0,[sp, #0x28]
+00108220 cbz x0,0x00108234
+  ref 00108234 LAB_00108234
+00108224 str xzr,[sp, #0x28]
+00108228 ldr x8,[x0]
+0010822c ldr x8,[x8, #0x8]
+00108230 blr x8
+00108234 ldr x0,[sp, #0x68]
+00108238 cbz x0,0x0010824c
+  ref 0010824c LAB_0010824c
+0010823c str xzr,[sp, #0x68]
+00108240 ldr x8,[x0]
+00108244 ldr x8,[x8, #0x10]
+00108248 blr x8
+0010824c ldr x0,[sp, #0x70]
+00108250 cbz x0,0x00108264
+  ref 00108264 LAB_00108264
+00108254 str xzr,[sp, #0x70]
+00108258 ldr x8,[x0]
+0010825c ldr x8,[x8, #0x8]
+00108260 blr x8
+00108264 add x0,sp,#0x78
+00108268 bl 0x000d2a70
+  ref 000d2a70 FUN_000d2a70
+0010826c ldr x0,[sp, #0x98]
+00108270 cbz x0,0x00108284
+  ref 00108284 LAB_00108284
+00108274 str xzr,[sp, #0x98]
+00108278 ldr x8,[x0]
+0010827c ldr x8,[x8, #0x10]
+00108280 blr x8
+00108284 ldr x0,[sp, #0xa0]
+00108288 cbz x0,0x0010829c
+  ref 0010829c LAB_0010829c
+0010828c str xzr,[sp, #0xa0]
+00108290 ldr x8,[x0]
+00108294 ldr x8,[x8, #0x10]
+00108298 blr x8
+0010829c ldr x0,[sp, #0x108]
+001082a0 cbz x0,0x001082ac
+  ref 001082ac LAB_001082ac
+001082a4 str x0,[sp, #0x110]
+001082a8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+001082ac ldr x0,[sp, #0x128]
+001082b0 cbz x0,0x001082bc
+  ref 001082bc LAB_001082bc
+001082b4 str x0,[sp, #0x130]
+001082b8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+001082bc ldr x0,[sp, #0xa8]
+001082c0 cbz x0,0x001082d4
+  ref 001082d4 LAB_001082d4
+001082c4 str xzr,[sp, #0xa8]
+001082c8 ldr x8,[x0]
+001082cc ldr x8,[x8, #0x10]
+001082d0 blr x8
+001082d4 ldr x0,[sp, #0xb0]
+001082d8 cbz x0,0x001082ec
+  ref 001082ec LAB_001082ec
+001082dc str xzr,[sp, #0xb0]
+001082e0 ldr x8,[x0]
+001082e4 ldr x8,[x8, #0x8]
+001082e8 blr x8
+001082ec ldr x0,[sp, #0xb8]
+001082f0 cbz x0,0x00108304
+  ref 00108304 LAB_00108304
+001082f4 str xzr,[sp, #0xb8]
+001082f8 ldr x8,[x0]
+001082fc ldr x8,[x8, #0x10]
+00108300 blr x8
+00108304 add x8,sp,#0x80
+00108308 str x8,[sp, #0x120]
+0010830c add x0,sp,#0x120
+00108310 bl 0x00132428
+  ref 00132428 FUN_00132428
+00108314 add x0,sp,#0xd8
+00108318 bl 0x001e9f20
+  ref 001e9f20 FUN_001e9f20
+0010831c ldr x0,[sp, #0xf8]
+00108320 cbz x0,0x00108334
+  ref 00108334 LAB_00108334
+00108324 str xzr,[sp, #0xf8]
+00108328 ldr x8,[x0]
+0010832c ldr x8,[x8, #0x10]
+00108330 blr x8
+00108334 ldrsb w8,[sp, #0xf7]
+00108338 tbz w8,#0x1f,0x00108344
+  ref 00108344 LAB_00108344
+0010833c ldr x0,[sp, #0xe0]
+  ref 00ba2687 s_GetSessionInfo:_Using_web_url_00ba2687
+00108340 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+00108344 ldr x0,[sp, #0xc0]
+00108348 cbz x0,0x0010835c
+  ref 0010835c LAB_0010835c
+0010834c str xzr,[sp, #0xc0]
+00108350 ldr x8,[x0]
+00108354 ldr x8,[x8, #0x8]
+00108358 blr x8
+0010835c ldr x0,[sp, #0x20]
+00108360 ldr x8,[x0]
+00108364 ldr x8,[x8, #0x10]
+00108368 blr x8
+0010836c b 0x00106d28
+  ref 00106d28 LAB_00106d28
+00108370 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+00108374 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+00108378 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+0010837c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+00108380 bl 0x009a4994
+  ref 009a4994 FUN_009a4994
+00108384 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+00108388 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+0010838c bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+00108390 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+00108394 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+00108398 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+0010839c bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083a0 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+001083a4 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+001083a8 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+001083ac bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+001083b0 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+001083b4 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083b8 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083bc bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+001083c0 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+001083c4 bl 0x009a5674
+  ref 009a5674 FUN_009a5674
+001083c8 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+001083cc bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083d0 bl 0x009a5668
+  ref 009a5668 FUN_009a5668
+001083d4 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083d8 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083dc bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083e0 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083e4 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083e8 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083ec bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail
+001083f0 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001083f4 bl 0x00439360
+  ref 00439360 FUN_00439360
+001083fc adrp x8,0xba2000
+00108400 add x8,x8,#0x658
+00108404 str x8,[sp, #0x120]
+  ref 00ba2658 s_GetDefaultOpWorkerFactory:_Unexp_00ba2658
+00108408 add x4,sp,#0x120
+0010840c mov w0,#0x630b
+00108410 movk w0,#0x1f64, LSL #16
+00108414 mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00108418 mov w2,#0xa
+0010841c mov w3,#0x2
+00108420 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00108424 mov w0,#0x1099
+00108428 movk w0,#0x1f85, LSL #16
+0010842c mov x1,#0x0
+00108430 bl 0x00438dc4
+  ref 00438dc4 FUN_00438dc4

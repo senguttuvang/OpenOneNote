@@ -1,0 +1,230 @@
+00108e14 sub sp,sp,#0xa0
+00108e18 stp x26,x25,[sp, #0x50]
+00108e1c stp x24,x23,[sp, #0x60]
+00108e20 stp x22,x21,[sp, #0x70]
+00108e24 stp x20,x19,[sp, #0x80]
+00108e28 stp x29,x30,[sp, #0x90]
+00108e2c add x29,sp,#0x90
+00108e30 mov x24,x4
+00108e34 mov x19,x3
+00108e38 mov x21,x2
+00108e3c mov x22,x1
+00108e40 mov x20,x0
+00108e44 adrp x8,0xba2000
+00108e48 add x8,x8,#0x2c2
+00108e4c str x8,[sp, #0x48]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+00108e50 add x4,sp,#0x48
+00108e54 mov w0,#0x6303
+00108e58 movk w0,#0x1f64, LSL #16
+00108e5c mov w1,#0x9d4
+  ref 000009d4 section_000009b8.segname+0xc
+00108e60 mov w2,#0x32
+00108e64 mov w3,#0x2
+00108e68 bl 0x000bfb18
+  ref 000bfb18 FUN_000bfb18
+00108e6c add x8,sp,#0x48
+00108e70 mov x0,x22
+00108e74 bl 0x00109120
+  ref 00109120 FUN_00109120
+00108e78 ldr x0,[sp, #0x48]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+00108e7c cbz x0,0x001090ec
+  ref 001090ec LAB_001090ec
+00108e80 ldr x8,[x0, #0x10]!
+  ref 00ba22d2 s_uler::SubmitJob_00ba22c2+0x10
+00108e84 ldr x8,[x8, #0x58]
+  ref 75533a3a72656ccd DAT_75533a3a72656ccd
+00108e88 blr x8
+00108e8c mov x8,x0
+00108e90 ldr x0,[sp, #0x48]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+00108e94 cbz x0,0x001090f0
+  ref 001090f0 LAB_001090f0
+00108e98 ldp x22,x23,[x8]
+00108e9c mov w25,#0x1096
+00108ea0 movk w25,#0x1f85, LSL #16
+00108ea4 orr w8,w25,#0x1
+00108ea8 str w8,[sp, #0x34]
+00108eac ldr x8,[x0, #0x10]!
+  ref 00ba22d2 s_uler::SubmitJob_00ba22c2+0x10
+00108eb0 ldr x9,[x8, #0x20]
+  ref 75533a3a72656c95 DAT_75533a3a72656c95
+00108eb4 add x8,sp,#0x38
+00108eb8 add x1,sp,#0x34
+00108ebc blr x9
+00108ec0 add x8,sp,#0x28
+00108ec4 mov x0,x20
+00108ec8 mov x1,x21
+00108ecc mov x2,x24
+00108ed0 bl 0x00109ec8
+  ref 00109ec8 FUN_00109ec8
+00108ed4 add x8,sp,#0x40
+00108ed8 add x0,sp,#0x38
+00108edc add x1,x20,#0xb0
+00108ee0 add x2,sp,#0x28
+00108ee4 bl 0x0010a074
+  ref 0010a074 FUN_0010a074
+00108ee8 ldr x0,[sp, #0x40]
+00108eec cbz x0,0x00108f00
+  ref 00108f00 LAB_00108f00
+00108ef0 str xzr,[sp, #0x40]
+00108ef4 ldr x8,[x0]
+00108ef8 ldr x8,[x8, #0x10]
+00108efc blr x8
+00108f00 ldr x0,[sp, #0x28]
+00108f04 cbz x0,0x00108f18
+  ref 00108f18 LAB_00108f18
+00108f08 str xzr,[sp, #0x28]
+00108f0c ldr x8,[x0]
+00108f10 ldr x8,[x8, #0x10]
+00108f14 blr x8
+00108f18 ldr x0,[sp, #0x38]
+00108f1c cbz x0,0x00108f30
+  ref 00108f30 LAB_00108f30
+00108f20 str xzr,[sp, #0x38]
+00108f24 ldr x8,[x0]
+00108f28 ldr x8,[x8, #0x10]
+00108f2c blr x8
+00108f30 ldr x8,[x21]
+00108f34 ldr x9,[x8, #0x40]
+00108f38 add x8,sp,#0x38
+00108f3c mov x0,x21
+00108f40 blr x9
+00108f44 add x8,sp,#0x28
+00108f48 mov x0,x20
+00108f4c mov x1,x22
+00108f50 mov x2,x23
+00108f54 bl 0x0010a1d4
+  ref 0010a1d4 FUN_0010a1d4
+00108f58 add x8,sp,#0x20
+00108f5c add x0,sp,#0x38
+00108f60 add x1,x20,#0xb0
+00108f64 add x2,sp,#0x28
+00108f68 bl 0x0010a260
+  ref 0010a260 FUN_0010a260
+00108f6c ldr x0,[sp, #0x20]
+00108f70 cbz x0,0x00108f84
+  ref 00108f84 LAB_00108f84
+00108f74 str xzr,[sp, #0x20]
+00108f78 ldr x8,[x0]
+00108f7c ldr x8,[x8, #0x10]
+00108f80 blr x8
+00108f84 ldr x0,[sp, #0x28]
+00108f88 cbz x0,0x00108f9c
+  ref 00108f9c LAB_00108f9c
+00108f8c str xzr,[sp, #0x28]
+00108f90 ldr x8,[x0]
+00108f94 ldr x8,[x8, #0x10]
+00108f98 blr x8
+00108f9c ldr x0,[sp, #0x38]
+00108fa0 cbz x0,0x00108fb4
+  ref 00108fb4 LAB_00108fb4
+00108fa4 str xzr,[sp, #0x38]
+00108fa8 ldr x8,[x0]
+00108fac ldr x8,[x8, #0x10]
+00108fb0 blr x8
+00108fb4 ldr x8,[x21]
+00108fb8 ldr x9,[x8, #0x48]
+00108fbc add x8,sp,#0x38
+00108fc0 mov x0,x21
+00108fc4 blr x9
+00108fc8 add x8,sp,#0x28
+00108fcc mov x0,x20
+00108fd0 mov x1,x22
+00108fd4 mov x2,x23
+00108fd8 bl 0x0010a394
+  ref 0010a394 FUN_0010a394
+00108fdc add x8,sp,#0x18
+00108fe0 add x0,sp,#0x38
+00108fe4 add x1,x20,#0xb0
+00108fe8 add x2,sp,#0x28
+00108fec bl 0x0010a420
+  ref 0010a420 FUN_0010a420
+00108ff0 ldr x0,[sp, #0x18]
+00108ff4 cbz x0,0x00109008
+  ref 00109008 LAB_00109008
+00108ff8 str xzr,[sp, #0x18]
+00108ffc ldr x8,[x0]
+00109000 ldr x8,[x8, #0x10]
+00109004 blr x8
+00109008 ldr x0,[sp, #0x28]
+0010900c cbz x0,0x00109020
+  ref 00109020 LAB_00109020
+00109010 str xzr,[sp, #0x28]
+00109014 ldr x8,[x0]
+00109018 ldr x8,[x8, #0x10]
+0010901c blr x8
+00109020 ldr x0,[sp, #0x38]
+00109024 cbz x0,0x00109038
+  ref 00109038 LAB_00109038
+00109028 str xzr,[sp, #0x38]
+0010902c ldr x8,[x0]
+00109030 ldr x8,[x8, #0x10]
+00109034 blr x8
+00109038 adrp x1,0xa7e000
+0010903c add x1,x1,#0xdf8
+  ref 00a7edf8 DAT_00a7edf8
+00109040 add x8,sp,#0x38
+00109044 add x0,sp,#0x48
+00109048 bl 0x0010a530
+  ref 0010a530 FUN_0010a530
+0010904c ldr x1,[sp, #0x48]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+00109050 add x0,x20,#0x120
+00109054 bl 0x0010a7c8
+  ref 0010a7c8 FUN_0010a7c8
+00109058 ldr x0,[x20, #0xa8]
+0010905c cbz x0,0x001090f4
+  ref 001090f4 LAB_001090f4
+00109060 str w25,[sp, #0x28]
+00109064 ldr x8,[sp, #0x48]
+00109068 add x9,x8,#0x10
+0010906c cmp x8,#0x0
+00109070 csel x2,xzr,x9,eq
+  ref 00ba22d2 s_uler::SubmitJob_00ba22c2+0x10
+00109074 add x8,sp,#0x8
+00109078 add x1,sp,#0x28
+0010907c mov x3,x19
+00109080 bl 0x0010a908
+  ref 0010a908 FUN_0010a908
+00109084 ldr w8,[sp, #0x8]
+00109088 cmp w8,#0x1
+0010908c b.ne 0x001090a0
+  ref 001090a0 LAB_001090a0
+00109090 ldr x0,[sp, #0x10]
+00109094 cbz x0,0x001090a0
+  ref 001090a0 LAB_001090a0
+00109098 str xzr,[sp, #0x10]
+0010909c bl 0x009b5b44
+  ref 009b5b44 @rpath/mso20.framework/Versions/A/mso20::Mso::ErrorCodeState::Release
+001090a0 ldr x0,[sp, #0x38]
+001090a4 cbz x0,0x001090b8
+  ref 001090b8 LAB_001090b8
+001090a8 str xzr,[sp, #0x38]
+001090ac ldr x8,[x0]
+001090b0 ldr x8,[x8, #0x10]
+001090b4 blr x8
+001090b8 ldr x0,[sp, #0x48]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+001090bc cbz x0,0x001090d0
+  ref 001090d0 LAB_001090d0
+001090c0 str xzr,[sp, #0x48]
+001090c4 ldr x8,[x0]
+  ref 00ba22c2 s_ContentSyncScheduler::SubmitJob_00ba22c2
+001090c8 ldr x8,[x8, #0x10]
+  ref 53746e65746e6f53 DAT_53746e65746e6f53
+001090cc blr x8
+001090d0 ldp x29,x30,[sp, #0x90]
+001090d4 ldp x20,x19,[sp, #0x80]
+001090d8 ldp x22,x21,[sp, #0x70]
+001090dc ldp x24,x23,[sp, #0x60]
+001090e0 ldp x26,x25,[sp, #0x50]
+001090e4 add sp,sp,#0xa0
+001090e8 ret
+001090ec bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001090f0 bl 0x009a4668
+  ref 009a4668 FUN_009a4668
+001090f4 bl 0x009a5668
+  ref 009a5668 FUN_009a5668

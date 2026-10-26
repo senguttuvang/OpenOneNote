@@ -1,0 +1,449 @@
+{
+  "capturedAt" : "2026-10-26T10:41:20Z",
+  "databasesExamined" : 32,
+  "directoryTotals" : {
+    "AccessibilityCheckerIndex" : {
+      "db" : {
+        "bytes" : 22630400,
+        "files" : 13
+      },
+      "other" : {
+        "bytes" : 0,
+        "files" : 13
+      }
+    },
+    "Backup" : {
+      "one" : {
+        "bytes" : 649930197,
+        "files" : 664
+      }
+    },
+    "cache" : {
+      "bin" : {
+        "bytes" : 1267391463,
+        "files" : 10887
+      },
+      "other" : {
+        "bytes" : 72,
+        "files" : 1
+      }
+    },
+    "FullTextSearchIndex" : {
+      "db" : {
+        "bytes" : 60014592,
+        "files" : 13
+      },
+      "other" : {
+        "bytes" : 0,
+        "files" : 13
+      }
+    },
+    "MasterIndex" : {
+      "db" : {
+        "bytes" : 20480,
+        "files" : 1
+      },
+      "other" : {
+        "bytes" : 0,
+        "files" : 1
+      }
+    },
+    "NoteTags" : {
+      "db" : {
+        "bytes" : 65536,
+        "files" : 4
+      }
+    },
+    "RecentSearches" : {
+      "db" : {
+        "bytes" : 16384,
+        "files" : 1
+      }
+    },
+    "ServerListings" : {
+      "other" : {
+        "bytes" : 34675,
+        "files" : 5
+      }
+    }
+  },
+  "failures" : 0,
+  "schemas" : [
+    {
+      "directory" : "AccessibilityCheckerIndex",
+      "mode" : "read-only-immutable-persisted-schema",
+      "tables" : [
+        {
+          "columns" : [
+            "rowid",
+            "EntityType",
+            "EntityGOID",
+            "EntityName",
+            "RootRevGenCount"
+          ],
+          "table" : "Entities"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "SchemaVersion"
+          ],
+          "table" : "Metadata"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "ViolationID",
+            "ElementGOID"
+          ],
+          "table" : "ViolationElements"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "EntityID",
+            "Name",
+            "Type",
+            "Location",
+            "SelectionStartIndex",
+            "SelectionEndIndex"
+          ],
+          "table" : "Violations"
+        }
+      ]
+    },
+    {
+      "directory" : "FullTextSearchIndex",
+      "mode" : "read-only-immutable-persisted-schema",
+      "tables" : [
+        {
+          "columns" : [
+            "rowid",
+            "Type",
+            "GOID",
+            "GUID",
+            "GOSID",
+            "ParentGOID",
+            "GrandparentGOIDs",
+            "ContentRID",
+            "RootRevGenCount",
+            "LastModifiedTime",
+            "RecentTime",
+            "PinTime",
+            "Color",
+            "Title",
+            "EnterpriseIdentity"
+          ],
+          "table" : "Entities"
+        },
+        {
+          "columns" : [
+            "Terms"
+          ],
+          "table" : "EntityContents"
+        },
+        {
+          "columns" : [
+            "docid",
+            "c0Terms"
+          ],
+          "table" : "EntityContents_content"
+        },
+        {
+          "columns" : [
+            "docid",
+            "size"
+          ],
+          "table" : "EntityContents_docsize"
+        },
+        {
+          "columns" : [
+            "level",
+            "idx",
+            "start_block",
+            "leaves_end_block",
+            "end_block",
+            "root"
+          ],
+          "table" : "EntityContents_segdir"
+        },
+        {
+          "columns" : [
+            "blockid",
+            "block"
+          ],
+          "table" : "EntityContents_segments"
+        },
+        {
+          "columns" : [
+            "id",
+            "value"
+          ],
+          "table" : "EntityContents_stat"
+        },
+        {
+          "columns" : [
+            "Hashtag"
+          ],
+          "table" : "HashtagContents"
+        },
+        {
+          "columns" : [
+            "docid",
+            "c0Hashtag"
+          ],
+          "table" : "HashtagContents_content"
+        },
+        {
+          "columns" : [
+            "docid",
+            "size"
+          ],
+          "table" : "HashtagContents_docsize"
+        },
+        {
+          "columns" : [
+            "level",
+            "idx",
+            "start_block",
+            "leaves_end_block",
+            "end_block",
+            "root"
+          ],
+          "table" : "HashtagContents_segdir"
+        },
+        {
+          "columns" : [
+            "blockid",
+            "block"
+          ],
+          "table" : "HashtagContents_segments"
+        },
+        {
+          "columns" : [
+            "id",
+            "value"
+          ],
+          "table" : "HashtagContents_stat"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "PageElementRowId"
+          ],
+          "table" : "Hashtags"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "SchemaVersion"
+          ],
+          "table" : "Metadata"
+        },
+        {
+          "columns" : [
+            "Terms"
+          ],
+          "table" : "NoteFlagContents"
+        },
+        {
+          "columns" : [
+            "docid",
+            "c0Terms"
+          ],
+          "table" : "NoteFlagContents_content"
+        },
+        {
+          "columns" : [
+            "docid",
+            "size"
+          ],
+          "table" : "NoteFlagContents_docsize"
+        },
+        {
+          "columns" : [
+            "level",
+            "idx",
+            "start_block",
+            "leaves_end_block",
+            "end_block",
+            "root"
+          ],
+          "table" : "NoteFlagContents_segdir"
+        },
+        {
+          "columns" : [
+            "blockid",
+            "block"
+          ],
+          "table" : "NoteFlagContents_segments"
+        },
+        {
+          "columns" : [
+            "id",
+            "value"
+          ],
+          "table" : "NoteFlagContents_stat"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "Type",
+            "Shape",
+            "Status",
+            "Label",
+            "PageElementRowId"
+          ],
+          "table" : "NoteFlags"
+        },
+        {
+          "columns" : [
+            "Terms"
+          ],
+          "table" : "PageElementContents"
+        },
+        {
+          "columns" : [
+            "docid",
+            "c0Terms"
+          ],
+          "table" : "PageElementContents_content"
+        },
+        {
+          "columns" : [
+            "docid",
+            "size"
+          ],
+          "table" : "PageElementContents_docsize"
+        },
+        {
+          "columns" : [
+            "level",
+            "idx",
+            "start_block",
+            "leaves_end_block",
+            "end_block",
+            "root"
+          ],
+          "table" : "PageElementContents_segdir"
+        },
+        {
+          "columns" : [
+            "blockid",
+            "block"
+          ],
+          "table" : "PageElementContents_segments"
+        },
+        {
+          "columns" : [
+            "id",
+            "value"
+          ],
+          "table" : "PageElementContents_stat"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "GOID",
+            "Text",
+            "Jcid",
+            "EntityRowId"
+          ],
+          "table" : "PageElements"
+        },
+        {
+          "columns" : [
+            "name",
+            "seq"
+          ],
+          "table" : "sqlite_sequence"
+        }
+      ]
+    },
+    {
+      "directory" : "MasterIndex",
+      "mode" : "read-only-immutable-persisted-schema",
+      "tables" : [
+        {
+          "columns" : [
+            "rowid",
+            "IndexedRID",
+            "PendingIndexRID",
+            "IsResetting"
+          ],
+          "table" : "Master"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "SchemaVersion"
+          ],
+          "table" : "Metadata"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "pluginType",
+            "schemaVersion",
+            "pendingSchemaVersionChange"
+          ],
+          "table" : "Plugins"
+        }
+      ]
+    },
+    {
+      "directory" : "NoteTags",
+      "mode" : "read-only-immutable-persisted-schema",
+      "tables" : [
+        {
+          "columns" : [
+            "rowid",
+            "SchemaVersion",
+            "IsLocalDataDirty"
+          ],
+          "table" : "Metadata"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "ActionItemType",
+            "Label",
+            "NoteTagShape",
+            "HighlightColor",
+            "FontColor"
+          ],
+          "table" : "NoteTags"
+        },
+        {
+          "columns" : [
+            "name",
+            "seq"
+          ],
+          "table" : "sqlite_sequence"
+        }
+      ]
+    },
+    {
+      "directory" : "RecentSearches",
+      "mode" : "read-only-immutable-persisted-schema",
+      "tables" : [
+        {
+          "columns" : [
+            "rowid",
+            "SchemaVersion"
+          ],
+          "table" : "Metadata"
+        },
+        {
+          "columns" : [
+            "rowid",
+            "SearchTerm",
+            "SearchTime",
+            "RecentSearchContext"
+          ],
+          "table" : "RecentSearches"
+        }
+      ]
+    }
+  ]
+}

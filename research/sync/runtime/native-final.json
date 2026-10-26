@@ -1,0 +1,16 @@
+{
+  "capturedAt" : "2026-10-26T11:03:46Z",
+  "foregroundBundle" : "com.microsoft.edgemac",
+  "foregroundUnchangedDuringProbe" : true,
+  "nativeEditPerformed" : false,
+  "networkPayloadCaptured" : false,
+  "oneNoteActive" : false,
+  "oneNoteHidden" : false,
+  "openDescriptorsByDirectory" : {
+    "cache" : 22
+  },
+  "serverListingFilesChecked" : 5,
+  "syntheticTitleListingMatches" : 0,
+  "tcpConnections" : 1,
+  "tcpRemote443Connections" : 1
+}

@@ -1,0 +1,29 @@
+0023d464 stp x22,x21,[sp, #-0x30]!
+0023d468 stp x20,x19,[sp, #0x10]
+0023d46c stp x29,x30,[sp, #0x20]
+0023d470 add x29,sp,#0x20
+0023d474 mov x19,x3
+0023d478 mov x22,x2
+0023d47c mov x21,x1
+0023d480 mov x20,x0
+0023d484 add x1,x0,#0x20
+0023d488 mov x0,x21
+0023d48c mov x2,#0x0
+0023d490 bl 0x009b5250
+  ref 009b5250 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::CopyWzToWz
+0023d494 cbz x22,0x0023d4a4
+  ref 0023d4a4 LAB_0023d4a4
+0023d498 ldrh w8,[x22]
+0023d49c cmp w8,#0x0
+0023d4a0 csel x21,x21,x22,eq
+0023d4a4 add x1,x20,#0x38
+0023d4a8 mov x0,x21
+0023d4ac mov x2,#0x0
+0023d4b0 bl 0x009b5250
+  ref 009b5250 @rpath/mso30.framework/Versions/A/mso30::MsoCF::Strings::CopyWzToWz
+0023d4b4 ldr q0,[x19]
+0023d4b8 str q0,[x20, #0x50]
+0023d4bc ldp x29,x30,[sp, #0x20]
+0023d4c0 ldp x20,x19,[sp, #0x10]
+0023d4c4 ldp x22,x21,[sp], #0x30
+0023d4c8 ret

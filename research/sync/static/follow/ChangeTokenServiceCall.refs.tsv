@@ -1,0 +1,4 @@
+direction	address	name
+caller	0079ff78	GetChangesSinceToken
+callee	009b375c	_WsCall
+callee	009b66f0	___stack_chk_fail

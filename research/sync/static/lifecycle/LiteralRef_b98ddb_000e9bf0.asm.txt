@@ -1,0 +1,1541 @@
+000e9bf0 stp x28,x27,[sp, #-0x60]!
+000e9bf4 stp x26,x25,[sp, #0x10]
+000e9bf8 stp x24,x23,[sp, #0x20]
+000e9bfc stp x22,x21,[sp, #0x30]
+000e9c00 stp x20,x19,[sp, #0x40]
+000e9c04 stp x29,x30,[sp, #0x50]
+000e9c08 add x29,sp,#0x50
+000e9c0c sub sp,sp,#0x520
+000e9c10 mov x26,x6
+000e9c14 mov x27,x5
+000e9c18 mov x24,x4
+000e9c1c mov x25,x3
+000e9c20 mov x21,x2
+000e9c24 mov x23,x1
+000e9c28 mov x20,x0
+000e9c2c adrp x8,0xc8a000
+000e9c30 ldr x8,[x8, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+000e9c34 ldr x8,[x8]
+  ref 00e29500 ___stack_chk_guard
+000e9c38 stur x8,[x29, #-0x68]
+000e9c3c ldr x19,[x0]
+000e9c40 add x0,sp,#0x220
+000e9c44 mov w1,#0x0
+000e9c48 mov w2,#0x0
+000e9c4c mov w3,#0x34c7
+000e9c50 movk w3,#0x311, LSL #16
+000e9c54 bl 0x000695a8
+  ref 000695a8 FUN_000695a8
+000e9c58 add x8,sp,#0x130
+000e9c5c mov x0,x19
+000e9c60 mov w1,#0x34c7
+000e9c64 movk w1,#0x311, LSL #16
+000e9c68 bl 0x002a44b0
+  ref 002a44b0 FUN_002a44b0
+000e9c6c ldr x19,[sp, #0x130]
+000e9c70 adrp x28,0xb7c000
+000e9c74 add x28,x28,#0x5a8
+000e9c78 ldr q0,[x28]
+  ref 00b7c5a8 DAT_00b7c5a8
+000e9c7c str q0,[sp, #0x390]
+000e9c80 ldr x8,[x19]
+000e9c84 ldr x8,[x8, #0x18]
+000e9c88 add x1,sp,#0x390
+000e9c8c mov x0,x19
+000e9c90 blr x8
+000e9c94 ldr x8,[x19]
+000e9c98 ldr x8,[x8, #0x30]
+000e9c9c add x1,sp,#0x390
+000e9ca0 mov x0,x19
+000e9ca4 mov x2,#0x0
+000e9ca8 blr x8
+000e9cac str w0,[sp, #0xc]
+000e9cb0 ldr x0,[sp, #0x130]
+000e9cb4 cbz x0,0x000e9cc8
+  ref 000e9cc8 LAB_000e9cc8
+000e9cb8 str xzr,[sp, #0x130]
+000e9cbc ldr x8,[x0]
+000e9cc0 ldr x8,[x8, #0x10]
+000e9cc4 blr x8
+000e9cc8 add x0,sp,#0x220
+000e9ccc bl 0x0006a0b0
+  ref 0006a0b0 FUN_0006a0b0
+000e9cd0 strb wzr,[sp, #0x20f]
+000e9cd4 mov w22,#0x1
+000e9cd8 str w22,[sp, #0x208]
+000e9cdc str xzr,[sp, #0x200]
+000e9ce0 str wzr,[sp, #0x1fc]
+000e9ce4 mov w8,#0x3
+000e9ce8 str w8,[sp, #0x1f8]
+000e9cec stp xzr,xzr,[sp, #0x1e0]
+000e9cf0 str xzr,[sp, #0x1f0]
+000e9cf4 strh wzr,[sp, #0x1de]
+000e9cf8 stp xzr,xzr,[sp, #0x1c8]
+000e9cfc ldr q0,[x28]
+  ref 00b7c5a8 DAT_00b7c5a8
+000e9d00 stur q0,[x29, #-0x80]
+000e9d04 stp xzr,xzr,[sp, #0x1b8]
+000e9d08 stp xzr,xzr,[sp, #0x1a8]
+000e9d0c str xzr,[sp, #0x1a0]
+000e9d10 ldr x19,[x20]
+000e9d14 add x8,sp,#0x208
+000e9d18 str x23,[sp, #0x390]
+000e9d1c str x8,[sp, #0x398]
+000e9d20 add x8,sp,#0x200
+000e9d24 add x9,sp,#0x1fc
+000e9d28 str x8,[sp, #0x3a0]
+000e9d2c str x9,[sp, #0x3a8]
+000e9d30 add x8,sp,#0x1f8
+000e9d34 add x9,sp,#0x1e0
+000e9d38 str x8,[sp, #0x3b0]
+000e9d3c str x9,[sp, #0x3b8]
+000e9d40 add x8,sp,#0x1df
+000e9d44 add x9,sp,#0x1de
+000e9d48 str x8,[sp, #0x3c0]
+000e9d4c str x9,[sp, #0x3c8]
+000e9d50 add x8,sp,#0x1c8
+000e9d54 sub x9,x29,#0x80
+000e9d58 str x8,[sp, #0x3d0]
+000e9d5c str x9,[sp, #0x3d8]
+000e9d60 add x8,sp,#0x1c0
+000e9d64 add x9,sp,#0x1b4
+000e9d68 str x8,[sp, #0x3e0]
+000e9d6c str x9,[sp, #0x3e8]
+000e9d70 add x8,sp,#0x1b0
+000e9d74 add x9,sp,#0x1a8
+000e9d78 str x8,[sp, #0x3f0]
+000e9d7c str x9,[sp, #0x3f8]
+000e9d80 add x8,sp,#0x1a0
+000e9d84 add x9,sp,#0x1b8
+000e9d88 str x8,[sp, #0x400]
+000e9d8c str x9,[sp, #0x408]
+000e9d90 add x8,sp,#0x20f
+000e9d94 str x8,[sp, #0x410]
+000e9d98 mov w0,#0x20
+000e9d9c mov w1,#0x0
+000e9da0 bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+000e9da4 cbz x0,0x000eae38
+  ref 000eae38 LAB_000eae38
+000e9da8 str w22,[x0, #0x8]
+000e9dac adrp x8,0xd08000
+000e9db0 add x8,x8,#0xf30
+000e9db4 add x9,x23,#0x10
+000e9db8 str x8,[x0]
+  ref 00d08f30 PTR_FUN_00d08f30
+000e9dbc add x8,sp,#0x390
+000e9dc0 stp x9,x8,[x0, #0x10]
+000e9dc4 str x0,[sp, #0x220]
+000e9dc8 add x2,sp,#0x220
+000e9dcc mov w0,#0x589
+000e9dd0 movk w0,#0x278, LSL #16
+000e9dd4 mov x1,x19
+000e9dd8 mov w3,#0x1
+000e9ddc bl 0x00291d78
+  ref 00291d78 FUN_00291d78
+000e9de0 ldr x0,[sp, #0x220]
+000e9de4 cbz x0,0x000e9df8
+  ref 000e9df8 LAB_000e9df8
+000e9de8 str xzr,[sp, #0x220]
+000e9dec ldr x8,[x0]
+000e9df0 ldr x8,[x8, #0x10]
+  ref 00d08f40 PTR_FUN_00d08f40
+000e9df4 blr x8
+  ref 00292e20 FUN_00292e20
+000e9df8 ldrb w8,[sp, #0x20f]
+000e9dfc cmp w8,#0x1
+000e9e00 b.ne 0x000ead90
+  ref 000ead90 LAB_000ead90
+000e9e04 ldr w22,[sp, #0x208]
+000e9e08 ldr w0,[sp, #0x1fc]
+000e9e0c cmp w0,#0x1
+000e9e10 ldr w1,[sp, #0x1f8]
+000e9e14 ccmp w1,#0x2,#0x0,eq
+000e9e18 cset w19,eq
+000e9e1c bl 0x0017688c
+  ref 0017688c FUN_0017688c
+000e9e20 tbnz w0,#0x0,0x000e9e28
+  ref 000e9e28 LAB_000e9e28
+000e9e24 cbz w19,0x000ead90
+  ref 000ead90 LAB_000ead90
+000e9e28 ldp x0,x8,[sp, #0x1e0]
+000e9e2c cmp x0,x8
+000e9e30 b.eq 0x000e9e44
+  ref 000e9e44 LAB_000e9e44
+000e9e34 sub x1,x8,x0
+000e9e38 add x8,sp,#0x198
+000e9e3c bl 0x009b4c98
+  ref 009b4c98 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::IActivityParenter::Deserialize
+000e9e40 b 0x000e9e50
+  ref 000e9e50 LAB_000e9e50
+000e9e44 bl 0x009b4cc8
+  ref 009b4cc8 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::ThreadCurrent
+000e9e48 add x8,sp,#0x198
+000e9e4c bl 0x004262f4
+  ref 004262f4 FUN_004262f4
+000e9e50 ldr x0,[sp, #0x1c8]
+000e9e54 cbz x0,0x000e9e64
+  ref 000e9e64 LAB_000e9e64
+000e9e58 ldr x8,[x0]
+000e9e5c ldr x8,[x8]
+000e9e60 blr x8
+000e9e64 cmp w0,#0x1
+000e9e68 str w0,[sp, #0x8]
+000e9e6c ccmp w0,#0xe,#0x4,ne
+000e9e70 csinc w28,w19,wzr,ne
+000e9e74 add x0,sp,#0x190
+000e9e78 cbz w19,0x000e9e94
+  ref 000e9e94 LAB_000e9e94
+000e9e7c mov w1,#0x2
+000e9e80 mov w2,#0x2
+000e9e84 bl 0x003d905c
+  ref 003d905c FUN_003d905c
+000e9e88 adrp x19,0xbd1000
+000e9e8c add x19,x19,#0x126
+000e9e90 b 0x000e9eac
+  ref 000e9eac LAB_000e9eac
+000e9e94 mov w1,#0xbf
+000e9e98 mov w2,#0x2
+000e9e9c mov w3,#0x6e
+000e9ea0 bl 0x00061b8c
+  ref 00061b8c FUN_00061b8c
+000e9ea4 adrp x19,0xbd1000
+000e9ea8 add x19,x19,#0x14f
+000e9eac bl 0x009b5544
+  ref 009b5544 @rpath/mso20.framework/Versions/A/mso20::Office::FileIO::CSI::GetNamespace
+000e9eb0 str x0,[sp, #0x390]
+000e9eb4 str x19,[sp, #0x398]
+  ref 00bd1126 s_FileRequestFinishedEditorsTableP_00bd1126
+000e9eb8 ldr x19,[sp, #0x198]
+000e9ebc ldr x1,[x20]
+000e9ec0 mov w0,#0x0
+000e9ec4 mov x2,x28
+000e9ec8 bl 0x000eb83c
+  ref 000eb83c FUN_000eb83c
+000e9ecc mov x8,x0
+000e9ed0 add x0,sp,#0x180
+000e9ed4 add x1,sp,#0x390
+000e9ed8 and x3,x8,#0xffff
+000e9edc add x4,sp,#0x190
+000e9ee0 mov x2,x19
+000e9ee4 bl 0x009b4d34
+  ref 009b4d34 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::Activity
+000e9ee8 ldr x1,[x20]
+000e9eec add x0,sp,#0x180
+000e9ef0 mov w2,#0x1
+000e9ef4 bl 0x001765e0
+  ref 001765e0 FUN_001765e0
+000e9ef8 ldr w2,[sp, #0x1fc]
+000e9efc ldrb w3,[sp, #0x1df]
+000e9f00 ldrb w4,[sp, #0x1de]
+000e9f04 ldr w6,[sp, #0x1f8]
+000e9f08 ldrb w7,[x23, #0x78]
+000e9f0c add x0,sp,#0x180
+000e9f10 sub x1,x29,#0x80
+000e9f14 ldr w28,[sp, #0x8]
+000e9f18 mov x5,x28
+000e9f1c bl 0x002116b4
+  ref 002116b4 FUN_002116b4
+000e9f20 add x0,sp,#0x180
+000e9f24 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000e9f28 mov x19,x0
+000e9f2c mov w0,#0xfee
+  ref 00000fee s_mation.framework/Versions/A/OLEA_00000fe0+0xe
+000e9f30 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000e9f34 mov x2,x0
+000e9f38 adrp x1,0xbd1000
+000e9f3c add x1,x1,#0x163
+  ref 00bd1163 s_RunLabelRequestOnContentEndpoint_00bd1163
+000e9f40 mov x0,x19
+000e9f44 mov w3,#0x4
+000e9f48 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000e9f4c add x0,sp,#0x180
+000e9f50 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000e9f54 mov x19,x0
+000e9f58 bl 0x0003427c
+  ref 0003427c FUN_0003427c
+000e9f5c mov x2,x0
+000e9f60 adrp x1,0xb98000
+000e9f64 add x1,x1,#0xab7
+  ref 00b98ab7 s_CanHostNotificationsFeatureRunFo_00b98ab7
+000e9f68 mov x0,x19
+000e9f6c mov w3,#0x4
+000e9f70 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000e9f74 add x0,sp,#0x180
+000e9f78 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000e9f7c mov x19,x0
+000e9f80 mov w0,#0xfcd
+  ref 00000fcd dylib_command_00000fc8.cmdsize+1
+000e9f84 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000e9f88 mov x2,x0
+000e9f8c adrp x1,0xb98000
+000e9f90 add x1,x1,#0xae0
+  ref 00b98ae0 s_ListenToHostNotifications_00b98ae0
+000e9f94 mov x0,x19
+000e9f98 mov w3,#0x4
+000e9f9c bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000e9fa0 add x0,sp,#0x180
+000e9fa4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000e9fa8 mov x19,x0
+000e9fac mov w0,#0xfe6
+  ref 00000fe6 s_/OLEAutomation.framework/Version_00000fe0+6
+000e9fb0 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000e9fb4 mov x2,x0
+000e9fb8 adrp x1,0xb98000
+000e9fbc add x1,x1,#0xafa
+  ref 00b98afa s_ListenToHostNotificationsForODCo_00b98afa
+000e9fc0 mov x0,x19
+000e9fc4 mov w3,#0x4
+000e9fc8 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000e9fcc add x0,sp,#0x180
+000e9fd0 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000e9fd4 mov x19,x0
+000e9fd8 mov w0,#0xfea
+  ref 00000fea s_Automation.framework/Versions/A/_00000fe0+0xa
+000e9fdc bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000e9fe0 mov x2,x0
+000e9fe4 adrp x1,0xb98000
+000e9fe8 add x1,x1,#0xb21
+  ref 00b98b21 s_StopSecondaryMetadataRequestsFor_00b98b21
+000e9fec mov x0,x19
+000e9ff0 mov w3,#0x4
+000e9ff4 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000e9ff8 add x0,sp,#0x180
+000e9ffc bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea000 mov x19,x0
+000ea004 mov w0,#0xfce
+  ref 00000fce dylib_command_00000fc8.cmdsize+2
+000ea008 bl 0x009b5718
+  ref 009b5718 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetUnsignedInteger32
+000ea00c mov x2,x0
+000ea010 adrp x1,0xb98000
+000ea014 add x1,x1,#0xddb
+  ref 00b98ddb s_HostNotificationsHeartbeatInterv_00b98ddb
+000ea018 mov x0,x19
+000ea01c mov w3,#0x4
+000ea020 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea024 add x0,sp,#0x180
+000ea028 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea02c mov x19,x0
+000ea030 mov w0,#0xfcf
+  ref 00000fcf dylib_command_00000fc8.cmdsize+3
+000ea034 bl 0x009b5718
+  ref 009b5718 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetUnsignedInteger32
+000ea038 mov x2,x0
+000ea03c adrp x1,0xb98000
+000ea040 add x1,x1,#0xe07
+  ref 00b98e07 s_HostNotificationsVerifyPingInter_00b98e07
+000ea044 mov x0,x19
+000ea048 mov w3,#0x4
+000ea04c bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea050 add x0,sp,#0x180
+000ea054 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea058 mov x19,x0
+000ea05c mov w0,#0xfd2
+  ref 00000fd2 dylib_command_00000fc8.dylib.name.offset+2
+000ea060 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea064 mov x2,x0
+000ea068 adrp x1,0xb98000
+000ea06c add x1,x1,#0xe2e
+  ref 00b98e2e s_SubscribeToEditorsTableNotificat_00b98e2e
+000ea070 mov x0,x19
+000ea074 mov w3,#0x4
+000ea078 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea07c add x0,sp,#0x180
+000ea080 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea084 mov x19,x0
+000ea088 mov w0,#0xfd3
+  ref 00000fd3 dylib_command_00000fc8.dylib.name.offset+3
+000ea08c bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea090 mov x2,x0
+000ea094 adrp x1,0xb98000
+000ea098 add x1,x1,#0xb45
+  ref 00b98b45 s_SubscribeToQueryChangesNotificat_00b98b45
+000ea09c mov x0,x19
+000ea0a0 mov w3,#0x4
+000ea0a4 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea0a8 add x0,sp,#0x180
+000ea0ac bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea0b0 mov x19,x0
+000ea0b4 mov w0,#0xfd4
+  ref 00000fd4 dylib_command_00000fc8.dylib.timestamp
+000ea0b8 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea0bc mov x2,x0
+000ea0c0 adrp x1,0xb98000
+000ea0c4 add x1,x1,#0xe52
+  ref 00b98e52 s_SubscribeToLabelUpdates_00b98e52
+000ea0c8 mov x0,x19
+000ea0cc mov w3,#0x4
+000ea0d0 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea0d4 add x0,sp,#0x180
+000ea0d8 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea0dc mov x19,x0
+000ea0e0 mov w0,#0xfd5
+  ref 00000fd5 dylib_command_00000fc8.dylib.timestamp+1
+000ea0e4 bl 0x009b5718
+  ref 009b5718 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetUnsignedInteger32
+000ea0e8 mov x2,x0
+000ea0ec adrp x1,0xb98000
+000ea0f0 add x1,x1,#0xe6a
+  ref 00b98e6a s_PollingIntervalWhileSubscribedIn_00b98e6a
+000ea0f4 mov x0,x19
+000ea0f8 mov w3,#0x4
+000ea0fc bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea100 add x0,sp,#0x180
+000ea104 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea108 mov x19,x0
+000ea10c ldr x0,[x20]
+000ea110 mov w1,#0x1
+000ea114 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+000ea118 mov x2,x0
+000ea11c adrp x1,0xbce000
+000ea120 add x1,x1,#0xba
+  ref 00bce0ba s_IsCurrentlySubscribedToETHostNot_00bce0ba
+000ea124 mov x0,x19
+000ea128 mov w3,#0x4
+000ea12c bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea130 add x0,sp,#0x180
+000ea134 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea138 mov x19,x0
+000ea13c ldr x0,[x20]
+000ea140 mov w1,#0x4
+000ea144 bl 0x000b5934
+  ref 000b5934 FUN_000b5934
+000ea148 mov x2,x0
+000ea14c adrp x1,0xbce000
+000ea150 add x1,x1,#0xe5
+  ref 00bce0e5 s_IsCurrentlySubscribedToQCHostNot_00bce0e5
+000ea154 mov x0,x19
+000ea158 mov w3,#0x4
+000ea15c bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea160 add x0,sp,#0x180
+000ea164 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea168 mov x19,x0
+000ea16c mov w0,#0xfe7
+  ref 00000fe7 s_OLEAutomation.framework/Versions_00000fe0+7
+000ea170 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea174 mov x2,x0
+000ea178 adrp x1,0xbd1000
+000ea17c add x1,x1,#0x184
+  ref 00bd1184 s_EnableRetryJoinCoauthOnOpen_00bd1184
+000ea180 mov x0,x19
+000ea184 mov w3,#0x4
+000ea188 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea18c add x0,sp,#0x180
+000ea190 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea194 adrp x1,0xbd1000
+000ea198 add x1,x1,#0x1a0
+  ref 00bd11a0 s_HostBatchCorrelationId_00bd11a0
+000ea19c mov x2,x27
+000ea1a0 mov x3,x26
+000ea1a4 mov w4,#0x4
+000ea1a8 bl 0x000686ac
+  ref 000686ac FUN_000686ac
+000ea1ac ldr x0,[sp, #0x1c0]
+000ea1b0 ldr x8,[x0]
+000ea1b4 ldr x8,[x8, #0x38]
+000ea1b8 blr x8
+000ea1bc mov x19,x0
+000ea1c0 add x0,sp,#0x180
+000ea1c4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea1c8 mov x1,x0
+000ea1cc mov x0,x19
+000ea1d0 bl 0x00211b24
+  ref 00211b24 FUN_00211b24
+000ea1d4 add x0,sp,#0x180
+000ea1d8 bl 0x000ebfbc
+  ref 000ebfbc FUN_000ebfbc
+000ea1dc ldr w8,[sp, #0x1f8]
+000ea1e0 cbnz w8,0x000ea3b4
+  ref 000ea3b4 LAB_000ea3b4
+000ea1e4 ldr x0,[x20]
+000ea1e8 add x1,sp,#0x180
+000ea1ec bl 0x00295780
+  ref 00295780 FUN_00295780
+000ea1f0 add x0,sp,#0x180
+000ea1f4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea1f8 ldrb w2,[x23, #0x1c0]
+000ea1fc adrp x1,0xbd1000
+000ea200 add x1,x1,#0x1b7
+  ref 00bd11b7 s_IsClpLabeledUpload_00bd11b7
+000ea204 mov w3,#0x4
+000ea208 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea20c add x0,sp,#0x180
+000ea210 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea214 ldr x2,[sp, #0x1b8]
+000ea218 adrp x1,0xbd1000
+000ea21c add x1,x1,#0x1ca
+  ref 00bd11ca s_MRTCount_00bd11ca
+000ea220 mov w3,#0x4
+000ea224 bl 0x00389ccc
+  ref 00389ccc FUN_00389ccc
+000ea228 add x0,sp,#0x180
+000ea22c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea230 ldr w2,[sp, #0x1b4]
+000ea234 adrp x1,0xbd1000
+000ea238 add x1,x1,#0x1d3
+  ref 00bd11d3 s_DownloadFragmentSize_00bd11d3
+000ea23c mov w3,#0x4
+000ea240 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea244 add x0,sp,#0x180
+000ea248 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea24c ldr w2,[sp, #0x1b0]
+000ea250 adrp x1,0xbd1000
+000ea254 add x1,x1,#0x1e8
+  ref 00bd11e8 s_UploadFragmentSize_00bd11e8
+000ea258 mov w3,#0x4
+000ea25c bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea260 add x0,sp,#0x180
+000ea264 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea268 adrp x1,0xbd1000
+000ea26c add x1,x1,#0x1fb
+  ref 00bd11fb s_ReceivedUpdates_00bd11fb
+000ea270 mov x2,x25
+000ea274 mov w3,#0x4
+000ea278 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea27c add x0,sp,#0x180
+000ea280 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea284 adrp x1,0xbd1000
+000ea288 add x1,x1,#0x20b
+  ref 00bd120b s_ServerOnlyFirstTimeDownload_00bd120b
+000ea28c mov x2,x24
+000ea290 mov w3,#0x4
+000ea294 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea298 add x0,sp,#0x180
+000ea29c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea2a0 mov x19,x0
+000ea2a4 mov w0,#0xfb8
+  ref 00000fb8 s_ons/A/WinCrypto_00000f98+0x20
+000ea2a8 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea2ac mov x2,x0
+000ea2b0 adrp x1,0xbd1000
+000ea2b4 add x1,x1,#0x227
+  ref 00bd1227 s_IsRefreshUponRestorationEnabled_00bd1227
+000ea2b8 mov x0,x19
+000ea2bc mov w3,#0x4
+000ea2c0 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea2c4 add x0,sp,#0x180
+000ea2c8 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea2cc ldrb w2,[x23, #0x12c]
+000ea2d0 adrp x1,0xbd1000
+000ea2d4 add x1,x1,#0x247
+  ref 00bd1247 s_IsSaveAs_00bd1247
+000ea2d8 mov w3,#0x4
+000ea2dc bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea2e0 ldr x0,[x20]
+000ea2e4 add x1,sp,#0x180
+000ea2e8 bl 0x00296e28
+  ref 00296e28 FUN_00296e28
+000ea2ec cmp w22,#0x6
+000ea2f0 b.eq 0x000ea2fc
+  ref 000ea2fc LAB_000ea2fc
+000ea2f4 cmp w22,#0x3
+000ea2f8 b.ne 0x000ea314
+  ref 000ea314 LAB_000ea314
+000ea2fc ldr x19,[sp, #0x1c0]
+000ea300 add x0,sp,#0x180
+000ea304 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea308 mov x1,x0
+000ea30c mov x0,x19
+000ea310 bl 0x000ec018
+  ref 000ec018 FUN_000ec018
+000ea314 add x0,sp,#0x180
+000ea318 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea31c mov x23,x0
+000ea320 ldr x0,[sp, #0x1c0]
+000ea324 ldr x8,[x0]
+000ea328 ldr x8,[x8, #0x20]
+000ea32c blr x8
+000ea330 ldrsb w8,[x0, #0x17]
+000ea334 tbnz w8,#0x1f,0x000ea34c
+  ref 000ea34c LAB_000ea34c
+000ea338 ldr q0,[x0]
+000ea33c ldr x8,[x0, #0x10]
+000ea340 str x8,[sp, #0x170]
+000ea344 str q0,[sp, #0x160]
+000ea348 b 0x000ea358
+  ref 000ea358 LAB_000ea358
+000ea34c ldp x1,x2,[x0]
+000ea350 add x0,sp,#0x160
+000ea354 bl 0x0002a254
+  ref 0002a254 FUN_0002a254
+000ea358 adrp x1,0xbc6000
+000ea35c add x1,x1,#0x309
+  ref 00bc6309 s_ServerResponseStats_00bc6309
+000ea360 add x2,sp,#0x160
+000ea364 mov x0,x23
+000ea368 mov w3,#0x4
+000ea36c bl 0x000a9ca8
+  ref 000a9ca8 FUN_000a9ca8
+000ea370 ldrsb w8,[sp, #0x177]
+000ea374 tbz w8,#0x1f,0x000ea380
+  ref 000ea380 LAB_000ea380
+000ea378 ldr x0,[sp, #0x160]
+000ea37c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000ea380 add x0,sp,#0x180
+000ea384 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea388 mov x19,x0
+000ea38c ldr x0,[sp, #0x1c0]
+000ea390 ldr x8,[x0]
+000ea394 ldr x8,[x8, #0x30]
+000ea398 blr x8
+000ea39c mov x2,x0
+000ea3a0 adrp x1,0xbc6000
+000ea3a4 add x1,x1,#0x217
+  ref 00bc6217 s_MRTRecordCount_00bc6217
+000ea3a8 mov x0,x19
+000ea3ac mov w3,#0x4
+000ea3b0 bl 0x00389ccc
+  ref 00389ccc FUN_00389ccc
+000ea3b4 cmp w22,#0x6
+000ea3b8 b.eq 0x000ea3c4
+  ref 000ea3c4 LAB_000ea3c4
+000ea3bc cmp w22,#0x3
+000ea3c0 b.ne 0x000ea3fc
+  ref 000ea3fc LAB_000ea3fc
+000ea3c4 add x0,sp,#0x180
+000ea3c8 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea3cc ldr x2,[sp, #0x1a8]
+000ea3d0 adrp x1,0xb92000
+000ea3d4 add x1,x1,#0x622
+  ref 00b92622 s_RequestTime_00b92622
+000ea3d8 mov w3,#0x4
+000ea3dc bl 0x00389ccc
+  ref 00389ccc FUN_00389ccc
+000ea3e0 add x0,sp,#0x180
+000ea3e4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea3e8 ldr x2,[sp, #0x1a0]
+000ea3ec adrp x1,0xb92000
+000ea3f0 add x1,x1,#0x62e
+  ref 00b9262e s_FinishedTime_00b9262e
+000ea3f4 mov w3,#0x4
+000ea3f8 bl 0x00389ccc
+  ref 00389ccc FUN_00389ccc
+000ea3fc add x0,sp,#0x180
+000ea400 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea404 ldr w2,[sp, #0x208]
+000ea408 adrp x1,0xb7e000
+000ea40c add x1,x1,#0xa4
+  ref 00b7e0a4 s_SyncRequestStatus_00b7e0a4
+000ea410 mov w3,#0x4
+000ea414 bl 0x0028f2fc
+  ref 0028f2fc FUN_0028f2fc
+000ea418 ldr x23,[x20]
+000ea41c add x0,sp,#0x218
+000ea420 mov w1,#0x1
+000ea424 mov w2,#0x0
+000ea428 mov w3,#0x44db
+000ea42c movk w3,#0x2041, LSL #16
+000ea430 bl 0x0029dc34
+  ref 0029dc34 FUN_0029dc34
+000ea434 bl 0x000c5f58
+  ref 000c5f58 FUN_000c5f58
+000ea438 ldr x0,[x0, #0x10]
+000ea43c add x8,sp,#0x210
+000ea440 mov x1,x23
+000ea444 mov w2,#0x44db
+000ea448 movk w2,#0x2041, LSL #16
+000ea44c bl 0x0029de84
+  ref 0029de84 FUN_0029de84
+000ea450 mov w0,#0x419
+  ref 00000419 section_000003d8.flags+1
+000ea454 bl 0x009b56e8
+  ref 009b56e8 @rpath/mso20.framework/Versions/A/mso20::Storage::Configuration::GetBoolean
+000ea458 cbz w0,0x000ea490
+  ref 000ea490 LAB_000ea490
+000ea45c ldr x0,[sp, #0x210]
+000ea460 bl 0x00433948
+  ref 00433948 FUN_00433948
+000ea464 mov x25,x0
+000ea468 ldr x0,[sp, #0x210]
+000ea46c bl 0x001b0598
+  ref 001b0598 FUN_001b0598
+000ea470 mov x24,x0
+000ea474 ldr x0,[sp, #0x210]
+000ea478 bl 0x003df124
+  ref 003df124 FUN_003df124
+000ea47c mov x26,x0
+000ea480 ldr x0,[sp, #0x210]
+000ea484 bl 0x00431884
+  ref 00431884 FUN_00431884
+000ea488 mov x23,x0
+000ea48c b 0x000ea510
+  ref 000ea510 LAB_000ea510
+000ea490 ldr x0,[sp, #0x210]
+000ea494 add x8,sp,#0x390
+000ea498 mov w1,#0x482
+000ea49c movk w1,#0x2282, LSL #16
+000ea4a0 mov w2,#0x0
+000ea4a4 bl 0x00733f98
+  ref 00733f98 FUN_00733f98
+000ea4a8 ldr x0,[sp, #0x390]
+000ea4ac ldr x8,[x0]
+000ea4b0 ldr x8,[x8, #0x50]
+000ea4b4 blr x8
+000ea4b8 mov x25,x0
+000ea4bc ldr x0,[sp, #0x390]
+000ea4c0 ldr x8,[x0]
+000ea4c4 ldr x8,[x8, #0x88]
+000ea4c8 blr x8
+000ea4cc mov x24,x0
+000ea4d0 ldr x0,[sp, #0x390]
+000ea4d4 ldr x8,[x0]
+000ea4d8 ldr x8,[x8, #0x98]
+000ea4dc blr x8
+000ea4e0 mov x26,x0
+000ea4e4 ldr x0,[sp, #0x390]
+000ea4e8 ldr x8,[x0]
+000ea4ec ldr x8,[x8, #0xb8]
+000ea4f0 blr x8
+000ea4f4 mov x23,x0
+000ea4f8 ldr x0,[sp, #0x390]
+000ea4fc str xzr,[sp, #0x390]
+000ea500 cbz x0,0x000ea510
+  ref 000ea510 LAB_000ea510
+000ea504 ldr x8,[x0]
+000ea508 ldr x8,[x8, #0x8]
+000ea50c blr x8
+000ea510 add x0,sp,#0x180
+000ea514 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea518 adrp x1,0xbd1000
+000ea51c add x1,x1,#0x41f
+  ref 00bd141f s_IsCloudCollabEnabledFlagSet_00bd141f
+000ea520 mov x2,x25
+000ea524 mov w3,#0x4
+000ea528 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea52c ldr x1,[x20]
+000ea530 mov w0,#0xf607
+000ea534 movk w0,#0x30d, LSL #16
+000ea538 bl 0x000446d8
+  ref 000446d8 FUN_000446d8
+000ea53c mov x25,x0
+000ea540 ldr x0,[sp, #0x210]
+000ea544 cbz x0,0x000eae40
+  ref 000eae40 LAB_000eae40
+000ea548 ldr x8,[x0]
+000ea54c ldr x8,[x8, #0xd8]
+000ea550 blr x8
+000ea554 orn w8,w0,w24
+000ea558 orr w8,w8,w25
+000ea55c mov w9,#0x2
+000ea560 mov w10,#0x10
+000ea564 cmp w26,#0x0
+000ea568 csel w9,w10,w9,ne
+000ea56c tst w8,#0x1
+000ea570 mov w8,#0x4
+000ea574 csel w19,w9,w8,ne
+000ea578 add x0,sp,#0x180
+000ea57c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea580 adrp x1,0xbd1000
+000ea584 add x1,x1,#0x43b
+  ref 00bd143b s_RequestedProtocol_00bd143b
+000ea588 mov x2,x19
+000ea58c mov w3,#0x4
+000ea590 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea594 str wzr,[sp, #0x390]
+000ea598 ldr x1,[x20]
+000ea59c add x2,sp,#0x390
+000ea5a0 mov w0,#0xf397
+000ea5a4 movk w0,#0x236d, LSL #16
+000ea5a8 mov x3,#0x0
+000ea5ac mov x4,x23
+000ea5b0 mov w5,#0x0
+000ea5b4 bl 0x004319ec
+  ref 004319ec FUN_004319ec
+000ea5b8 add x0,sp,#0x180
+000ea5bc bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea5c0 ldr w2,[sp, #0x390]
+000ea5c4 adrp x1,0xb81000
+000ea5c8 add x1,x1,#0xc82
+  ref 00b81c82 s_CoauthStatus_00b81c82
+000ea5cc mov w3,#0x4
+000ea5d0 bl 0x0028f2fc
+  ref 0028f2fc FUN_0028f2fc
+000ea5d4 ldr x0,[sp, #0x210]
+000ea5d8 str xzr,[sp, #0x210]
+000ea5dc cbz x0,0x000ea5ec
+  ref 000ea5ec LAB_000ea5ec
+000ea5e0 ldr x8,[x0]
+000ea5e4 ldr x8,[x8, #0x10]
+000ea5e8 blr x8
+000ea5ec add x0,sp,#0x218
+000ea5f0 bl 0x0029e094
+  ref 0029e094 FUN_0029e094
+000ea5f4 mov w23,#0x1
+000ea5f8 ldr w19,[sp, #0xc]
+000ea5fc add x0,sp,#0x180
+000ea600 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea604 adrp x1,0xb98000
+000ea608 add x1,x1,#0x7d1
+  ref 00b987d1 s_IsFileOpen_00b987d1
+000ea60c mov x2,x19
+000ea610 mov w3,#0x4
+000ea614 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea618 strb wzr,[sp, #0x150]
+000ea61c strb wzr,[sp, #0x158]
+000ea620 strb wzr,[sp, #0x130]
+000ea624 strb wzr,[sp, #0x148]
+000ea628 ldr x0,[sp, #0x200]
+000ea62c add x1,sp,#0x150
+000ea630 add x2,sp,#0x130
+000ea634 bl 0x00299b60
+  ref 00299b60 FUN_00299b60
+000ea638 ldrb w8,[sp, #0x148]
+000ea63c and w8,w0,w8
+000ea640 cmp w8,#0x1
+000ea644 b.ne 0x000ea6cc
+  ref 000ea6cc LAB_000ea6cc
+000ea648 ldrb w8,[sp, #0x158]
+000ea64c tbz w8,#0x0,0x000ea678
+  ref 000ea678 LAB_000ea678
+000ea650 add x0,sp,#0x180
+000ea654 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea658 ldr x2,[sp, #0x150]
+000ea65c adrp x1,0xb81000
+000ea660 add x1,x1,#0x748
+  ref 00b81748 s_HttpStatusCode_00b81748
+000ea664 mov w3,#0x4
+000ea668 bl 0x00389ccc
+  ref 00389ccc FUN_00389ccc
+000ea66c ldrb w8,[sp, #0x148]
+000ea670 cmp w8,#0x1
+000ea674 b.ne 0x000ea6cc
+  ref 000ea6cc LAB_000ea6cc
+000ea678 add x0,sp,#0x180
+000ea67c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea680 ldr w2,[sp, #0x130]
+000ea684 adrp x1,0xb93000
+000ea688 add x1,x1,#0x828
+  ref 00b93828 s_HttpResultValue_00b93828
+000ea68c mov w3,#0x4
+000ea690 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea694 add x0,sp,#0x180
+000ea698 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea69c ldr x2,[sp, #0x138]
+000ea6a0 adrp x1,0xb93000
+000ea6a4 add x1,x1,#0x838
+  ref 00b93838 s_HttpResultExtValue_00b93838
+000ea6a8 mov w3,#0x4
+000ea6ac bl 0x0028f1fc
+  ref 0028f1fc FUN_0028f1fc
+000ea6b0 add x0,sp,#0x180
+000ea6b4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea6b8 ldr w2,[sp, #0x140]
+000ea6bc adrp x1,0xb93000
+000ea6c0 add x1,x1,#0x84b
+  ref 00b9384b s_HttpResultTag_00b9384b
+000ea6c4 mov w3,#0x4
+000ea6c8 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea6cc cbz x21,0x000eac68
+  ref 000eac68 LAB_000eac68
+000ea6d0 ldr x8,[x21]
+000ea6d4 ldr x9,[x8, #0xa0]
+000ea6d8 add x24,sp,#0x390
+000ea6dc add x8,sp,#0x390
+000ea6e0 mov x0,x21
+000ea6e4 blr x9
+000ea6e8 ldr x22,[sp, #0x438]
+000ea6ec cbz x22,0x000ea758
+  ref 000ea758 LAB_000ea758
+000ea6f0 add x0,sp,#0x180
+000ea6f4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea6f8 mov x19,x0
+000ea6fc ldr x8,[x22]
+000ea700 ldr x8,[x8, #0x20]
+000ea704 mov x0,x22
+000ea708 blr x8
+000ea70c ldp x2,x3,[x0]
+000ea710 adrp x1,0xbcf000
+000ea714 add x1,x1,#0xde9
+  ref 00bcfde9 s_Identity_00bcfde9
+000ea718 mov x0,x19
+000ea71c mov w4,#0x100
+000ea720 bl 0x000686ac
+  ref 000686ac FUN_000686ac
+000ea724 add x0,sp,#0x180
+000ea728 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea72c mov x19,x0
+000ea730 ldr x8,[x22]
+000ea734 ldr x8,[x8, #0x30]
+000ea738 mov x0,x22
+000ea73c blr x8
+000ea740 mov x2,x0
+000ea744 adrp x1,0xbbb000
+000ea748 add x1,x1,#0x813
+  ref 00bbb813 s_IdentityProvider_00bbb813
+000ea74c mov x0,x19
+000ea750 mov w3,#0x4
+000ea754 bl 0x000833ec
+  ref 000833ec FUN_000833ec
+000ea758 ldr x8,[x21]
+000ea75c ldr x8,[x8, #0x40]
+000ea760 mov x0,x21
+000ea764 blr x8
+000ea768 str x0,[sp, #0x380]
+000ea76c str x1,[sp, #0x388]
+000ea770 add x0,sp,#0x180
+000ea774 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea778 mov x22,x0
+000ea77c ldrsb w8,[sp, #0x457]
+000ea780 tbnz w8,#0x1f,0x000ea798
+  ref 000ea798 LAB_000ea798
+000ea784 ldur q0,[x24, #0xb0]
+000ea788 str q0,[sp, #0x110]
+000ea78c ldur x8,[x24, #0xc0]
+000ea790 str x8,[sp, #0x120]
+000ea794 b 0x000ea7a8
+  ref 000ea7a8 LAB_000ea7a8
+000ea798 ldr x1,[sp, #0x440]
+000ea79c ldr x2,[sp, #0x448]
+000ea7a0 add x0,sp,#0x110
+000ea7a4 bl 0x0002a254
+  ref 0002a254 FUN_0002a254
+000ea7a8 adrp x1,0xbd1000
+000ea7ac add x1,x1,#0x250
+  ref 00bd1250 s_CorrelationVector_00bd1250
+000ea7b0 add x2,sp,#0x110
+000ea7b4 mov x0,x22
+000ea7b8 mov w3,#0x4
+000ea7bc bl 0x000a9ca8
+  ref 000a9ca8 FUN_000a9ca8
+000ea7c0 ldrsb w8,[sp, #0x127]
+000ea7c4 tbz w8,#0x1f,0x000ea7d0
+  ref 000ea7d0 LAB_000ea7d0
+000ea7c8 ldr x0,[sp, #0x110]
+000ea7cc bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000ea7d0 add x0,sp,#0x180
+000ea7d4 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea7d8 ldr x2,[sp, #0x380]
+000ea7dc ldr x3,[sp, #0x388]
+000ea7e0 adrp x1,0xb80000
+000ea7e4 add x1,x1,#0x71b
+  ref 00b8071b s_ClientCorrelationID_00b8071b
+000ea7e8 mov w4,#0x100
+000ea7ec bl 0x000686ac
+  ref 000686ac FUN_000686ac
+000ea7f0 ldr x8,[x21]
+000ea7f4 ldr x9,[x8, #0xa0]
+000ea7f8 add x8,sp,#0x220
+000ea7fc mov x0,x21
+000ea800 blr x9
+000ea804 ldrb w19,[sp, #0x2e9]
+000ea808 add x0,sp,#0x220
+000ea80c bl 0x001d057c
+  ref 001d057c FUN_001d057c
+000ea810 cmp w19,#0x1
+000ea814 b.ne 0x000ea8b4
+  ref 000ea8b4 LAB_000ea8b4
+000ea818 add x0,sp,#0x180
+000ea81c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea820 ldrb w8,[sp, #0x459]
+000ea824 tbz w8,#0x0,0x000eae5c
+  ref 000eae5c LAB_000eae5c
+000ea828 ldrb w2,[sp, #0x458]
+000ea82c adrp x1,0xbd1000
+000ea830 add x1,x1,#0x262
+  ref 00bd1262 s_IsHybridStore_00bd1262
+000ea834 mov w3,#0x4
+000ea838 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000ea83c ldrb w8,[sp, #0x459]
+000ea840 tbz w8,#0x0,0x000eae64
+  ref 000eae64 LAB_000eae64
+000ea844 ldrb w21,[sp, #0x458]
+000ea848 ldr x0,[x20]
+000ea84c mov x1,x21
+000ea850 bl 0x000ec868
+  ref 000ec868 FUN_000ec868
+000ea854 cbz w23,0x000ea8b4
+  ref 000ea8b4 LAB_000ea8b4
+000ea858 ldr x20,[x20]
+000ea85c mov w0,#0x10
+000ea860 mov w1,#0x0
+000ea864 bl 0x009b49bc
+  ref 009b49bc @rpath/mso20.framework/Versions/A/mso20::Mso::Memory::AllocateEx
+000ea868 cbz x0,0x000eae48
+  ref 000eae48 LAB_000eae48
+000ea86c adrp x8,0xd08000
+000ea870 add x8,x8,#0xf88
+000ea874 str x8,[x0]
+  ref 00d08f88 PTR_FUN_00d08f88
+000ea878 mov w8,#0x1
+000ea87c stp w8,w21,[x0, #0x8]
+000ea880 str x0,[sp, #0x220]
+000ea884 add x1,sp,#0x220
+000ea888 mov x0,x20
+000ea88c mov w2,#0x8819
+000ea890 movk w2,#0x1e89, LSL #16
+000ea894 bl 0x000c187c
+  ref 000c187c FUN_000c187c
+000ea898 ldr x0,[sp, #0x220]
+000ea89c cbz x0,0x000ea8b0
+  ref 000ea8b0 LAB_000ea8b0
+000ea8a0 str xzr,[sp, #0x220]
+000ea8a4 ldr x8,[x0]
+000ea8a8 ldr x8,[x8, #0x10]
+  ref 00d08f98 PTR_FUN_00d08f98
+000ea8ac blr x8
+  ref 000c33f4 FUN_000c33f4
+000ea8b0 mov w23,#0x1
+000ea8b4 add x8,sp,#0x390
+000ea8b8 add x0,sp,#0x220
+000ea8bc add x1,x8,#0xf8
+000ea8c0 bl 0x0020767c
+  ref 0020767c FUN_0020767c
+000ea8c4 ldrb w8,[sp, #0x238]
+000ea8c8 cmp w8,#0x1
+000ea8cc b.ne 0x000ea980
+  ref 000ea980 LAB_000ea980
+000ea8d0 adrp x1,0xbfc000
+000ea8d4 add x1,x1,#0x916
+  ref 00bfc916 u_MIRA_00bfc916
+000ea8d8 add x0,sp,#0x220
+000ea8dc mov x2,#0x0
+000ea8e0 bl 0x0017c96c
+  ref 0017c96c FUN_0017c96c
+000ea8e4 mov x19,x0
+000ea8e8 add x0,sp,#0x180
+000ea8ec bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea8f0 adrp x8,0xbcf000
+000ea8f4 add x8,x8,#0xdf2
+000ea8f8 adrp x9,0xbcf000
+000ea8fc add x9,x9,#0xdf7
+000ea900 cmn x19,#0x1
+000ea904 csel x2,x9,x8,eq
+  ref 00bcfdf2 s_MIRA_00bcfdf2
+  ref 00bcfdf7 s_AFD_00bcfdf7
+000ea908 adrp x1,0xb8c000
+000ea90c add x1,x1,#0xb0d
+  ref 00b8cb0d s_FrontDoor_00b8cb0d
+000ea910 mov w3,#0x4
+000ea914 bl 0x001b7fe4
+  ref 001b7fe4 FUN_001b7fe4
+000ea918 add x0,sp,#0x180
+000ea91c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000ea920 ldrb w8,[sp, #0x238]
+000ea924 tbz w8,#0x0,0x000eae6c
+  ref 000eae6c LAB_000eae6c
+000ea928 mov x20,x0
+000ea92c ldrsb w8,[sp, #0x237]
+000ea930 tbnz w8,#0x1f,0x000ea948
+  ref 000ea948 LAB_000ea948
+000ea934 ldr q0,[sp, #0x220]
+000ea938 str q0,[sp, #0xf0]
+000ea93c ldr x8,[sp, #0x230]
+000ea940 str x8,[sp, #0x100]
+000ea944 b 0x000ea958
+  ref 000ea958 LAB_000ea958
+000ea948 ldr x1,[sp, #0x220]
+000ea94c ldr x2,[sp, #0x228]
+000ea950 add x0,sp,#0xf0
+000ea954 bl 0x0002a254
+  ref 0002a254 FUN_0002a254
+000ea958 adrp x1,0xb8c000
+000ea95c add x1,x1,#0xb17
+  ref 00b8cb17 s_FDRef_00b8cb17
+000ea960 add x2,sp,#0xf0
+000ea964 mov x0,x20
+000ea968 mov w3,#0x100
+000ea96c bl 0x000a9ca8
+  ref 000a9ca8 FUN_000a9ca8
+000ea970 ldrsb w8,[sp, #0x107]
+000ea974 tbz w8,#0x1f,0x000ea980
+  ref 000ea980 LAB_000ea980
+000ea978 ldr x0,[sp, #0xf0]
+000ea97c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000ea980 ldrb w8,[sp, #0x238]
+000ea984 cmp w8,#0x1
+000ea988 b.ne 0x000ea99c
+  ref 000ea99c LAB_000ea99c
+000ea98c ldrsb w8,[sp, #0x237]
+000ea990 tbz w8,#0x1f,0x000ea99c
+  ref 000ea99c LAB_000ea99c
+000ea994 ldr x0,[sp, #0x220]
+000ea998 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000ea99c add x8,sp,#0xd8
+000ea9a0 add x0,sp,#0x380
+000ea9a4 mov w1,#0x0
+000ea9a8 bl 0x009b5370
+  ref 009b5370 @rpath/mso20.framework/Versions/A/mso20::OGuid::ToString
+000ea9ac add x0,sp,#0x220
+000ea9b0 add x2,sp,#0xd8
+000ea9b4 mov w1,#0x6
+000ea9b8 bl 0x002b5034
+  ref 002b5034 FUN_002b5034
+000ea9bc ldrsb w8,[sp, #0xef]
+000ea9c0 tbz w8,#0x1f,0x000ea9cc
+  ref 000ea9cc LAB_000ea9cc
+000ea9c4 ldr x0,[sp, #0xd8]
+000ea9c8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000ea9cc mov w8,#0x1
+000ea9d0 str x8,[sp, #0xc0]
+000ea9d4 add x8,sp,#0xd8
+000ea9d8 add x1,sp,#0x220
+000ea9dc add x3,sp,#0xc0
+000ea9e0 mov w0,#0x0
+000ea9e4 mov w2,#0xf
+000ea9e8 bl 0x009b3be8
+  ref 009b3be8 @rpath/mso20.framework/Versions/A/mso20::Measurements::GetTimeSplitVerboseRepresentation
+000ea9ec add x8,sp,#0xc0
+000ea9f0 add x1,sp,#0x220
+000ea9f4 mov w0,#0x0
+000ea9f8 mov w2,#0xf
+000ea9fc mov w3,#0x0
+000eaa00 bl 0x009b3bf4
+  ref 009b3bf4 @rpath/mso20.framework/Versions/A/mso20::Measurements::GetNonExclusiveCompactRepresentation
+000eaa04 add x8,sp,#0xa8
+000eaa08 add x1,sp,#0x220
+000eaa0c mov w0,#0x0
+000eaa10 mov w2,#0xf
+000eaa14 bl 0x009b3bd0
+  ref 009b3bd0 @rpath/mso20.framework/Versions/A/mso20::Measurements::ExtractCompactRepresentation
+000eaa18 add x19,sp,#0xa8
+000eaa1c add x0,sp,#0x180
+000eaa20 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eaa24 mov x20,x0
+000eaa28 ldrsb w8,[sp, #0xbf]
+000eaa2c tbnz w8,#0x1f,0x000eaa44
+  ref 000eaa44 LAB_000eaa44
+000eaa30 ldr q0,[x19]
+000eaa34 str q0,[sp, #0x90]
+000eaa38 ldr x8,[sp, #0xb8]
+000eaa3c str x8,[sp, #0xa0]
+000eaa40 b 0x000eaa50
+  ref 000eaa50 LAB_000eaa50
+000eaa44 ldp x1,x2,[sp, #0xa8]
+000eaa48 add x0,sp,#0x90
+000eaa4c bl 0x00012604
+  ref 00012604 FUN_00012604
+000eaa50 adrp x1,0xbcf000
+000eaa54 add x1,x1,#0xe68
+  ref 00bcfe68 s_HttpMeasurements_00bcfe68
+000eaa58 add x2,sp,#0x90
+000eaa5c mov x0,x20
+000eaa60 mov w3,#0x4
+000eaa64 bl 0x000ac148
+  ref 000ac148 FUN_000ac148
+000eaa68 ldrsb w8,[sp, #0xa7]
+000eaa6c tbz w8,#0x1f,0x000eaa78
+  ref 000eaa78 LAB_000eaa78
+000eaa70 ldr x0,[sp, #0x90]
+000eaa74 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eaa78 add x0,sp,#0x180
+000eaa7c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eaa80 mov x20,x0
+000eaa84 ldrsb w8,[sp, #0xef]
+000eaa88 tbnz w8,#0x1f,0x000eaaa0
+  ref 000eaaa0 LAB_000eaaa0
+000eaa8c ldr q0,[x19, #0x30]
+000eaa90 str q0,[sp, #0x70]
+000eaa94 ldr x8,[sp, #0xe8]
+000eaa98 str x8,[sp, #0x80]
+000eaa9c b 0x000eaaac
+  ref 000eaaac LAB_000eaaac
+000eaaa0 ldp x1,x2,[sp, #0xd8]
+000eaaa4 add x0,sp,#0x70
+000eaaa8 bl 0x00012604
+  ref 00012604 FUN_00012604
+000eaaac adrp x1,0xbcf000
+000eaab0 add x1,x1,#0xe79
+  ref 00bcfe79 s_HttpMeasurementsTimeSplit_00bcfe79
+000eaab4 add x2,sp,#0x70
+000eaab8 mov x0,x20
+000eaabc mov w3,#0x4
+000eaac0 bl 0x000ac148
+  ref 000ac148 FUN_000ac148
+000eaac4 ldrsb w8,[sp, #0x87]
+000eaac8 tbz w8,#0x1f,0x000eaad4
+  ref 000eaad4 LAB_000eaad4
+000eaacc ldr x0,[sp, #0x70]
+000eaad0 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eaad4 add x0,sp,#0x180
+000eaad8 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eaadc mov x20,x0
+000eaae0 ldrsb w8,[sp, #0xd7]
+000eaae4 tbnz w8,#0x1f,0x000eaafc
+  ref 000eaafc LAB_000eaafc
+000eaae8 ldr q0,[sp, #0xc0]
+000eaaec str q0,[sp, #0x50]
+000eaaf0 ldr x8,[sp, #0xd0]
+000eaaf4 str x8,[sp, #0x60]
+000eaaf8 b 0x000eab08
+  ref 000eab08 LAB_000eab08
+000eaafc ldp x1,x2,[sp, #0xc0]
+000eab00 add x0,sp,#0x50
+000eab04 bl 0x00012604
+  ref 00012604 FUN_00012604
+000eab08 adrp x1,0xbcf000
+000eab0c add x1,x1,#0xe93
+  ref 00bcfe93 s_HttpMeasurementsInclusive_00bcfe93
+000eab10 add x2,sp,#0x50
+000eab14 mov x0,x20
+000eab18 mov w3,#0x4
+000eab1c bl 0x000ac148
+  ref 000ac148 FUN_000ac148
+000eab20 ldrsb w8,[sp, #0x67]
+000eab24 tbz w8,#0x1f,0x000eab30
+  ref 000eab30 LAB_000eab30
+000eab28 ldr x0,[sp, #0x50]
+000eab2c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eab30 add x19,sp,#0x390
+000eab34 ldrb w8,[sp, #0x4c8]
+000eab38 cmp w8,#0x1
+000eab3c b.ne 0x000eabac
+  ref 000eabac LAB_000eabac
+000eab40 add x0,sp,#0x180
+000eab44 bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eab48 ldrb w8,[sp, #0x4c8]
+000eab4c cmp w8,#0x1
+000eab50 b.ne 0x000eae54
+  ref 000eae54 LAB_000eae54
+000eab54 mov x20,x0
+000eab58 ldrsb w8,[sp, #0x4c7]
+000eab5c tbnz w8,#0x1f,0x000eab74
+  ref 000eab74 LAB_000eab74
+000eab60 ldr q0,[x19, #0x120]
+000eab64 str q0,[sp, #0x30]
+000eab68 ldr x8,[x19, #0x130]
+000eab6c str x8,[sp, #0x40]
+000eab70 b 0x000eab84
+  ref 000eab84 LAB_000eab84
+000eab74 ldr x1,[sp, #0x4b0]
+000eab78 ldr x2,[sp, #0x4b8]
+000eab7c add x0,sp,#0x30
+000eab80 bl 0x00012604
+  ref 00012604 FUN_00012604
+000eab84 adrp x1,0xbd1000
+000eab88 add x1,x1,#0x270
+  ref 00bd1270 s_ConfiguredHttpVersion_00bd1270
+000eab8c add x2,sp,#0x30
+000eab90 mov x0,x20
+000eab94 mov w3,#0x4
+000eab98 bl 0x000ac148
+  ref 000ac148 FUN_000ac148
+000eab9c ldrsb w8,[sp, #0x47]
+000eaba0 tbz w8,#0x1f,0x000eabac
+  ref 000eabac LAB_000eabac
+000eaba4 ldr x0,[sp, #0x30]
+000eaba8 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eabac ldrb w8,[sp, #0x4e8]
+000eabb0 cmp w8,#0x1
+000eabb4 b.ne 0x000eac20
+  ref 000eac20 LAB_000eac20
+000eabb8 add x0,sp,#0x180
+000eabbc bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eabc0 ldrb w8,[sp, #0x4e8]
+000eabc4 tbz w8,#0x0,0x000eae54
+  ref 000eae54 LAB_000eae54
+000eabc8 mov x20,x0
+000eabcc ldrsb w8,[sp, #0x4e7]
+000eabd0 tbnz w8,#0x1f,0x000eabe8
+  ref 000eabe8 LAB_000eabe8
+000eabd4 ldr q0,[x19, #0x140]
+000eabd8 str q0,[sp, #0x10]
+000eabdc ldr x8,[x19, #0x150]
+000eabe0 str x8,[sp, #0x20]
+000eabe4 b 0x000eabf8
+  ref 000eabf8 LAB_000eabf8
+000eabe8 ldr x1,[sp, #0x4d0]
+000eabec ldr x2,[sp, #0x4d8]
+000eabf0 add x0,sp,#0x10
+000eabf4 bl 0x00012604
+  ref 00012604 FUN_00012604
+000eabf8 adrp x1,0xbd1000
+000eabfc add x1,x1,#0x286
+  ref 00bd1286 s_ActualHttpVersion_00bd1286
+000eac00 add x2,sp,#0x10
+000eac04 mov x0,x20
+000eac08 mov w3,#0x4
+000eac0c bl 0x000ac148
+  ref 000ac148 FUN_000ac148
+000eac10 ldrsb w8,[sp, #0x27]
+000eac14 tbz w8,#0x1f,0x000eac20
+  ref 000eac20 LAB_000eac20
+000eac18 ldr x0,[sp, #0x10]
+000eac1c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eac20 ldrsb w8,[sp, #0xbf]
+000eac24 tbz w8,#0x1f,0x000eac30
+  ref 000eac30 LAB_000eac30
+000eac28 ldr x0,[sp, #0xa8]
+000eac2c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eac30 ldrsb w8,[sp, #0xd7]
+000eac34 tbz w8,#0x1f,0x000eac40
+  ref 000eac40 LAB_000eac40
+000eac38 ldr x0,[sp, #0xc0]
+000eac3c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eac40 ldrsb w8,[sp, #0xef]
+000eac44 tbz w8,#0x1f,0x000eac50
+  ref 000eac50 LAB_000eac50
+000eac48 ldr x0,[sp, #0xd8]
+000eac4c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eac50 ldrsb w8,[sp, #0x23f]
+000eac54 tbz w8,#0x1f,0x000eac60
+  ref 000eac60 LAB_000eac60
+000eac58 ldr x0,[sp, #0x228]
+000eac5c bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eac60 add x0,sp,#0x390
+000eac64 bl 0x001d057c
+  ref 001d057c FUN_001d057c
+000eac68 add x0,sp,#0x180
+000eac6c bl 0x009b4cbc
+  ref 009b4cbc @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::DataFields
+000eac70 adrp x1,0xbd1000
+000eac74 add x1,x1,#0x298
+  ref 00bd1298 s_FileExist_00bd1298
+000eac78 mov x2,x23
+000eac7c mov w3,#0x4
+000eac80 bl 0x0006a384
+  ref 0006a384 FUN_0006a384
+000eac84 ldr x20,[sp, #0x200]
+000eac88 cbz x20,0x000ead20
+  ref 000ead20 LAB_000ead20
+000eac8c str xzr,[sp, #0x390]
+000eac90 add x0,sp,#0x390
+000eac94 mov x1,x20
+000eac98 bl 0x003927ac
+  ref 003927ac FUN_003927ac
+000eac9c ldr x0,[sp, #0x390]
+000eaca0 cbz x0,0x000eacd4
+  ref 000eacd4 LAB_000eacd4
+000eaca4 ldr x8,[x0]
+000eaca8 ldr x8,[x8, #0x48]
+000eacac blr x8
+000eacb0 mov x21,x0
+000eacb4 ldr x0,[sp, #0x390]
+000eacb8 str xzr,[sp, #0x390]
+000eacbc cbz x0,0x000eaccc
+  ref 000eaccc LAB_000eaccc
+000eacc0 ldr x8,[x0]
+000eacc4 ldr x8,[x8, #0x10]
+000eacc8 blr x8
+000eaccc cmp w21,#0x5ec
+000eacd0 b.eq 0x000ead20
+  ref 000ead20 LAB_000ead20
+000eacd4 str xzr,[sp, #0x390]
+000eacd8 add x0,sp,#0x390
+000eacdc mov x1,x20
+000eace0 bl 0x003927ac
+  ref 003927ac FUN_003927ac
+000eace4 ldr x0,[sp, #0x390]
+000eace8 cbz x0,0x000ead60
+  ref 000ead60 LAB_000ead60
+000eacec ldr x8,[x0]
+000eacf0 ldr x8,[x8, #0x48]
+000eacf4 blr x8
+000eacf8 mov x20,x0
+000eacfc ldr x0,[sp, #0x390]
+000ead00 str xzr,[sp, #0x390]
+000ead04 cbz x0,0x000ead14
+  ref 000ead14 LAB_000ead14
+000ead08 ldr x8,[x0]
+000ead0c ldr x8,[x8, #0x10]
+000ead10 blr x8
+000ead14 mov w8,#0x1e25
+000ead18 cmp w20,w8
+000ead1c b.ne 0x000ead60
+  ref 000ead60 LAB_000ead60
+000ead20 cmp w28,#0xe
+000ead24 b.ne 0x000ead4c
+  ref 000ead4c LAB_000ead4c
+000ead28 add x0,sp,#0x390
+000ead2c mov w1,#0x1
+000ead30 mov w2,#0x2
+000ead34 mov w3,#0x6e
+000ead38 bl 0x00061b8c
+  ref 00061b8c FUN_00061b8c
+000ead3c add x0,sp,#0x180
+000ead40 bl 0x009b4ce0
+  ref 009b4ce0 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::Flags
+000ead44 ldr x8,[sp, #0x390]
+000ead48 str x8,[x0]
+000ead4c add x0,sp,#0x180
+000ead50 bl 0x009b4d10
+  ref 009b4d10 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::Success
+000ead54 mov w8,#0x101
+000ead58 strh w8,[x0]
+000ead5c b 0x000ead70
+  ref 000ead70 LAB_000ead70
+000ead60 ldr x1,[sp, #0x200]
+000ead64 add x0,sp,#0x180
+000ead68 mov w2,#0x0
+000ead6c bl 0x000e01d8
+  ref 000e01d8 FUN_000e01d8
+000ead70 add x0,sp,#0x180
+000ead74 bl 0x009b4d40
+  ref 009b4d40 @rpath/mso20.framework/Versions/A/mso20::Mso::Telemetry::Activity::~Activity
+000ead78 ldr x0,[sp, #0x198]
+000ead7c cbz x0,0x000ead90
+  ref 000ead90 LAB_000ead90
+000ead80 str xzr,[sp, #0x198]
+000ead84 ldr x8,[x0]
+000ead88 ldr x8,[x8, #0x10]
+000ead8c blr x8
+000ead90 ldr x0,[sp, #0x1c0]
+000ead94 str xzr,[sp, #0x1c0]
+000ead98 cbz x0,0x000eada8
+  ref 000eada8 LAB_000eada8
+000ead9c ldr x8,[x0]
+000eada0 ldr x8,[x8, #0x98]
+000eada4 blr x8
+000eada8 ldr x19,[sp, #0x1d0]
+000eadac cbz x19,0x000eadd8
+  ref 000eadd8 LAB_000eadd8
+000eadb0 add x8,x19,#0x8
+000eadb4 mov x9,#-0x1
+000eadb8 ldaddal x9,x8,[x8]
+000eadbc cbnz x8,0x000eadd8
+  ref 000eadd8 LAB_000eadd8
+000eadc0 ldr x8,[x19]
+000eadc4 ldr x8,[x8, #0x10]
+000eadc8 mov x0,x19
+000eadcc blr x8
+000eadd0 mov x0,x19
+000eadd4 bl 0x009b633c
+  ref 009b633c /usr/lib/libc++.1.dylib::std::__shared_weak_count::__release_weak
+000eadd8 ldr x0,[sp, #0x1e0]
+000eaddc cbz x0,0x000eade8
+  ref 000eade8 LAB_000eade8
+000eade0 str x0,[sp, #0x1e8]
+000eade4 bl 0x009b65e8
+  ref 009b65e8 <EXTERNAL>::operator.delete
+000eade8 ldr x0,[sp, #0x200]
+000eadec str xzr,[sp, #0x200]
+000eadf0 cbz x0,0x000eae00
+  ref 000eae00 LAB_000eae00
+000eadf4 ldr x8,[x0]
+000eadf8 ldr x8,[x8, #0x10]
+000eadfc blr x8
+000eae00 ldur x8,[x29, #-0x68]
+000eae04 adrp x9,0xc8a000
+000eae08 ldr x9,[x9, #0x488]
+  ref 00c8a488 PTR____stack_chk_guard_00c8a488
+000eae0c ldr x9,[x9]
+  ref 00e29500 ___stack_chk_guard
+000eae10 cmp x9,x8
+000eae14 b.ne 0x000eae50
+  ref 000eae50 LAB_000eae50
+000eae18 add sp,sp,#0x520
+000eae1c ldp x29,x30,[sp, #0x50]
+000eae20 ldp x20,x19,[sp, #0x40]
+000eae24 ldp x22,x21,[sp, #0x30]
+000eae28 ldp x24,x23,[sp, #0x20]
+000eae2c ldp x26,x25,[sp, #0x10]
+000eae30 ldp x28,x27,[sp], #0x60
+000eae34 ret
+000eae38 bl 0x009a4e3c
+  ref 009a4e3c FUN_009a4e3c
+000eae40 bl 0x009a49bc
+  ref 009a49bc FUN_009a49bc
+000eae48 bl 0x009a4e3c
+  ref 009a4e3c FUN_009a4e3c
+000eae50 bl 0x009b66f0
+  ref 009b66f0 ___stack_chk_fail
+000eae54 bl 0x00442230
+  ref 00442230 FUN_00442230
+000eae5c bl 0x00442230
+  ref 00442230 FUN_00442230
+000eae64 bl 0x00442230
+  ref 00442230 FUN_00442230
+000eae6c bl 0x00442230
+  ref 00442230 FUN_00442230
