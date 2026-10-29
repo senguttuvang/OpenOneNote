@@ -30,11 +30,11 @@ extension CloudVerification {
         let run = UUID().uuidString
         let recordDirectory = try vault.safeURL(".o2n/validation/\(run)")
         try FileManager.default.createDirectory(at: recordDirectory, withIntermediateDirectories: true)
-        var registry: [String: String] = ["run": run, "classification": "synthetic-only", "verification": "started"]
+        var registry: [String: String] = ["run": run, "root": session.root, "classification": "synthetic-only", "verification": "started"]
         func record() throws { try JSONEncoder().encode(registry).write(to: recordDirectory.appendingPathComponent("registry.json"), options: .atomic) }
         try record()
         func create(_ path: String, body: Data, type: String = "application/json") async throws -> GraphItem {
-            let data = try await graph.request(graph.url(root: "me", path: path), method: "POST", body: body, contentType: type)
+            let data = try await graph.request(graph.url(root: session.root, path: path), method: "POST", body: body, contentType: type)
             return try JSONDecoder().decode(GraphItem.self, from: data)
         }
         let label = "O2N Synthetic Validation " + String(run.prefix(8))
@@ -45,7 +45,7 @@ extension CloudVerification {
         let initial = "<html><head><title>\(label)</title></head><body><div><p>Local base</p><p>Remote base</p><p><b>Bold</b> and <i>italic</i> <a href='https://example.com'>link</a></p><table><tr><td>Name</td><td>State</td></tr><tr><td>O2N</td><td>Ready</td></tr></table></div></body></html>"
         let page = try await create("sections/\(GraphClient.component(section.id))/pages", body: Data(initial.utf8), type: "text/html")
         registry["pageID"] = page.id; try record()
-        let identity = PageIdentity(pageID: page.id, accountKey: account)
+        let identity = PageIdentity(root: session.root, pageID: page.id, accountKey: account)
         let connection = ReconnectRemote(client: graph)
         let sync = NoteSync(vault: vault, remote: connection, diagrams: MermaidRenderer())
         var ledger = try await sync.open(identity)
@@ -91,7 +91,7 @@ extension CloudVerification {
         guard conflict.state == "conflict", conflict.remoteRecovery != nil, try vault.markdown(conflict).contains("Local overlap") else { throw NotesError.invalid("Overlap recovery copies missing") }
         registry["overlapPreservation"] = "passed"; registry["verification"] = "Graph API acceptance passed; native OneNote visual proof not performed"
         try record()
-        print("Real native MSAL/Graph synthetic acceptance passed: same-page formatted/table/image/diagram readback, source recovery, external refresh, offline reconnect, disjoint merge and overlap preservation. Synthetic identities retained locally; no existing pages changed or test pages deleted.")
+        print("Native AppAuth/Graph synthetic API acceptance passed: same-page formatted/table/image/diagram readback, source recovery, external refresh, offline reconnect, disjoint merge and overlap preservation. These remote edits were API probes, separate from the official-editor test. Synthetic identities retained locally; no existing pages changed or test pages deleted.")
     }
     private static func remoteReplace(graph: GraphClient, identity: PageIdentity, text: String, replacement: String) async throws {
         let page = try await graph.fetch(identity)

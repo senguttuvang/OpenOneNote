@@ -38,7 +38,21 @@ private actor ScriptedTransport: GraphTransport {
     #expect(try await client.list(root: "me", path: "notebooks").map(\.id) == ["one", "two"])
     #expect(await transport.requests.count == 3)
     #expect(GraphClient.retryDelay("12") == 12)
+    #expect(GraphClient.retryDelay("inf") == nil)
     #expect(GraphClient.retryDelay("Wed, 21 Oct 2015 07:28:00 GMT", now: Date(timeIntervalSince1970: 0)) != nil)
+}
+
+@Test func graphReturnsLongProviderBackoffWithoutRetryingEarly() async throws {
+    let transport = ScriptedTransport([GraphResponse(data: Data(), status: 429, retryAfter: "900")])
+    let client = GraphClient(authorization: SyntheticAuthorization(), transport: transport)
+    do {
+        _ = try await client.list(root: "me", path: "notebooks")
+        Issue.record("Expected provider backoff")
+    } catch let retry as GraphRetryRequired {
+        #expect(retry.status == 429)
+        #expect(retry.delay == 900)
+    }
+    #expect(await transport.requests.count == 1)
 }
 @Test func graphRejectsHostilePaginationAndDoesNotRetryWrites() async throws {
     let transport = ScriptedTransport([GraphResponse(data: Data("{\"value\":[],\"@odata.nextLink\":\"https://evil.example/steal\"}".utf8), status: 200)])

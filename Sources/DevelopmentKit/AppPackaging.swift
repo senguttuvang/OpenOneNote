@@ -19,11 +19,10 @@ extension DevelopmentWorkflow {
         try FileManager.default.createDirectory(at: contents.appendingPathComponent("MacOS"), withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: resources, withIntermediateDirectories: true)
         try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNoteMac"), to: contents.appendingPathComponent("MacOS/OpenOneNoteMac"))
-        let frameworks = contents.appendingPathComponent("Frameworks")
-        try FileManager.default.createDirectory(at: frameworks, withIntermediateDirectories: true)
-        let msal = frameworks.appendingPathComponent("MSAL.framework")
-        try FileManager.default.copyItem(at: bin.appendingPathComponent("MSAL.framework"), to: msal)
         try FileManager.default.copyItem(at: bin.appendingPathComponent("OpenOneNote_MarkdownEditor.bundle"), to: resources.appendingPathComponent("OpenOneNote_MarkdownEditor.bundle"))
+        for name in ["AppAuth_AppAuth.bundle", "AppAuth_AppAuthCore.bundle"] {
+            try FileManager.default.copyItem(at: bin.appendingPathComponent(name), to: resources.appendingPathComponent(name))
+        }
         let executable = contents.appendingPathComponent("MacOS/OpenOneNoteMac")
         let loadCommands = try run("otool", ["-l", executable.path], capture: true).stdout
         for line in loadCommands.components(separatedBy: "\n") {
@@ -32,14 +31,13 @@ extension DevelopmentWorkflow {
                 try run("install_name_tool", ["-delete_rpath", path, executable.path])
             }
         }
-        try run("install_name_tool", ["-add_rpath", "@executable_path/../Frameworks", executable.path])
         let notices = resources.appendingPathComponent("Licenses")
         try FileManager.default.createDirectory(at: notices, withIntermediateDirectories: true)
         for (source, name) in [
             (".build/checkouts/swift-markdown/LICENSE.txt", "Swift-Markdown.txt"),
             (".build/checkouts/swift-cmark/COPYING", "cmark.txt"),
             (".build/checkouts/SwiftSoup/LICENSE", "SwiftSoup.txt"),
-            (".build/checkouts/microsoft-authentication-library-for-objc/LICENSE", "MSAL.txt"),
+            (".build/checkouts/AppAuth-iOS/LICENSE", "AppAuth.txt"),
             ("Sources/MarkdownEditor/Resources/Mermaid/LICENSE", "Mermaid.txt")
         ] { try FileManager.default.copyItem(at: root.appendingPathComponent(source), to: notices.appendingPathComponent(name)) }
         let plist: [String: Any] = [
@@ -58,29 +56,11 @@ extension DevelopmentWorkflow {
         let dirty = try run("git", ["status", "--porcelain", "--", "Package.swift", "Package.resolved", "Sources"], capture: true).stdout
         let metadata = ["sourceRevision": revision, "sourceState": dirty.isEmpty ? "committed" : "working-tree",
                         "architecture": try run("uname", ["-m"], capture: true).stdout,
-                        "signingMode": (ProcessInfo.processInfo.environment["O2N_SIGNING_IDENTITY"] ?? "-") == "-" ? "ad-hoc; offline workspace; native MSAL requires developer identity/profile" : "developer identity and profile requested",
+                        "signingMode": (ProcessInfo.processInfo.environment["O2N_SIGNING_IDENTITY"] ?? "-") == "-" ? "ad-hoc; app-private macOS Keychain; no shared entitlement" : "developer identity; app-private macOS Keychain",
                         "scope": "Markdown vault editor with delegated Graph same-page sync; see build verification for live evidence"]
         try JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted, .sortedKeys]).write(to: resources.appendingPathComponent("build.json"))
         let identity = ProcessInfo.processInfo.environment["O2N_SIGNING_IDENTITY"] ?? "-"
-        try run("codesign", ["--force", "--sign", identity, "--timestamp=none", msal.path])
         try run("codesign", ["--force", "--sign", identity, "--timestamp=none", app.path])
-        if identity != "-" {
-            var code: SecStaticCode?; var information: CFDictionary?
-            guard SecStaticCodeCreateWithPath(app as CFURL, [], &code) == errSecSuccess, let code,
-                  SecCodeCopySigningInformation(code, SecCSFlags(rawValue: kSecCSSigningInformation), &information) == errSecSuccess,
-                  let values = information as? [String: Any], let team = values[kSecCodeInfoTeamIdentifier as String] as? String,
-                  let profilePath = ProcessInfo.processInfo.environment["O2N_PROVISIONING_PROFILE"] else {
-                throw DevelopmentError.invalidArguments("Developer signing requires an approved matching identity and O2N_PROVISIONING_PROFILE; no ad-hoc entitlement fallback")
-            }
-            let decoded = try run("security", ["cms", "-D", "-i", profilePath], capture: true)
-            guard let data = decoded.stdout.data(using: .utf8), let profile = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else { throw DevelopmentError.invalidArguments("Provisioning profile could not be decoded") }
-            try Self.validateSigningProfile(profile, team: team)
-            try FileManager.default.copyItem(at: URL(fileURLWithPath: profilePath), to: contents.appendingPathComponent("embedded.provisionprofile"))
-            let entitlements = resources.appendingPathComponent("O2N-Keychain.entitlements.plist")
-            let applicationID = team + ".dev.senguttuvang.OpenOneNote"
-            try PropertyListSerialization.data(fromPropertyList: ["keychain-access-groups": [applicationID], "com.apple.application-identifier": applicationID, "com.apple.developer.team-identifier": team], format: .xml, options: 0).write(to: entitlements)
-            try run("codesign", ["--force", "--sign", identity, "--timestamp=none", "--entitlements", entitlements.path, app.path])
-        }
         try run("codesign", ["--verify", "--deep", "--strict", app.path])
         print("Built \(app.path)")
     }
@@ -112,8 +92,8 @@ extension DevelopmentWorkflow {
         var verification = try JSONSerialization.jsonObject(with: metadata) as? [String: String] ?? [:]
         let capability = try run(binary, ["--signing-status"], allowFailure: true)
         let adHoc = verification["signingMode"]?.hasPrefix("ad-hoc") == true
-        guard capability.exitCode == (adHoc ? 2 : 0) else { throw DevelopmentError.invalidArguments("Packaged native credential-cache capability did not match the signing mode") }
-        verification["nativeCredentialCache"] = adHoc ? "Unavailable in ad-hoc build; requires approved developer identity/profile; no credentials probed" : "Private Keychain entitlement verified; native user sign-in remains separate"
+        guard capability.exitCode == 0 else { throw DevelopmentError.invalidArguments("Packaged executable signature verification failed") }
+        verification["nativeCredentialCache"] = "AppAuth secure archive in app-private macOS Keychain; actual persistence and human sign-in remain separate live checks"
         verification["signature"] = adHoc ? "Ad-hoc deep/strict verification passed" : "Developer deep/strict verification passed"
         verification["nativeEditing"] = "Packaged binary: legacy rich text and Markdown source edit/undo/redo/save/reopen passed"
         verification["diagrams"] = "Bundled offline Mermaid PNG, preview and malformed-source rejection passed"

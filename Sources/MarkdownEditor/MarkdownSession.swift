@@ -25,11 +25,14 @@ import OneNoteGraph
     private var operation: Task<Void, Never>?
     private var refreshLoop: Task<Void, Never>?
     private var loadedFileHash: String?
+    private var refreshPolicy = RemoteRefreshPolicy()
+    private var refreshIdentity: UUID?
     public init(vault: MarkdownVault) throws {
         self.vault = vault; notes = try vault.ledgers().sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
         let config = try vault.safeURL(".o2n/config/microsoft-client.json")
         if FileManager.default.fileExists(atPath: config.path) {
             let value = try JSONDecoder().decode(MicrosoftConfiguration.self, from: Data(contentsOf: config))
+            root = value.graphRoot ?? "me"
             configure(clientID: value.clientID, tenant: value.tenant, redirect: value.redirectURI, persist: false)
         }
     }
@@ -69,6 +72,7 @@ import OneNoteGraph
         do {
             var ledger = try vault.load(id); try vault.recover(&ledger)
             try display(ledger)
+            refreshSelectedPage()
         } catch {
             if let ledger = try? vault.load(id), ledger.externalRecoveryMarkdown != nil { try? display(ledger) }
             message = error.localizedDescription
@@ -88,7 +92,7 @@ import OneNoteGraph
     }
     public func configure(clientID: String, tenant: String, redirect: String, persist: Bool = true) {
         do {
-            let value = MicrosoftConfiguration(clientID: clientID, tenant: tenant, redirectURI: redirect)
+            let value = MicrosoftConfiguration(clientID: clientID, tenant: tenant, redirectURI: redirect, graphRoot: root)
             microsoftConfiguration = value
             let auth = try MicrosoftSignIn(clientID: clientID, tenant: tenant, redirectURI: redirect)
             if persist {
@@ -101,7 +105,7 @@ import OneNoteGraph
             let failure = error as NSError
             let underlying = failure.userInfo[NSUnderlyingErrorKey] as? NSError
             let codes = " [\(failure.domain):\(failure.code)" + (underlying.map { ", \($0.domain):\($0.code)" } ?? "") + "]"
-            message = ((failure.userInfo["MSALErrorDescriptionKey"] as? String) ?? error.localizedDescription) + codes
+            message = error.localizedDescription + codes
         }
     }
     public func login(controller: NSViewController) {
@@ -128,7 +132,7 @@ import OneNoteGraph
     public func loadPages() {
         guard let graph, let sectionID else { return }
         let root = root
-        perform { self.pages = try await graph.list(root: root, path: "sections/\(GraphClient.component(sectionID))/pages"); self.pageID = nil; self.message = "Choose a page." }
+        perform { self.pages = try await graph.list(root: root, path: "sections/\(GraphClient.component(sectionID))/pages?$select=id,title&$top=100"); self.pageID = nil; self.message = "Choose a page." }
     }
     public func openPage() {
         guard let graph, let pageID, save() else { return }
@@ -138,7 +142,8 @@ import OneNoteGraph
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
         perform {
             let identity = PageIdentity(root: root, pageID: pageID, accountKey: try await graph.authorization.identityKey())
-            var ledger = try await sync.open(identity); ledger.hierarchy = hierarchy
+            var ledger = try await sync.open(identity)
+            ledger = try await sync.sync(ledger.id, allowPush: false); ledger.hierarchy = hierarchy
             try self.vault.saveLedger(ledger); try self.display(ledger)
             self.message = "Cloud page opened as local Markdown."
         }
@@ -177,20 +182,33 @@ import OneNoteGraph
         guard refreshLoop == nil else { return }
         refreshLoop = Task { [weak self] in
             while !Task.isCancelled {
-                do { try await Task.sleep(for: .seconds(120)) } catch { return }
-                guard let self, !self.busy, let graph = self.graph, let id = self.selectedID, self.selected?.identity.root != "local" else { continue }
-                let sync = NoteSync(vault: self.vault, remote: graph, diagrams: MermaidRenderer())
-                self.perform {
+                do { try await Task.sleep(for: .seconds(5)) } catch { return }
+                self?.refreshSelectedPage(forceContent: false)
+            }
+        }
+    }
+    public func refreshSelectedPage(forceContent: Bool = true) {
+        guard !busy, let graph, let id = selectedID, let selected, selected.identity.root != "local" else { return }
+        if refreshIdentity != id { refreshIdentity = id; refreshPolicy.selectedPageChanged() }
+        // Focus/resume requests also honor a provider's outstanding Retry-After.
+        guard refreshPolicy.canRefresh(now: Date(), force: forceContent) else { return }
+        let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
+        perform {
+            do {
+                let hint = try await graph.modificationHint(selected.identity)
+                let content = self.refreshPolicy.needsContent(hint: hint, now: Date(), force: forceContent)
+                var changed = false
+                if content {
                     let ledger = try await sync.sync(id, allowPush: false)
+                    changed = ledger.remoteHTMLHash != selected.remoteHTMLHash
                     self.replace(ledger)
-                    if ledger.state == "synced", self.selectedID == id {
-                        self.source = try self.vault.markdown(ledger)
-                        self.loadedFileHash = MarkdownVault.hash(self.source)
-                        self.preview = try MarkdownConversion().parse(self.source)
-                        self.preview.warnings += ledger.baseline.warnings
-                    }
+                    if ledger.state == "synced", self.selectedID == id { try self.display(ledger) }
                     self.message = ledger.state == "synced" ? "Remote refresh complete." : "Local edits pending explicit sync."
                 }
+                self.refreshPolicy.succeeded(hint: hint, contentChecked: content, changed: changed, now: Date())
+            } catch {
+                self.refreshPolicy.failed(now: Date(), retryAfter: (error as? GraphRetryRequired)?.delay)
+                throw error
             }
         }
     }

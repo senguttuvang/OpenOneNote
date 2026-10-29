@@ -1,13 +1,13 @@
 {
-  "originHash" : "a9f7166f4f991abf38a1b1f59e3b567d7bf28ab096c78074205b072e23dea776",
+  "originHash" : "283e4cde2b843a491cfef421fc1e0a9b67c2c716ad0bd51b49eab4a09856587e",
   "pins" : [
     {
-      "identity" : "microsoft-authentication-library-for-objc",
+      "identity" : "appauth-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AzureAD/microsoft-authentication-library-for-objc.git",
+      "location" : "https://github.com/openid/AppAuth-iOS.git",
       "state" : {
-        "revision" : "8dfe5bf41fe10e6d2afed62a72c4232adbef20f4",
-        "version" : "2.16.0"
+        "revision" : "a972daac82d449d58ab119e91c68153e29ddac33",
+        "version" : "3.0.0"
       }
     },
     {

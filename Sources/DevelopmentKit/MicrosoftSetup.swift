@@ -1,80 +1,79 @@
 import Foundation
 
 extension DevelopmentWorkflow {
-    /// Sanctioned delegated registration discovery and narrow native callback setup; no credential extraction or scope changes.
-    public func microsoftSetup(cli: String, vault: URL, backupRoot: URL? = nil) throws {
-        guard cli.hasPrefix("/"), FileManager.default.isExecutableFile(atPath: cli) else { throw DevelopmentError.invalidArguments("Supply the installed Microsoft 365 CLI executable") }
-        let status = try run(cli, ["status", "--output", "json"], capture: true)
-        guard let data = status.stdout.data(using: .utf8), let metadata = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let clientID = metadata["appId"] as? String, UUID(uuidString: clientID) != nil,
-              let tenant = metadata["appTenant"] as? String, ["browser", "deviceCode"].contains(metadata["authType"] as? String ?? "") else {
-            throw DevelopmentError.invalidArguments("The sanctioned CLI has no usable delegated session")
+    /// Provision only O2N's separate public client, using the existing same-tenant Azure CLI context.
+    /// No shared registration changes, secrets, application roles or tenant-wide consent.
+    public func microsoftRegister(azure: String, vault: URL, tenant: String, siteID: String) throws {
+        guard azure.hasPrefix("/"), FileManager.default.isExecutableFile(atPath: azure),
+              UUID(uuidString: tenant) != nil, !siteID.isEmpty, !siteID.contains("/"), !siteID.contains("?"), !siteID.contains("#") else {
+            throw DevelopmentError.invalidArguments("Supply Azure CLI, intended tenant UUID and exact verified SharePoint site ID")
         }
-        var endpoint = URLComponents(string: "https://graph.microsoft.com/v1.0/applications")!
-        endpoint.queryItems = [URLQueryItem(name: "$filter", value: "appId eq '\(clientID)'"),
-                               URLQueryItem(name: "$select", value: "id,appId,signInAudience,publicClient,isFallbackPublicClient")]
-        let response = try run(cli, ["request", "--url", endpoint.url!.absoluteString, "--output", "json"], capture: true)
-        guard let bytes = response.stdout.data(using: .utf8), let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              let values = object["value"] as? [[String: Any]], let registration = values.first,
-              let publicClient = registration["publicClient"] as? [String: Any], let redirects = publicClient["redirectUris"] as? [String],
-              let registrationID = registration["id"] as? String, UUID(uuidString: registrationID) != nil else {
-            throw DevelopmentError.invalidArguments("Existing registration has no verified supported native redirect; no registration or permission was changed")
+        func json(_ arguments: [String]) throws -> Any {
+            let output = try run(azure, arguments + ["--output", "json"], capture: true).stdout
+            guard let bytes = output.data(using: .utf8) else { throw DevelopmentError.invalidArguments("Invalid Azure metadata encoding") }
+            return try JSONSerialization.jsonObject(with: bytes)
         }
-        let expectedRedirect = "msauth.dev.senguttuvang.OpenOneNote://auth"
-        var redirect = redirects.first(where: { $0.caseInsensitiveCompare(expectedRedirect) == .orderedSame }) ?? expectedRedirect
-        if !redirects.contains(where: { $0.caseInsensitiveCompare(expectedRedirect) == .orderedSame }) {
-            let stamp = ISO8601DateFormatter().string(from: Date()).replacingOccurrences(of: ":", with: "-")
-            let backup = (backupRoot ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Backups/OpenOneNote")).appendingPathComponent("\(stamp)-native-redirect")
-            try FileManager.default.createDirectory(at: backup, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
-            let restore: [String: Any] = ["publicClient": publicClient]
-            try JSONSerialization.data(withJSONObject: restore, options: [.prettyPrinted, .sortedKeys]).write(to: backup.appendingPathComponent("restore-public-client.json"), options: .atomic)
-            let manifest: [String: Any] = [
-                "purpose": "Preserve existing sanctioned registration before adding the O2N native redirect",
-                "source": "Microsoft Graph application metadata", "registrationID": registrationID,
-                "restore": "With separate rollback authority, PATCH the same application using restore-public-client.json through the sanctioned CLI",
-                "verification": "Original publicClient object preserved; update changes only redirectUris; readback checks the exact redirect set"
-            ]
-            try JSONSerialization.data(withJSONObject: manifest, options: [.prettyPrinted, .sortedKeys]).write(to: backup.appendingPathComponent("manifest.json"), options: .atomic)
-            var changed = publicClient; changed["redirectUris"] = redirects + [redirect]
-            let request = backup.appendingPathComponent("add-native-redirect.json")
-            try JSONSerialization.data(withJSONObject: ["publicClient": changed], options: [.sortedKeys]).write(to: request, options: .atomic)
-            let applicationURL = "https://graph.microsoft.com/v1.0/applications/\(registrationID)"
-            func recheck() throws {
-                let current = try run(cli, ["request", "--url", applicationURL + "?$select=publicClient", "--output", "json"], capture: true)
-                guard let bytes = current.stdout.data(using: .utf8), let value = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-                      let client = value["publicClient"] as? [String: Any], NSDictionary(dictionary: client).isEqual(to: publicClient) else {
-                    throw DevelopmentError.invalidArguments("Registration changed while setup was prepared; no callback overwrite attempted")
-                }
-            }
-            try recheck()
-            var update = try run(cli, ["request", "--url", applicationURL, "--method", "patch", "--content-type", "application/json", "--body", "@" + request.path, "--output", "json"], capture: true, allowFailure: true)
-            let azure = "/opt/homebrew/bin/az"
-            if update.exitCode != 0, FileManager.default.isExecutableFile(atPath: azure) {
-                let context = try run(azure, ["account", "show", "--query", "tenantId", "--output", "tsv"], capture: true, allowFailure: true)
-                if context.exitCode == 0, context.stdout.trimmingCharacters(in: .whitespacesAndNewlines).caseInsensitiveCompare(tenant) == .orderedSame {
-                    try recheck()
-                    print("Microsoft 365 CLI update rejected; using the existing same-tenant Azure CLI management context for the same narrow callback payload. No login, scope or account change.")
-                    update = try run(azure, ["rest", "--method", "patch", "--url", applicationURL, "--headers", "Content-Type=application/json", "--body", "@" + request.path, "--output", "none"], capture: true, allowFailure: true)
-                }
-            }
-            if update.exitCode != 0 {
-                try Data(update.stdout.utf8).write(to: backup.appendingPathComponent("update-diagnostic.txt"), options: .atomic)
-                throw DevelopmentError.invalidArguments("Microsoft native redirect update failed; detailed response retained in centralized backup. No permission scope was added.")
-            }
-            let readback = try run(cli, ["request", "--url", applicationURL + "?$select=publicClient", "--output", "json"], capture: true)
-            try Data(readback.stdout.utf8).write(to: backup.appendingPathComponent("readback-public-client.json"), options: .atomic)
-            guard let bytes = readback.stdout.data(using: .utf8), let value = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-                  let client = value["publicClient"] as? [String: Any], let actual = client["redirectUris"] as? [String],
-                  actual.count == redirects.count + 1, redirects.allSatisfy(actual.contains),
-                  let native = actual.first(where: { $0.caseInsensitiveCompare(expectedRedirect) == .orderedSame }) else { throw DevelopmentError.invalidArguments("Native redirect readback did not match; backup retained and setup stopped") }
-            redirect = native
-            print("O2N native callback appended and read back; existing callbacks and permission scopes preserved. Rollback metadata retained in the centralized backup.")
+        let context = try json(["account", "show"]) as? [String: Any]
+        guard (context?["tenantId"] as? String)?.lowercased() == tenant.lowercased(), context?["state"] as? String == "Enabled" else {
+            throw DevelopmentError.invalidArguments("Azure CLI is not signed into the intended enabled tenant")
         }
+        let encoded = siteID.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+        let site = try json(["rest", "--method", "get", "--url", "https://graph.microsoft.com/v1.0/sites/\(encoded)?$select=id,webUrl"]) as? [String: Any]
+        guard site?["id"] as? String == siteID, let web = site?["webUrl"] as? String,
+              let host = URL(string: web)?.host, host.hasSuffix(".sharepoint.com") else {
+            throw DevelopmentError.invalidArguments("SharePoint target identity did not match; no registration changed")
+        }
+        let name = "OpenOneNote"
+        let callback = "msauth.dev.senguttuvang.OpenOneNote://auth"
+        let resource = "00000003-0000-0000-c000-000000000000"
+        let permission = "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a" // delegated Notes.ReadWrite
+        let matches = try json(["ad", "app", "list", "--display-name", name]) as? [[String: Any]] ?? []
+        let exact = matches.filter { $0["displayName"] as? String == name }
+        guard exact.count <= 1 else { throw DevelopmentError.invalidArguments("Multiple O2N registrations exist; resolve their identities before provisioning") }
         let directory = vault.appendingPathComponent(".o2n/config")
-        guard directory.resolvingSymlinksInPath().path.hasPrefix(vault.resolvingSymlinksInPath().path + "/") else { throw DevelopmentError.invalidArguments("Configuration path escapes vault") }
+        guard directory.resolvingSymlinksInPath().path.hasPrefix(vault.resolvingSymlinksInPath().path + "/") else { throw DevelopmentError.invalidArguments("Configuration escapes vault") }
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        let config: [String: String] = ["clientID": clientID, "tenant": tenant, "redirectURI": redirect]
+        let manifest = [["resourceAppId": resource, "resourceAccess": [["id": permission, "type": "Scope"]]]] as [[String: Any]]
+        let permissions = directory.appendingPathComponent("delegated-permissions.json")
+        try JSONSerialization.data(withJSONObject: manifest, options: [.prettyPrinted, .sortedKeys]).write(to: permissions, options: .atomic)
+        let app: [String: Any]
+        if let existing = exact.first { app = existing }
+        else {
+            guard let created = try json(["ad", "app", "create", "--display-name", name, "--sign-in-audience", "AzureADMyOrg",
+                                          "--is-fallback-public-client", "true", "--public-client-redirect-uris", callback,
+                                          "--required-resource-access", "@" + permissions.path]) as? [String: Any] else {
+                throw DevelopmentError.invalidArguments("Azure did not return the created registration; rediscover before retrying")
+            }
+            app = created
+            // Record immediately so an interrupted provisioning run can rediscover safely.
+            try JSONSerialization.data(withJSONObject: ["appId": app["appId"] ?? "", "id": app["id"] ?? ""], options: [.sortedKeys]).write(to: directory.appendingPathComponent("registration-identity.json"), options: .atomic)
+        }
+        guard let clientID = app["appId"] as? String, UUID(uuidString: clientID) != nil else { throw DevelopmentError.invalidArguments("O2N registration has no valid client ID") }
+        let readback = try json(["ad", "app", "show", "--id", clientID]) as? [String: Any] ?? [:]
+        let access = readback["requiredResourceAccess"] as? [[String: Any]] ?? []
+        let scopes = access.first?["resourceAccess"] as? [[String: Any]] ?? []
+        guard readback["displayName"] as? String == name, readback["signInAudience"] as? String == "AzureADMyOrg",
+              readback["isFallbackPublicClient"] as? Bool == true,
+              (readback["publicClient"] as? [String: Any])?["redirectUris"] as? [String] == [callback],
+              access.count == 1, access.first?["resourceAppId"] as? String == resource,
+              scopes.count == 1, scopes.first?["id"] as? String == permission, scopes.first?["type"] as? String == "Scope",
+              (readback["passwordCredentials"] as? [Any] ?? []).isEmpty,
+              (readback["keyCredentials"] as? [Any] ?? []).isEmpty else {
+            throw DevelopmentError.invalidArguments("Existing/readback O2N registration does not match the narrow public-client contract; no overwrite attempted")
+        }
+        let principals = try json(["ad", "sp", "list", "--filter", "appId eq '\(clientID)'"]) as? [[String: Any]] ?? []
+        guard principals.count <= 1 else { throw DevelopmentError.invalidArguments("Ambiguous O2N service principal") }
+        let principal = try principals.first ?? (json(["ad", "sp", "create", "--id", clientID]) as? [String: Any] ?? [:])
+        guard principal["appId"] as? String == clientID, principal["servicePrincipalType"] as? String == "Application" else {
+            throw DevelopmentError.invalidArguments("O2N service principal metadata did not match")
+        }
+        let config = ["clientID": clientID, "tenant": tenant.lowercased(), "redirectURI": callback, "graphRoot": "sites/" + siteID]
         try JSONSerialization.data(withJSONObject: config, options: [.prettyPrinted, .sortedKeys]).write(to: directory.appendingPathComponent("microsoft-client.json"), options: .atomic)
-        print("Existing delegated registration and native redirect verified. Local O2N configuration saved; native Sign in remains separate.")
+        let evidence: [String: Any] = ["clientID": clientID, "tenant": tenant, "siteID": siteID, "siteURL": web,
+                                      "registrationID": readback["id"] ?? "", "servicePrincipalID": principal["id"] ?? "",
+                                      "delegatedScopes": ["Notes.ReadWrite"], "callback": callback,
+                                      "consent": "User consent pending; no admin consent granted", "verifiedAt": ISO8601DateFormatter().string(from: Date())]
+        try JSONSerialization.data(withJSONObject: evidence, options: [.prettyPrinted, .sortedKeys]).write(to: directory.appendingPathComponent("registration-verification.json"), options: .atomic)
+        print("Dedicated O2N single-tenant public client and service principal verified. Notes.ReadWrite only; no secret or tenant-wide consent. Public metadata saved locally. User Sign in is next.")
     }
 }

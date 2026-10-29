@@ -23,7 +23,7 @@ Read [the findings](research/findings.md), [architecture and reconstruction meth
 
 ## Build And Open The Mac App
 
-Requires macOS 14 or newer and Swift 6. The original Microsoft OneNote research archives are unnecessary for building and testing. SwiftPM downloads the supported MSAL authentication dependency.
+Requires macOS 14 or newer and Swift 6. The original Microsoft OneNote research archives are unnecessary for building and testing. SwiftPM pins the AppAuth authentication dependency.
 
 ```sh
 git clone git@github.com:senguttuvang/OpenOneNote.git
@@ -31,12 +31,15 @@ cd OpenOneNote
 swift run openonenote-dev check
 swift run openonenote-dev app
 swift run openonenote-dev verify-app
-open dist/OpenOneNote.app
+swift run openonenote-dev install-app
+open ~/Applications/OpenOneNote.app
 ```
 
 Normal launch opens the Markdown workspace at `~/Library/Application Support/OpenOneNote/Markdown`. Use `OpenOneNoteMac --vault /path/to/vault` for another vault. Source and reading preview support common formatting, tables, images/attachments and locally rendered Mermaid. Files save offline; explicit sync performs baseline/local/remote reconciliation, protects unsupported objects, updates supported children of the same page and verifies readback. Background refresh is read-only. Conflicts retain all three copies and expose resolution history. Relink a moved note from its context menu; missing pages/files never imply deletion.
 
-Microsoft connection uses O2N's own delegated MSAL identity and private Keychain cache. Configure an approved client or run `swift run openonenote-dev microsoft-setup /absolute/path/to/m365 /path/to/vault` with the sanctioned Microsoft 365 CLI. Setup verifies existing registration metadata and can append only O2N's native callback through existing same-tenant authority, preserving callbacks/scopes and centralized rollback evidence. It never grants new permissions or extracts credentials. Click **Microsoft connection → Sign in**, then load a notebook, section and existing page. SharePoint roots use `sites/<id>`; personal/work/school support depends on the approved registration's audience and consent.
+Save and quit O2N before `install-app`. It refuses replacement while any O2N instance is running, preserves the prior app under `~/Backups/OpenOneNote/` with a restore manifest, stages the replacement and verifies its signature/checksum. Notes, preferences and Keychain items stay in their existing locations. Use one running build for native custom-scheme authentication; an older installed copy sharing the same bundle identity can receive a development build’s return URL. The current split-pane shell still requires the separately requested original-OneNote-style UI integration; these auth/sync changes do not establish visual or interaction parity.
+
+Microsoft connection uses O2N's own delegated AppAuth identity and app-private macOS Keychain item. With explicit provisioning authority, run `swift run openonenote-dev microsoft-register /absolute/path/to/az /path/to/vault <tenant-id> <site-id>`. It verifies Azure's tenant and the exact SharePoint target, creates or reuses the separate **OpenOneNote** single-tenant public-client registration, and verifies its callback, service principal and delegated `Notes.ReadWrite` permission. It does not change the shared CloudOps registration, create a secret or grant tenant-wide consent. Click **Microsoft connection → Sign in**, then load the selected site’s notebook, section and page. SharePoint roots use `sites/<id>`; this registration intentionally supports the selected organization only.
 
 Mermaid sync uploads a PNG fallback and a hash-bound source attachment. New vaults recover source only when the downloaded source and image match. A remotely changed diagram is retained as an image with a stale-source warning; pixels are never treated as editable source.
 
@@ -69,17 +72,21 @@ shasum -a 256 -c research/originals/SHA256SUMS
 
 The new Swift code does not load original Microsoft assets. See [research reproduction](research/README.md) and [ownership](THIRD_PARTY.md). No user notebooks, account records, credentials, or OneNote caches are included.
 
-## Native credential signing
+## Native Sign-In And Cloud Verification
 
-MSAL's private macOS Keychain requires an approved Apple developer signing identity and matching provisioning profile. An ad-hoc build remains an offline Markdown editor; it reports the native-auth requirement before querying credentials. Package a native-auth-capable build with an existing Keychain identity/profile:
+AppAuth uses authorization code flow with PKCE, state, nonce and offline access through the system browser. Its secure state archive is stored in a nonsynchronizing, app-private macOS login Keychain item, scoped to the O2N registration and tenant. There is no shared Keychain group or plaintext fallback. Apple developer membership is not an OAuth prerequisite. An existing signing identity can be supplied with `O2N_SIGNING_IDENTITY`; the local default is an integrity-checked ad-hoc build. macOS may require explicit access approval when a new build reads its previous Keychain item; background reads never request interaction.
 
 ```sh
-O2N_SIGNING_IDENTITY='Approved identity in Keychain' O2N_PROVISIONING_PROFILE=/path/to/O2N.provisionprofile swift run openonenote-dev app
+swift run openonenote-dev app
 swift run openonenote-dev verify-app
+dist/OpenOneNote.app/Contents/MacOS/OpenOneNoteMac --cloud-sign-in /path/to/configured/vault
+dist/OpenOneNote.app/Contents/MacOS/OpenOneNoteMac --cloud-status /path/to/configured/vault
 ```
 
-The profile must authorize this app/team/private Keychain group and be unexpired. No first-party credential extraction, plaintext token fallback, broadened permission scope or invalid ad-hoc entitlement is used. `OpenOneNoteMac --signing-status` checks capability without reading credentials. `--cloud-status /path/to/configured/vault` checks native MSAL plus delegated Notes access without writing cloud notes. `--cloud-self-test /path/to/configured/test-vault` creates and retains a clearly named synthetic notebook/section/page, records its IDs locally, and exercises same-page readback, diagram source recovery, refresh, offline reconnect and conflicts. It never targets pre-existing pages or deletes fixtures. Graph readback does not establish native OneNote visual fidelity.
+`--signing-status` checks executable integrity without reading credentials. `--cloud-sign-in` opens a dedicated human consent window; `--cloud-status` verifies saved native authentication and delegated Notes access without cloud writes. `--cloud-roundtrip /path/to/configured/test-vault` creates a new synthetic SharePoint notebook/section/page, edits through the actual native source editor and session save/sync path, verifies same-page formatted/table Graph readback, and waits for a separate marker entered in the **official OneNote editor**. It checks that polling pulls that marker into native Markdown/preview while retaining the original marker/table and single page identity. Registry, URLs, expected markers and native renders remain local under `.o2n/acceptance`; existing notes are untouched and fixtures are retained. Official UI rendering/provenance must be checked separately; Graph PATCH never substitutes for an official-client edit.
+
+Selected pages refresh read-only on open, focus and wake. Background metadata polling adapts from 15 to 120 seconds, with a full content check at least every 120 seconds even if timestamps do not change. Errors back off to 300 seconds and honor longer `Retry-After` instructions. Explicit sync rechecks content before a write. OneNote page webhooks/delta are not documented; SharePoint library notifications require separate validation and cannot replace content reconciliation. See [the refresh contract](reconstruction/markdown-first-architecture.md#recovery-and-refresh).
 
 Local notes can be created with Command-N and existing vault Markdown opened with Command-O. Existing file bytes are preserved when first adopted. External file changes and interrupted saves retain both copies for explicit reload/overwrite resolution; note identity survives explicit relinking after a move.
 
-A separate `swift run openonenote-dev graph-probe /absolute/path/to/m365 /new/synthetic-output` command uses the sanctioned CLI's delegated session to test newly created synthetic fixtures without exporting tokens. Its successful text/table, refresh/reconnect and conflict readback is explicitly separate from native MSAL and image/diagram acceptance. Existing notes remain read-only for automated experiments; generated fixture IDs stay in the private output directory.
+A separate `swift run openonenote-dev graph-probe /absolute/path/to/m365 /new/synthetic-output` command uses the sanctioned CLI's delegated session to test newly created synthetic fixtures without exporting tokens. Its text/table, refresh/reconnect and conflict readback is explicitly separate from native authentication and official-client acceptance. Existing notes remain read-only for automated experiments; generated fixture IDs stay in the private output directory.

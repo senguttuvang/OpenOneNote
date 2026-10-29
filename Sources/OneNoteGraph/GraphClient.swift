@@ -14,6 +14,11 @@ public struct GraphResponse: Sendable {
 public protocol GraphTransport: Sendable {
     func send(_ request: URLRequest) async throws -> GraphResponse
 }
+public struct GraphRetryRequired: Error, LocalizedError, Sendable {
+    public let status: Int
+    public let delay: TimeInterval
+    public var errorDescription: String? { "Microsoft Graph requested a retry after \(String(format: "%.0f", delay.rounded(.up))) seconds. Local notes are retained." }
+}
 public final class URLSessionGraphTransport: NSObject, GraphTransport, URLSessionTaskDelegate, Sendable {
     public override init() {}
     public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse,
@@ -59,7 +64,7 @@ public struct GraphClient: OneNoteRemote, Sendable {
     }
     public static func retryDelay(_ value: String?, now: Date = Date()) -> TimeInterval? {
         guard let value else { return nil }
-        if let seconds = Double(value), seconds >= 0 { return seconds }
+        if let seconds = Double(value), seconds.isFinite, seconds >= 0 { return seconds }
         let format = DateFormatter(); format.locale = Locale(identifier: "en_US_POSIX"); format.timeZone = TimeZone(secondsFromGMT: 0)
         format.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
         return format.date(from: value).map { max(0, $0.timeIntervalSince(now)) }
@@ -75,9 +80,9 @@ public struct GraphClient: OneNoteRemote, Sendable {
             if (200..<300).contains(response.status) { return response.data }
             if response.status == 401 { throw NotesError.authenticationRequired }
             // Writes are never blindly retried after an ambiguous response or timeout.
-            if method == "GET", [429, 503].contains(response.status), attempt < 3 {
+            if method == "GET", [429, 503].contains(response.status) {
                 let delay = Self.retryDelay(response.retryAfter) ?? pow(2, Double(attempt))
-                guard delay <= 120 else { throw NotesError.http(response.status) }
+                guard delay <= 120, attempt < 3 else { throw GraphRetryRequired(status: response.status, delay: delay) }
                 try await Task.sleep(for: .seconds(delay)); continue
             }
             throw NotesError.http(response.status)
@@ -125,6 +130,14 @@ public struct GraphClient: OneNoteRemote, Sendable {
         let data = try await request(url(root: identity.root, path: "pages/\(page)/content?includeIDs=true"))
         guard metadata.id == identity.pageID, let html = String(data: data, encoding: .utf8) else { throw NotesError.invalid("Page identity or encoding mismatch") }
         return RemotePage(id: metadata.id, title: metadata.title, html: html)
+    }
+    public func modificationHint(_ identity: PageIdentity) async throws -> String? {
+        try await verifyIdentity(identity)
+        struct Metadata: Decodable { var id: String; var lastModifiedDateTime: String? }
+        let path = "pages/\(try Self.component(identity.pageID))?$select=id,lastModifiedDateTime"
+        let value = try JSONDecoder().decode(Metadata.self, from: await request(url(root: identity.root, path: path)))
+        guard value.id == identity.pageID else { throw NotesError.invalid("Page metadata identity mismatch") }
+        return value.lastModifiedDateTime
     }
     public func resource(_ url: URL) async throws -> Data {
         try Self.validate(url)

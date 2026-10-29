@@ -16,11 +16,11 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-markdown.git", exact: "0.9.0"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", exact: "2.14.3"),
-        .package(url: "https://github.com/AzureAD/microsoft-authentication-library-for-objc.git", exact: "2.16.0")
+        .package(url: "https://github.com/openid/AppAuth-iOS.git", exact: "3.0.0")
     ],
     targets: [
         .target(name: "MarkdownNotes", dependencies: [.product(name: "Markdown", package: "swift-markdown"), .product(name: "SwiftSoup", package: "SwiftSoup")]),
-        .target(name: "OneNoteGraph", dependencies: ["MarkdownNotes", .product(name: "MSAL", package: "microsoft-authentication-library-for-objc")]),
+        .target(name: "OneNoteGraph", dependencies: ["MarkdownNotes", .product(name: "AppAuth", package: "AppAuth-iOS")]),
         .target(name: "MarkdownEditor", dependencies: ["MarkdownNotes", "OneNoteGraph"], resources: [.copy("Resources/Mermaid")]),
         .target(name: "NotebookCore"),
         .target(name: "NotebookPersistence", dependencies: ["NotebookCore"]),

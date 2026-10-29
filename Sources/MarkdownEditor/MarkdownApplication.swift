@@ -5,6 +5,7 @@ import MarkdownNotes
 @MainActor public final class MarkdownApplication: NSObject, NSApplicationDelegate, NSWindowDelegate {
     public let session: MarkdownSession
     public var window: NSWindow?
+    private var wakeObserver: NSObjectProtocol?
     public init(vault: URL) throws { session = try MarkdownSession(vault: MarkdownVault(root: vault)) }
     public func applicationDidFinishLaunching(_ notification: Notification) {
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
@@ -28,15 +29,24 @@ import MarkdownNotes
         editItem.submenu = edit; menu.addItem(editItem); NSApp.mainMenu = menu
         window.center(); window.makeKeyAndOrderFront(nil)
         session.startBackgroundRefresh()
+        wakeObserver = NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
+            Task { @MainActor in self?.session.refreshSelectedPage() }
+        }
         // Normal explicit app launch may show a window; tests never call this lifecycle callback.
     }
     public func windowShouldClose(_ sender: NSWindow) -> Bool { session.save() }
+    public func applicationDidBecomeActive(_ notification: Notification) { session.refreshSelectedPage() }
+    public func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls { _ = session.signIn?.resume(url) }
+    }
+    public func windowDidBecomeKey(_ notification: Notification) { session.refreshSelectedPage() }
     @objc private func saveLocally(_ sender: Any?) { if !session.busy { session.save() } }
     @objc private func syncPage(_ sender: Any?) { if !session.busy { session.sync() } }
     @objc private func newLocal(_ sender: Any?) { session.newLocal() }
     @objc private func openLocal(_ sender: Any?) { session.openLocal() }
     public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         guard session.save() else { return .terminateCancel }
+        if let wakeObserver { NSWorkspace.shared.notificationCenter.removeObserver(wakeObserver) }
         session.stopBackgroundRefresh(); session.cancel(); return .terminateNow
     }
     public func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }

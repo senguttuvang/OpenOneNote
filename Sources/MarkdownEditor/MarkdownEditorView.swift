@@ -5,7 +5,7 @@ import MarkdownNotes
 public struct MarkdownEditorView: View {
     @Bindable private var session: MarkdownSession
     @State private var clientID = ""
-    @State private var tenant = "common"
+    @State private var tenant = ""
     @State private var redirect = ""
     @State private var showConnection = false
     public init(session: MarkdownSession) { self.session = session }
@@ -117,10 +117,10 @@ public struct MarkdownEditorView: View {
     }
     private var connectionPanel: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Use your sanctioned Microsoft public-client registration. Credentials remain in MSAL’s Keychain cache.").font(.callout)
+            Text("Use O2N’s dedicated Microsoft registration. Sign-in stays in your browser and credentials stay in O2N’s macOS Keychain item.").font(.callout)
             HStack {
                 TextField("Client ID", text: $clientID).accessibilityLabel("Microsoft client ID")
-                TextField("Tenant or common", text: $tenant).accessibilityLabel("Microsoft tenant")
+                TextField("Tenant UUID", text: $tenant).accessibilityLabel("Microsoft tenant")
                 TextField("Registered redirect URI", text: $redirect).accessibilityLabel("Microsoft redirect URI")
                 Button("Configure") { session.configure(clientID: clientID, tenant: tenant, redirect: redirect) }
                 Button("Sign in") {
