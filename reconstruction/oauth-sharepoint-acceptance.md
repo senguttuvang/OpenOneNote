@@ -1,0 +1,40 @@
+# Dedicated OAuth And SharePoint Acceptance
+
+This record distinguishes verified setup and local native behavior from the still-pending dedicated-identity cloud roundtrip. Observations are from 29 October 2026; live execution remains in Beads `oon-atf`, and review is in [draft PR 7](https://github.com/senguttuvang/OpenOneNote/pull/7), stacked on PR 6.
+
+## Registration And Consent
+
+- **Verified:** Azure CLI was signed into the intended enabled organizational tenant. The exact SharePoint target was resolved before provisioning.
+- **Dedicated identity:** a separate single-tenant **OpenOneNote** public client and matching service principal were created through Azure CLI and read back. Its native callback matches the packaged bundle identity. No client secret, application permission or shared CloudOps application change was made.
+- **User grant:** directory readback returned `consentType: Principal` with `openid profile offline_access Notes.ReadWrite`. Tenant-wide admin consent was not granted by this workflow.
+- **Private metadata:** registration/site identifiers and public app configuration remain in the local acceptance vault. Credentials are not included in this record or the repository.
+
+## Native Application
+
+- **Implemented:** AppAuth 3.0 authorization-code/PKCE flow, SDK state/nonce and ID-token validation, native URL forwarding, separate browser-return/code-exchange diagnostics, SDK callback ownership transfer to the main actor, bounded discovery/token networking, and an app-private macOS Keychain archive. There is no plaintext token fallback or first-party identity extraction.
+- **Package verified:** program source `4539de7` builds and passes packaged hidden native editing/undo/save/reopen, native renders, offline Mermaid rendering and malformed-source rejection, resource loading and deep/strict signature checks. This establishes package/local behavior, not cloud authentication.
+- **Native authentication pending:** browser consent was completed, but fresh native status checks still returned authentication-required. No saved dedicated native identity or refresh-token reuse has been established. Earlier helper attempts did not report a completed native code exchange/cache save; they must not be called successful native sign-ins.
+- **Runtime conflict observed:** an older installed O2N instance was running alongside development helpers with the same bundle identifier. Such an instance can receive a custom-scheme return URL. This is a possible routing cause, not a proved explanation for every earlier failure. The user was asked to save and quit the installed instance before safely replacing it and retrying at the installed path.
+- **Safe replacement ready:** `openonenote-dev install-app` refuses any running O2N instance, preserves the prior app in the centralized backup location with a restore manifest, stages replacement, and verifies signatures/executable hashes. Notes, preferences and Keychain items are outside the install operation. No existing user app was force-terminated.
+
+## Official Client And Cloud Content
+
+- **Official web authentication verified:** after human sign-in, the managed copied Chrome profile was returned to headless mode and the intended SharePoint home rendered authenticated. This is browser-session evidence only.
+- **O2N → official pending:** the new identity has not yet created its synthetic acceptance page or produced a native write visible in the official editor.
+- **Official → O2N pending:** no marker has yet been entered in that new page using the actual official OneNote editor and detected/rendered by O2N.
+- **Preservation:** no pre-existing note was used as a write fixture, no new-identity cloud fixture has been created, and no notebook/page was deleted in this execution.
+- **Latency unmeasured:** there is no measured official-edit-to-native freshness result yet. Poll intervals are implementation settings, not observed delivery times.
+
+## Refresh Contract
+
+Selected-page open/focus/wake refresh is read-only. Metadata checks adapt from 15 to 120 seconds; scheduling preserves a full-content deadline of 120 seconds even if timestamps remain unchanged. The loop adds up to five seconds of scheduling delay plus network/service time. Failures back off through 30–300 seconds and honor longer provider `Retry-After` values, including after navigation/focus. Explicit sync re-fetches and rechecks content before push.
+
+Microsoft does not currently document OneNote pages in the [change-notification](https://learn.microsoft.com/en-us/graph/change-notifications-overview) or [delta-query](https://learn.microsoft.com/en-us/graph/delta-query-overview) resource lists. SharePoint library notifications are a possible future hint and are not validated as complete page-edit signals here. No webhook infrastructure was provisioned. Read/recheck/write retains a concurrency race and is not an ETag transaction.
+
+## Local Verification And Integration
+
+`swift run --jobs 2 openonenote-dev check` passed on the active feature worktree with the program sources committed as `4539de7`: **66 tests** (8 + 9 + 38 + 11), release build, hidden native editing/renders, real offline Mermaid, CLI rejection, evidence tamper rejection and authored whitespace. `swift run --jobs 2 openonenote-dev verify-app` also passed on the packaged program. Synthetic unit/transport fixtures do not establish native cloud acceptance.
+
+The branch is `feat/o2n-sharepoint-auth`; PR 7 remains draft. GitHub Actions is disabled. Beads coordination is local-only. Merge remains gated on actual native credential persistence/reuse, the real two-client synthetic roundtrip and required integrated-branch local verification. The requested original-OneNote visual/interaction shell is separate pending product work; this auth change does not establish UI fidelity.
+
+After the installed instance has safely closed, use the verified installer, then run the installed app's `--cloud-sign-in`, `--cloud-status` and `--cloud-roundtrip` against the configured local acceptance vault. Enter the recorded return marker through the actual official editor, retain test-only UI/native evidence and identities locally, and record measured results. The separate `--cloud-self-test` API reconnect/conflict probes supplement this test and must remain classified as API-generated remote edits.
