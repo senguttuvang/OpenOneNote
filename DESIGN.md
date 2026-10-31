@@ -47,3 +47,7 @@ The text container has a 9pt move bar and a bottom-right resize handle. Existing
 Render real SwiftUI/AppKit views at 1728×1088, 1280×800 and 960×800 with prohibited activation and hidden owned windows. Inspect the reference and compact images, including crops of navigation, ribbon and note text. Native integration tests cover selection formatting, links, list metadata, heading size, table insertion, undo/redo and RTF save/reopen. No Microsoft OneNote interaction, full keyboard traversal or VoiceOver test has run.
 
 This is a close layout reconstruction with a functional local editing slice. It is not pixel-perfect or full feature parity: ribbon group coverage, tags, rail tools, text metrics, table controls, ink, attachments, zoom, cross-container selection, import and synchronization remain different or unsupported. Synthetic fixture content shares the reference's structure without reproducing client text.
+
+## Integrated legacy interface history
+
+The preserved JSON/RTF canvas also retains the legacy observed menus, native galleries, command routing and hidden interface render verification from PR4. This mode is selected explicitly with --legacy or --notebook. Its historical inspection mode uses a separate bundle identity and never registers the production OAuth callback. These additions do not replace the default rich editor or establish cloud or full OneNote parity.

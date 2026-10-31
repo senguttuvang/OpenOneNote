@@ -41,7 +41,7 @@ import NotebookEditor
         session.undoManager.beginUndoGrouping()
         formatting.heading(1)
         session.undoManager.endUndoGrouping()
-        #expect((view.attributedString().attribute(.font, at: 0, effectiveRange: nil) as? NSFont)?.pointSize == 20)
+        #expect((view.attributedString().attribute(.font, at: 0, effectiveRange: nil) as? NSFont)?.pointSize == 22)
         view.setSelectedRange(NSRange(location: view.string.utf16.count, length: 0))
         session.undoManager.beginUndoGrouping(); formatting.table(); session.undoManager.endUndoGrouping()
         #expect(view.string.contains("Column 1"))
