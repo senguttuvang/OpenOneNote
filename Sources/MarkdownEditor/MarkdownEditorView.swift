@@ -95,8 +95,14 @@ import MarkdownNotes
             .id(identity).textFieldStyle(.plain).font(.system(size: 24, weight: .regular)).focused($titleFocused)
             .accessibilityLabel("Page title").disabled(identity == nil || session.busy || session.selected?.identity.root != "local")
             .onSubmit {
-                guard session.selectedID == identity, let view = shell.editor.target else { return }
-                titleFocused = false; view.window?.makeFirstResponder(view)
+                guard session.selectedID == identity else { return }
+                titleFocused = false
+                RunLoop.main.perform(inModes: [.default]) {
+                    MainActor.assumeIsolated {
+                        guard session.selectedID == identity, let view = shell.editor.target else { return }
+                        view.window?.makeFirstResponder(view)
+                    }
+                }
             }
     }
     private var richPane: some View {
