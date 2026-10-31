@@ -1,6 +1,33 @@
 # Dedicated OAuth And SharePoint Acceptance
 
-This record distinguishes verified setup and local native behavior from the still-pending dedicated-identity cloud roundtrip. Observations are from 29 October 2026; live execution remains in Beads `oon-atf`, and review is in [draft PR 7](https://github.com/senguttuvang/OpenOneNote/pull/7), stacked on PR 6.
+This record separates native identity, actual official-client interoperability, recovery probes and deployment access. The 31 October live result below supersedes the earlier pending observations retained afterward. Beads `oon-atf` tracks this acceptance delivery.
+
+## Live Result: 31 October 2026
+
+The synthetic **O2N Cloud Acceptance 9EEA4828** page passed both directions through the dedicated native identity and the actual official OneNote web editor. No existing user page was edited and no fixture was deleted.
+
+- **Native identity:** AppAuth received the callback, redeemed the authorization code and saved its own macOS Keychain archive. A fresh native process reused that archive without another Microsoft login. Personal and configured SharePoint hierarchy reads both succeeded.
+- **Required permission:** the earlier personal `Notes.ReadWrite` grant succeeded for personal notebooks but returned HTTP403 / OneNote40004 for SharePoint. The dedicated registration now declares delegated `Notes.ReadWrite.All`; native SDK scope readback verifies it after user consent. The earlier declaration is retained. No application role, client secret or tenant-wide admin grant was added. See [Microsoft's shared-notebook scope guidance](https://devblogs.microsoft.com/microsoft365dev/onenote-service-scopes-update/).
+- **O2N to official:** the mounted default rich editor typed and bolded the outgoing marker, inserted a native table and edited a cell. Its Markdown ribbon added a blue PNG and Mermaid source. Actual native sync wrote the same newly created page. The authenticated official web editor displayed the marker in bold, table, rendered diagram and source attachment. The blue image's actual DOM image reported loaded natural dimensions32×32; the original32×32 PNG was recovered independently by hash.
+- **Official to O2N:** real keyboard input through the official web editor added the recorded return marker in a new table row. No Graph PATCH simulated this edit. Native background polling detected it in source and the reading preview at **17:07:38 UTC**. Keyboard input completed at **17:06:17 UTC**, giving an observed **81-second** delay; input began at17:06:13, so the complete input-to-detection interval is81–85 seconds. Timestamps have one-second precision and the harness observes at two-second intervals. This includes service and polling delay and is one observation, not an SLA or an assertion of real-time delivery.
+- **Identity and preservation:** final checks verified unchanged page ID, exactly one page in the synthetic section, both markers, the table, images and source attachment. An independent fresh vault downloaded the original image bytes and recovered the hash-bound editable Mermaid fence after the official edit. This establishes the tested supported subset, not lossless compatibility with every OneNote object.
+- **Separate recovery probe:** synthetic run **7D55BD69** passed actual Graph formatted/table/image/diagram readback, independent source recovery, API-generated external refresh, offline save/reconnect, disjoint merge and overlapping-edit recovery copies. The test transport alone was disconnected; the user's network stayed enabled. These API-generated edits are separate from the official-editor proof above.
+
+Fixture IDs, original HTML, marker timestamps, the independent vault, synthetic-only official/native screenshots and controller logs remain in the local acceptance vault. They are not uploaded with this record. A first immediate open after page creation returned404/20102; resuming the recorded identities succeeded without creating a duplicate page.
+
+### Builds And Final Deployment Boundary
+
+The live two-client and recovery runs used installed source `49d579e` plus the subsequently committed silent legacy-Keychain guard from `e280d5d`. The accepted installed executable SHA-256 was `af06db6003619eb90bd0cb7e52d46883ec757fde98f8d7928de0b25212b23dd7`. SDK callbacks run on the main actor. Readback repairs ignore table-structure whitespace and map returned internal `siteCollections` asset links to the public `sites` endpoint, preserving IDs and the Graph host boundary.
+
+The exact combined source `e2455cb` passed **93 tests** (12 +9 +60 +12) and the full local release/native/render/diagram/rejection/integrity/whitespace gate. Its committed package also passed hidden native rich/inline-section editing, legacy editing, undo/save/reopen, diagram and malformed-source checks. [PR13](https://github.com/senguttuvang/OpenOneNote/pull/13) merged it and every preserved branch head into main `d7b5c0c`; canonical main is synchronized. Existing branches/worktrees and the old stash remain preserved. Actions remains disabled.
+
+That final committed app is installed with the previous bundle backed up and notes/settings/credentials preserved. The ordinary Markdown workspace now has the sanctioned public-client/site configuration; no local note was converted into a cloud page. **Final-build credential reuse passed:** after human approval for its changed ad-hoc signature, a fresh installed process reused the saved identity and read the configured hierarchy from the ordinary workspace without another login. A separate fresh process reread the recorded synthetic page and downloaded all three assets (190-byte original PNG, 7,327-byte diagram PNG and 29-byte source attachment). The app was reopened in the background. Its executable SHA-256 is `7a5ca8551cf6585d5108fa62e4cab01195dfac83876da4524048809e9f166c8c`.
+
+No valid development signing identity is available locally. Ad-hoc updates can therefore require renewed macOS approval for O2N's own saved item; the initial final-build attempt returned error−25293 before that approval. This development-signing limitation remains separate from Microsoft consent and the completed interoperability test. Background access refuses Keychain UI; only explicit Sign in can ask for owned-item approval. No credential was extracted, deleted or replaced by a plaintext cache.
+
+## Historical Investigation: 29–31 October
+
+The sections below retain the earlier observations and test counts as history. Their pending statements do not describe the completed synthetic roundtrip above.
 
 ## Registration And Consent
 
