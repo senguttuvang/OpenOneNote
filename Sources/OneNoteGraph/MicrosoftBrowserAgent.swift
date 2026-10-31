@@ -22,27 +22,36 @@ import Foundation
         return started
     }
 
-    func dismiss(animated: Bool, completion: @escaping @Sendable () -> Void) {
-        browser.dismiss(animated: animated, completion: completion)
-        callback = nil
+    nonisolated func dismiss(animated: Bool, completion: @escaping @Sendable () -> Void) {
+        onMicrosoftMainActor {
+            self.browser.dismiss(animated: animated, completion: completion)
+            self.callback = nil
+        }
     }
 }
 
-@MainActor final class MicrosoftBrowserCallback: NSObject, @preconcurrency OIDExternalUserAgentSession {
+@MainActor final class MicrosoftBrowserCallback: NSObject, OIDExternalUserAgentSession {
     private weak var session: (any OIDExternalUserAgentSession)?
     private let report: (String) -> Void
     init(session: any OIDExternalUserAgentSession, report: @escaping (String) -> Void) {
         self.session = session; self.report = report
     }
-    func cancel() { session?.cancel() }
-    func cancel(completion: (@Sendable () -> Void)?) {
-        if let session { session.cancel(completion: completion) } else { completion?() }
+    nonisolated func cancel() { onMicrosoftMainActor { self.session?.cancel() } }
+    nonisolated func cancel(completion: (@Sendable () -> Void)?) {
+        onMicrosoftMainActor {
+            if let session = self.session { session.cancel(completion: completion) } else { completion?() }
+        }
     }
-    func resumeExternalUserAgentFlow(with url: URL) -> Bool {
-        guard session != nil else { return false }
-        do { try resumeExternalUserAgentFlow(url); return true } catch { return false }
+    nonisolated func resumeExternalUserAgentFlow(with url: URL) -> Bool {
+        onMicrosoftMainActor {
+            guard self.session != nil else { return false }
+            do { try self.resumeOnMainActor(url); return true } catch { return false }
+        }
     }
-    func resumeExternalUserAgentFlow(_ url: URL) throws {
+    nonisolated func resumeExternalUserAgentFlow(_ url: URL) throws {
+        try onMicrosoftMainActor { try self.resumeOnMainActor(url) }
+    }
+    private func resumeOnMainActor(_ url: URL) throws {
         report("System browser returned a callback; validating with AppAuth.")
         guard let session else { return }
         do {
@@ -55,8 +64,17 @@ import Foundation
             throw error
         }
     }
-    func failExternalUserAgentFlowWithError(_ error: any Error) {
-        report("System authentication session failed before a validated callback.")
-        session?.failExternalUserAgentFlowWithError(error)
+    nonisolated func failExternalUserAgentFlowWithError(_ error: any Error) {
+        onMicrosoftMainActor {
+            self.report("System authentication session failed before a validated callback.")
+            self.session?.failExternalUserAgentFlowWithError(error)
+        }
     }
+}
+
+/// AppAuth's Objective-C browser completion can arrive off-main and requires a synchronous reply.
+/// Hop before entering actor-isolated code, including the SDK's synchronous dismissal callback.
+private func onMicrosoftMainActor<T: Sendable>(_ action: @MainActor @Sendable () throws -> T) rethrows -> T {
+    if Thread.isMainThread { return try MainActor.assumeIsolated(action) }
+    return try DispatchQueue.main.sync { try MainActor.assumeIsolated(action) }
 }

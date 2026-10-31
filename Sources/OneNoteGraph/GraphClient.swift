@@ -85,6 +85,7 @@ public struct GraphClient: OneNoteRemote, Sendable {
                 guard delay <= 120, attempt < 3 else { throw GraphRetryRequired(status: response.status, delay: delay) }
                 try await Task.sleep(for: .seconds(delay)); continue
             }
+            if let failure = GraphServiceFailure(status: response.status, body: response.data) { throw failure }
             throw NotesError.http(response.status)
         }
         throw NotesError.invalid("Retry budget exhausted")

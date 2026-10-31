@@ -34,6 +34,24 @@ import OneNoteGraph
         let notebooks = try await graph.list(root: session.root, path: "notebooks?$top=1")
         print("Native AppAuth delegated Notes access verified; hierarchy request succeeded (\(notebooks.count) sampled notebook). No cloud writes performed.")
     }
+    public static func diagnose(vault: URL) async throws {
+        let session = try MarkdownSession(vault: MarkdownVault(root: vault))
+        guard let graph = session.graph else { throw NotesError.invalid(session.message) }
+        _ = try await graph.authorization.identityKey()
+        let scopes = session.signIn?.notesScopeSummary()
+        print("Saved native identity reused without login. Notes.ReadWrite: \(scopes?.readWrite == true); Notes.ReadWrite.All: \(scopes?.readWriteAll == true).")
+        var selectedFailure: (any Error)?
+        for (label, root) in [("Personal Notes", "me"), ("Configured Notes", session.root)] {
+            do {
+                let notebooks = try await graph.list(root: root, path: "notebooks?$select=id&$top=1")
+                print("\(label): HTTP success; \(notebooks.count) sampled notebook. No content read or writes performed.")
+            } catch {
+                print("\(label): \(error.localizedDescription)")
+                if label == "Configured Notes" { selectedFailure = error }
+            }
+        }
+        if let selectedFailure { throw selectedFailure }
+    }
 }
 
 /// A LaunchServices URL callback must reach the same retained AppAuth session that initiated it.

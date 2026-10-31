@@ -82,13 +82,14 @@ import MarkdownEditor
             } catch { FileHandle.standardError.write(Data("Native signing capability: \(error.localizedDescription)\n".utf8)); exit(2) }
             return
         }
-        if arguments.first == "--cloud-status" || arguments.first == "--cloud-self-test" || arguments.first == "--cloud-roundtrip" {
+        if arguments.first == "--cloud-status" || arguments.first == "--cloud-self-test" || arguments.first == "--cloud-roundtrip" || arguments.first == "--cloud-diagnose" {
             app.setActivationPolicy(.prohibited)
             guard arguments.count == 2 else { FileHandle.standardError.write(Data("Expected configured vault directory\n".utf8)); exit(1) }
             Task { @MainActor in
                 do {
                     let vault = URL(fileURLWithPath: arguments[1])
                     if arguments[0] == "--cloud-status" { try await CloudVerification.status(vault: vault) }
+                    else if arguments[0] == "--cloud-diagnose" { try await CloudVerification.diagnose(vault: vault) }
                     else if arguments[0] == "--cloud-roundtrip" { try await CloudVerification.officialRoundtrip(vault: vault) }
                     else { try await CloudVerification.exercise(vault: vault) }
                     exit(0)

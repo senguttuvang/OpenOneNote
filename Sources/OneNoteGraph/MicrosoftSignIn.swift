@@ -75,6 +75,11 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
               token.issuer == issuer, !token.subject.isEmpty else { throw NotesError.authenticationRequired }
         return MarkdownVault.hash(issuer.absoluteString + ":" + token.subject)
     }
+    public func notesScopeSummary() -> (readWrite: Bool, readWriteAll: Bool) {
+        let scopes = Set((state?.lastTokenResponse?.scope ?? "").split(separator: " ").map(String.init))
+        return (scopes.contains("Notes.ReadWrite") || scopes.contains("https://graph.microsoft.com/Notes.ReadWrite"),
+                scopes.contains("Notes.ReadWrite.All") || scopes.contains("https://graph.microsoft.com/Notes.ReadWrite.All"))
+    }
     /// Only explicit sign-in may present browser or Keychain consent UI.
     public func signIn(presenting controller: NSViewController) async throws {
         progress?("Starting native OAuth; checking O2N’s own Keychain state.")
