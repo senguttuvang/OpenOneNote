@@ -14,6 +14,8 @@ Beads `oon-qar`; based on native-shell source `fe7609e`. The supplied 31 October
 
 ## Verification and scope
 
+The subsequent live installed-app check used a clearly labelled local verification notebook. Actual Add section showed selected inline name entry without a sheet, and Return moved to the page title. Clicking the real Add page footer next exposed a title-focus loss that programmatic hidden creation had not reproduced: typing reached no field. The title-focus request now explicitly re-arms focus after the current UI update, guarded by page identity/request generation. Repeated native creation and packaged checks supplement the required live footer before/after verification.
+
 `swift run --jobs 2 openonenote-dev check` is the full local merge gate. The delivery PR and Beads ledger record its exact tested revision and outcome. GitHub Actions is disabled. The gate includes the native unit workflows above, release build, hidden packaged-capable rich editing/title/table acceptance through `--markdown-self-test`, native source/legacy editing, synthetic renders at 1728/1280/960, light/dark surfaces, offline Mermaid, CLI rejection and tamper/whitespace checks.
 
 Synthetic captures live in the isolated worktree's ignored `scratch/ux-parity-render/`. No user notes, installed app, credentials or official OneNote selection were modified for UI verification. The cloud peer retains the shared installed-app/auth fixture lease until explicitly released. No lease release, installation or live cloud result is inferred from elapsed time or queued coordination messages.

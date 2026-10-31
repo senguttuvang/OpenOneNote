@@ -22,7 +22,18 @@ import MarkdownNotes
             }.background(palette.canvas).foregroundStyle(palette.ink)
         }.frame(minWidth: 960, minHeight: 600).tint(palette.accent)
             .onChange(of: session.selectedID) { _, _ in titleFocused = false; shell.followSelection() }
-            .onChange(of: shell.titleFocusRequest) { _, _ in if shell.editingSectionID == nil { titleFocused = true } }
+            .onChange(of: shell.titleFocusRequest) { _, request in
+                guard shell.editingSectionID == nil else { return }
+                let identity = session.selectedID
+                titleFocused = false
+                // Finish the current click/update before re-arming the same field.
+                RunLoop.main.perform(inModes: [.default]) {
+                    MainActor.assumeIsolated {
+                        guard shell.titleFocusRequest == request, session.selectedID == identity, shell.editingSectionID == nil else { return }
+                        titleFocused = true
+                    }
+                }
+            }
             .onChange(of: shell.markdownVisible) { _, _ in
                 titleFocused = false
                 if let view = shell.editor.target { view.window?.makeFirstResponder(view) }
@@ -34,11 +45,8 @@ import MarkdownNotes
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 3) {
-                        TextField("", text: Binding(get: { session.selected?.title == "Untitled Page" ? "" : (session.selected?.title ?? "") }, set: session.renameSelected))
-                            .textFieldStyle(.plain).font(.system(size: 24, weight: .regular)).focused($titleFocused)
-                            .accessibilityLabel("Page title").disabled(session.selectedID == nil || session.busy || session.selected?.identity.root != "local")
+                        pageTitle
                             .help(session.selected?.identity.root == "local" ? "Page title" : "Cloud page rename is unavailable")
-                            .onSubmit { titleFocused = false; shell.editor.target?.window?.makeFirstResponder(shell.editor.target) }
                         Rectangle().fill(palette.secondary.opacity(0.7)).frame(width: 310, height: 0.5)
                     }
                     Spacer(minLength: 8)
@@ -78,6 +86,18 @@ import MarkdownNotes
         var editor = MarkdownSourceEditor(source: session.source, identity: session.selectedID, onChange: session.edit)
         editor.commands = shell.sourceCommands; editor.pointSize = shell.sourceCommands.fontSize * shell.zoom; editor.fontName = shell.sourceCommands.fontName; editor.lightPaper = shell.lightPaper
         return editor.disabled(session.busy || shell.mode == .read || !shell.markdownVisible).padding(.top, 12)
+    }
+    private var pageTitle: some View {
+        let identity = session.selectedID
+        return TextField("", text: Binding(
+            get: { session.selected?.title == "Untitled Page" ? "" : (session.selected?.title ?? "") },
+            set: { if session.selectedID == identity { session.renameSelected($0) } }))
+            .id(identity).textFieldStyle(.plain).font(.system(size: 24, weight: .regular)).focused($titleFocused)
+            .accessibilityLabel("Page title").disabled(identity == nil || session.busy || session.selected?.identity.root != "local")
+            .onSubmit {
+                guard session.selectedID == identity, let view = shell.editor.target else { return }
+                titleFocused = false; view.window?.makeFirstResponder(view)
+            }
     }
     private var richPane: some View {
         var editor = NativeRichEditor(source: session.source, identity: session.selectedID, commands: shell.richCommands, onChange: session.edit)

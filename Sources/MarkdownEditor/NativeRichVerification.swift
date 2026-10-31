@@ -17,7 +17,11 @@ import MarkdownNotes
             throw NotesError.invalid("Add page did not create a blank page and focus its inline title")
         }
         try MarkdownVerification.render(session: session, to: directory.appendingPathComponent("new-page.png"), width: 1728)
-        title.insertText("Synthetic rich page", replacementRange: NSRange(location: 0, length: title.string.utf16.count))
+        window.makeFirstResponder(nil); shell.createPage(); settle()
+        guard let repeatedTitle = window.firstResponder as? NSTextView, repeatedTitle.isFieldEditor else {
+            throw NotesError.invalid("Repeated Add page did not restore title focus")
+        }
+        repeatedTitle.insertText("Synthetic rich page", replacementRange: NSRange(location: 0, length: repeatedTitle.string.utf16.count))
         guard let rich = shell.richCommands.target, let source = shell.sourceCommands.target else { throw NotesError.invalid("Native projections did not mount") }
         window.makeFirstResponder(rich)
         rich.insertText("தமிழ் 📝 ordinary editing", replacementRange: NSRange(location: 0, length: 0))
