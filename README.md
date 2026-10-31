@@ -11,7 +11,7 @@ O2N's independently authored code is available under the [MIT license](LICENSE),
 - **Files you can keep.** Notes and assets live locally as portable Markdown and companion files. Local editing and offline Mermaid diagram rendering do not require Microsoft sign-in.
 - **The same cloud notebook.** The sync implementation targets existing OneNote pages through delegated Microsoft Graph access, rather than exporting a separate copy into another note service.
 
-**Current stage: developer preview.** Native local editing and the Graph transport/recovery paths have automated coverage. Dedicated native sign-in persistence and the complete O2N ↔ official OneNote editor round-trip are still awaiting live acceptance. O2N does not yet promise production-ready interoperability, complete OneNote feature parity, or lossless handling of every OneNote page.
+**Current stage: developer preview.** Native local editing and Graph transport/recovery paths have automated coverage. A synthetic native O2N ↔ official OneNote web-editor roundtrip passed on 31 October, including same-page identity, table/image/diagram-source preservation and an observed 81-second return refresh. Separate offline/reconnect/conflict checks passed. The final installed build also verified saved-identity reuse and synthetic asset downloads; ad-hoc development updates can require renewed macOS Keychain approval. See the [precise acceptance and deployment boundaries](reconstruction/oauth-sharepoint-acceptance.md). O2N does not yet promise production-ready interoperability, complete OneNote feature parity, or lossless handling of every OneNote page.
 
 ## For Teams And Business Users
 
@@ -34,7 +34,7 @@ OneNote does not understand every Markdown structure or O2N enhancement. O2N the
 - **Local source and metadata:** Markdown files, assets and a local `.o2n` ledger retain note identity, sync baselines and recovery state. Local metadata is not automatically understood by official clients or guaranteed to travel to another device.
 - **Compatible cloud content:** official OneNote receives supported HTML, images and attachments. Mermaid diagrams use a rendered PNG plus an attached source file whose name binds the source and preview hashes. O2N recovers editable diagram source only when both downloaded files still match.
 
-If an official-client edit changes a diagram preview or source, O2N preserves the available image and attachment and reports stale source instead of inventing editable Markdown. Other edits may normalize Markdown syntax or exceed the supported rich-text subset. This is a preservation strategy, not a guarantee that every O2N-specific structure or metadata field survives every official-client edit. The actual two-client preservation test remains part of live acceptance.
+If an official-client edit changes a diagram preview or source, O2N preserves the available image and attachment and reports stale source instead of inventing editable Markdown. Other edits may normalize Markdown syntax or exceed the supported rich-text subset. The synthetic two-client test recovered original image bytes and editable Mermaid source from a fresh vault after the official edit. This is a tested preservation strategy, not a guarantee that every O2N-specific structure or metadata field survives every official-client edit.
 
 ### Refresh And Authentication
 
