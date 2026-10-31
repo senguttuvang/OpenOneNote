@@ -1,4 +1,11 @@
 .DS_Store
+.agent-artifacts/
+.env
+.env.*
+*.pem
+*.key
+credentials.json
+*-credentials.json
 .build/
 .swiftpm/
 dist/
