@@ -15,7 +15,7 @@ flowchart LR
     Page <--> Official["Official OneNote clients"]
 ```
 
-Microsoft Graph exposes HTML-based page updates. An adapter must fetch the current generated element IDs before addressing page content; the rendered representation and those API targets are not durable Markdown anchors. See Microsoft's [page-update contract](https://learn.microsoft.com/en-us/graph/onenote-update-page) and [input/output HTML reference](https://learn.microsoft.com/en-us/graph/onenote-input-output-html).
+Microsoft Graph exposes HTML-based page updates. For updates that address generated element IDs, O2N fetches their current values before patching them. The rendered representation and those API targets are not durable Markdown anchors. See Microsoft's [page-update contract](https://learn.microsoft.com/en-us/graph/onenote-update-page) and [input/output HTML reference](https://learn.microsoft.com/en-us/graph/onenote-input-output-html).
 
 The practical requirement is a roundtrip, not just a successful upload: create or open a supported page, edit it in O2N, inspect it in the official editor, make an official-client change and reconcile it back into O2N. Verify the same page identity and actual downloaded resources, rather than trusting a cached local source file or an image tag in returned HTML.
 

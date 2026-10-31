@@ -17,7 +17,7 @@ See the [dated acceptance record](reconstruction/oauth-sharepoint-acceptance.md)
 - **Broaden official-origin roundtrips — in progress.** Exercise pages created and edited in official OneNote, including text, tables, images, attachments and empty editor/caret blocks. Preserve untouched remote objects while allowing neighboring supported edits. Completion requires native edits visible in the official editor, an official return edit, unchanged page identity and actual resource preservation; local regression coverage alone is insufficient.
 - **Make recovery understandable.** Explain pending local work, protected content, stale diagram source and unresolved overlaps without implying that an access error means deletion. Reopen and reconnect should retain both the user's work and the remote version needed for resolution.
 - **Keep OneNote-style interactions consistent.** Verify inline creation/naming, keyboard focus, selection, undo, menus, light/dark appearance, resizing and view transitions across implemented workflows. Add focused accessibility and VoiceOver checks; screenshots do not establish behavioral parity.
-- **Expand the editing subset deliberately.** Improve table structure operations, cloud title/hierarchy mutation and persisted rich formatting only with explicit conversion and roundtrip tests. Disabled controls should remain accurate until those behaviors are supported.
+- **Expand the editing subset deliberately.** Improve table structure operations, cloud page/section creation, cloud title/hierarchy mutation and persisted rich formatting only with explicit conversion and roundtrip tests. Disabled controls should remain accurate until those behaviors are supported.
 
 ## Planned: Markdown And Review Tools
 
