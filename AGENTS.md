@@ -1,6 +1,6 @@
 # OpenOneNote
 
-Private OneNote Mac research and an independent native Swift reconstruction.
+Public development and release repository for an independent native Swift notebook. Legacy third-party research remains outside O2N's MIT grant; see `THIRD_PARTY.md` and `PUBLIC_RELEASE.md`.
 
 ## Ownership
 

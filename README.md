@@ -94,6 +94,8 @@ Issues and focused pull requests are welcome, especially for native editing, acc
 
 O2N is an independent effort to fill that notebook-workflow gap on macOS, using Swift and Apple's native frameworks, with OneNote interoperability and Markdown enhancements as its focus. These links acknowledge related work; they do not imply shared code, integration or endorsement.
 
-## License And Release Preparation
+## License And Releases
 
-See [LICENSE](LICENSE) for O2N's MIT terms and [THIRD_PARTY.md](THIRD_PARTY.md) for dependencies and exclusions. The private development repository also retains Microsoft research materials that are **not** covered by MIT and must not be included in a public source distribution. Maintainers must follow [the public-release boundary](PUBLIC_RELEASE.md) before publishing this repository or its history. Adding a license does not make those materials redistributable.
+This public repository is the single home for development, issues, pull requests and release publishing. Work lands on `main` through reviewed pull requests; version tags and [GitHub Releases](https://github.com/senguttuvang/OpenOneNote/releases) belong here too. No packaged GitHub releases are published yet; use the source build instructions above.
+
+See [LICENSE](LICENSE) for O2N's MIT terms and [THIRD_PARTY.md](THIRD_PARTY.md) for dependencies and exclusions. Legacy Microsoft research remains in the repository and its history, outside O2N's MIT grant. Public visibility does not relicense those materials. Follow the [release guide](PUBLIC_RELEASE.md) to select reviewed O2N source and binary assets; excluding research from a release archive does not remove it from Git history or LFS storage.
