@@ -28,11 +28,12 @@ import DevelopmentKit
             case "verify-app" where arguments.count == 1: try workflow.verifyApp()
             case "package-app" where arguments.count == 1: try workflow.packageApp()
             case "package-tools" where arguments.count == 1: try workflow.packageTools()
+            case "demo-vault" where arguments.count == 2: try workflow.createDemoVault(at: URL(fileURLWithPath: arguments[1]))
             case "capture" where arguments.count == 3: try workflow.capture(bundle: URL(fileURLWithPath: arguments[1]), label: arguments[2])
             case "additional" where arguments.count == 4: try workflow.additional(bundle: URL(fileURLWithPath: arguments[1]), output: URL(fileURLWithPath: arguments[2]), label: arguments[3])
             case "decompile-sample" where arguments.count == 4: try workflow.decompileSample(bundle: URL(fileURLWithPath: arguments[1]), label: arguments[2], ghidra: URL(fileURLWithPath: arguments[3]))
             case "help", "--help", nil:
-                print("OpenOneNote Swift development CLI\nCommands: check | app | inspection-app | install-app | verify-app | package-app | package-tools | microsoft-register <az> <vault> <tenant-id> <site-id> | graph-probe <m365> <new-output> | source-index | source-query <terms> | capture <app> <new-label> | additional <app> <new-directory> <label> | decompile-sample <app> <new-directory> <label> <analyzeHeadless>")
+                print("OpenOneNote Swift development CLI\nCommands: check | app | inspection-app | install-app | verify-app | package-app | package-tools | demo-vault <new-directory> | microsoft-register <az> <vault> <tenant-id> <site-id> | graph-probe <m365> <new-output> | source-index | source-query <terms> | capture <app> <new-label> | additional <app> <new-directory> <label> | decompile-sample <app> <new-directory> <label> <analyzeHeadless>")
             default: throw DevelopmentError.invalidArguments("Unknown command or wrong arguments; use openonenote-dev help")
             }
         } catch { FileHandle.standardError.write(Data("Development workflow failed: \(error)\n".utf8)); exit(1) }

@@ -14,7 +14,7 @@ Start with independently authored `Sources/`, `Tests/`, Swift package manifests,
 
 Review design/specification and architecture documents individually before selection. Source/tool code also needs a privacy and provenance check; an allowlist is a starting point, not evidence that every file is cleared. Build and run the full local gate in the source-only checkout so missing research is proved harmless.
 
-Exclude original Microsoft material under `research/`, historical research archives/LFS pointers, private account/acceptance output, source indexes, local agent state, credentials and screenshots of real notebooks. Historical compiled packages and captures under `artifacts/` are not automatically approved releases; assemble and review fresh artifacts separately.
+Exclude original Microsoft material under `research/`, historical research archives/LFS pointers, private account/acceptance output, source indexes, local agent state, credentials and screenshots of real notebooks. Historical compiled packages and captures under `artifacts/` are not automatically approved releases; assemble and review fresh artifacts separately. The README explicitly uses the fictional O2N-only images and accompanying explanation in `artifacts/previews/orbit-startup/`; include that reviewed directory in a source-only selection so the README's images resolve, without including unrelated artifact history.
 
 ## Review The Whole Publication Surface
 

@@ -4,6 +4,10 @@
 
 O2N's independently authored code is available under the [MIT license](LICENSE), including for personal and commercial use. Microsoft and other third-party materials retain their own rights; see [third-party notices](THIRD_PARTY.md). O2N is not affiliated with or endorsed by Microsoft or ArtCraft.
 
+![O2N's native editor showing the fictional Orbit startup notebook, product brief, roadmap pages and six team sections](artifacts/previews/orbit-startup/product-brief.png)
+
+*Developer preview on macOS. Orbit is a fictional startup; the notebook, metrics and planning content are sample data. [Open the full-resolution screenshot](artifacts/previews/orbit-startup/product-brief.png).*
+
 ## For People Who Use OneNote
 
 - **A familiar place to write.** Notebook, section and page navigation, a ribbon, light/dark appearance, native rich-text editing, and immediate inline page creation. Add a page and type its title in place.
@@ -12,6 +16,10 @@ O2N's independently authored code is available under the [MIT license](LICENSE),
 - **The same cloud notebook.** The sync implementation targets existing OneNote pages through delegated Microsoft Graph access, rather than exporting a separate copy into another note service.
 
 **Current stage: developer preview.** Native local editing and Graph transport/recovery paths have automated coverage. A synthetic native O2N ↔ official OneNote web-editor roundtrip passed on 31 October, including same-page identity, table/image/diagram-source preservation and an observed 81-second return refresh. Separate offline/reconnect/conflict checks passed. The final installed build also verified saved-identity reuse and synthetic asset downloads; ad-hoc development updates can require renewed macOS Keychain approval. See the [precise acceptance and deployment boundaries](reconstruction/oauth-sharepoint-acceptance.md). O2N does not yet promise production-ready interoperability, complete OneNote feature parity, or lossless handling of every OneNote page.
+
+![The same Orbit notebook in Markdown split mode, with onboarding source beside its rendered Mermaid flowchart and product requirements](artifacts/previews/orbit-startup/markdown-onboarding.png)
+
+*Markdown and a locally rendered onboarding diagram, inside the same notebook. [Screenshot details and demo instructions](artifacts/previews/orbit-startup/README.md).*
 
 ## For Teams And Business Users
 
@@ -61,6 +69,15 @@ Normal launch uses `~/Library/Application Support/OpenOneNote/Markdown`. To try 
 ```sh
 dist/OpenOneNote.app/Contents/MacOS/OpenOneNoteMac --vault /absolute/path/to/test-vault
 ```
+
+To explore the fictional startup notebook shown above, choose a **new, nonexistent directory**:
+
+```sh
+swift run --jobs 2 openonenote-dev demo-vault /tmp/o2n-orbit-demo
+dist/OpenOneNote.app/Contents/MacOS/OpenOneNoteMac --vault /tmp/o2n-orbit-demo
+```
+
+The demo contains 17 pages across Product, Engineering, Customer Research, Go-to-Market, Operations and Team Knowledge. It is local-only, needs no Microsoft account, and refuses to replace an existing directory. Select **01 Product brief**, or open **02 Onboarding flow** and use the Markdown icon to try Split mode.
 
 To install a verified build, save and quit O2N, then run `swift run --jobs 2 openonenote-dev install-app`. The installer refuses a running O2N instance, backs up the previous app and verifies the replacement. Notes, settings and authentication stores are not replaced. Avoid running multiple builds with the same bundle identity during native sign-in.
 
