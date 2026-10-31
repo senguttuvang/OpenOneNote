@@ -1,4 +1,5 @@
 import AppKit
+import Carbon
 import Foundation
 import MarkdownNotes
 import OneNoteGraph
@@ -41,6 +42,9 @@ import OneNoteGraph
     private var authentication: MicrosoftSignIn?
     public init(vault: URL) { self.vault = vault }
     public func applicationDidFinishLaunching(_ notification: Notification) {
+        // Match AppAuth's macOS sample: accessory helpers must explicitly receive GetURL events.
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleGetURL(_:withReplyEvent:)),
+                                                     forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         Task { @MainActor in
             do {
                 try await CloudVerification.signIn(vault: vault) { self.authentication = $0 }
@@ -50,11 +54,21 @@ import OneNoteGraph
             }
         }
     }
+    @objc private func handleGetURL(_ event: NSAppleEventDescriptor, withReplyEvent reply: NSAppleEventDescriptor) {
+        guard let value = event.paramDescriptor(forKeyword: AEKeyword(keyDirectObject))?.stringValue,
+              let url = URL(string: value) else { return }
+        let accepted = authentication?.resume(url) ?? false
+        FileHandle.standardError.write(Data("Native GetURL AppleEvent received; matched active OAuth flow: \(accepted).\n".utf8))
+    }
     public func application(_ application: NSApplication, open urls: [URL]) {
         for url in urls {
             let accepted = authentication?.resume(url) ?? false
             FileHandle.standardError.write(Data("Native URL event received; matched active OAuth flow: \(accepted).\n".utf8))
         }
     }
-    public func applicationWillTerminate(_ notification: Notification) { authentication?.cancel() }
+    public func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+    public func applicationWillTerminate(_ notification: Notification) {
+        authentication?.cancel()
+        NSAppleEventManager.shared().removeEventHandler(forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
+    }
 }

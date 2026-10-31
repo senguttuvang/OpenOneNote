@@ -45,9 +45,11 @@ import MarkdownEditor
     let client = "11111111-1111-1111-1111-111111111111"
     let tenant = "22222222-2222-2222-2222-222222222222"
     try MicrosoftSignIn.validate(clientID: client, tenant: tenant, redirectURI: "msauth.dev.senguttuvang.OpenOneNote://auth")
+    try MicrosoftSignIn.validate(clientID: client, tenant: tenant, redirectURI: "msauth.dev.senguttuvang.OpenOneNote://auth/callback")
     for (app, directory, redirect) in [("invalid", tenant, "msauth.dev.senguttuvang.OpenOneNote://auth"),
                                        (client, "common", "msauth.dev.senguttuvang.OpenOneNote://auth"),
                                        (client, tenant, "http://localhost"),
+                                       (client, tenant, "msauth.dev.senguttuvang.OpenOneNote://auth/callback/"),
                                        (client, tenant, "msauth.dev.senguttuvang.OpenOneNote://auth?code=synthetic")] {
         #expect(throws: NotesError.self) { try MicrosoftSignIn.validate(clientID: app, tenant: directory, redirectURI: redirect) }
     }

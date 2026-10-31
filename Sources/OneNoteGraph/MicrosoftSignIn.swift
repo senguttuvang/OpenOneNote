@@ -38,7 +38,7 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
     }
     public static func validate(clientID: String, tenant: String, redirectURI: String) throws {
         guard UUID(uuidString: clientID) != nil, UUID(uuidString: tenant) != nil,
-              redirectURI == "msauth.dev.senguttuvang.OpenOneNote://auth" else {
+              ["msauth.dev.senguttuvang.OpenOneNote://auth", "msauth.dev.senguttuvang.OpenOneNote://auth/callback"].contains(redirectURI) else {
             throw NotesError.invalid("Use O2N’s dedicated single-tenant public-client registration and exact registered native callback.")
         }
     }

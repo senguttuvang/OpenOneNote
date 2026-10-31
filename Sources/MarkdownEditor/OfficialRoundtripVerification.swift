@@ -1,4 +1,5 @@
 import AppKit
+import SwiftUI
 import Foundation
 import MarkdownNotes
 import OneNoteGraph
@@ -14,8 +15,8 @@ extension CloudVerification {
         let account = try await graph.authorization.identityKey()
         let run = UUID().uuidString
         let label = "O2N Cloud Acceptance " + String(run.prefix(8))
-        let outgoing = "O2N_TO_OFFICIAL_" + run
-        let incoming = "OFFICIAL_TO_O2N_" + run
+        let outgoing = "O2N-TO-OFFICIAL-" + run
+        let incoming = "OFFICIAL-TO-O2N-" + run
         let evidence = try vault.safeURL(".o2n/acceptance/\(run)")
         try FileManager.default.createDirectory(at: evidence, withIntermediateDirectories: true)
         var registry = ["run": run, "root": session.root, "classification": "synthetic-only", "outgoingMarker": outgoing,
@@ -46,20 +47,14 @@ extension CloudVerification {
         let ledger = try await sync.open(identity)
         session.select(ledger.id)
         while session.busy { try await Task.sleep(for: .milliseconds(50)) }
-        // Use the actual source editor and application's save callback, not a direct file mutation.
-        let editor = MarkdownSourceEditor(source: session.source, identity: ledger.id, onChange: session.edit)
-        let coordinator = editor.makeCoordinator()
-        defer { withExtendedLifetime(coordinator) {} }
-        let text = editor.makeTextView(coordinator: coordinator)
-        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 800, height: 600), styleMask: [.borderless], backing: .buffered, defer: false)
-        window.contentView = text; window.makeFirstResponder(text)
         let image = try vault.storeAsset(fixturePNG(), resourceURL: "", extension: "png")
         let diagramSource = "flowchart LR\n O2N-->Official\n"
         registry["imageSHA256"] = image.hash
         registry["diagramSourceSHA256"] = MarkdownVault.hash(diagramSource)
-        let changed = session.source + "\n**" + outgoing + "**\n\n| Client | State |\n| --- | --- |\n| O2N native | Synced |\n\n![Synthetic blue square](\(image.path))\n\n```mermaid\n" + diagramSource + "```\n"
-        text.insertText(changed, replacementRange: NSRange(location: 0, length: text.string.utf16.count))
-        guard session.source == changed, try vault.markdown(ledger) == changed, !window.isVisible else { throw NotesError.invalid("Native source edit/save failed") }
+        let window = try editRoundtripFixture(session: session, outgoing: outgoing, imagePath: image.path, diagramSource: diagramSource)
+        defer { withExtendedLifetime(window) {} }
+        guard try vault.markdown(ledger) == session.source, !window.isVisible else { throw NotesError.invalid("Native rich/source edit/save failed") }
+        registry["nativeEditPath"] = "default rich text and table; Markdown ribbon for image/diagram source"
         let before = try await graph.fetch(identity)
         guard before.id == page.id, before.title == label else { throw NotesError.invalid("Synthetic page identity changed before native sync") }
         session.sync()
@@ -113,5 +108,39 @@ extension CloudVerification {
             return
         }
         throw NotesError.invalid("Official editor marker was not observed within 30 minutes; fixture and local evidence retained")
+    }
+
+    /// Exercise the mounted default editor, ribbon formatting/table commands and Markdown projection.
+    static func editRoundtripFixture(session: MarkdownSession, outgoing: String, imagePath: String, diagramSource: String) throws -> NSWindow {
+        guard NSApp.activationPolicy() == .prohibited else { throw NotesError.invalid("Fixture editor must stay hidden") }
+        let shell = NativeShellState(session: session)
+        let host = NSHostingView(rootView: MarkdownEditorView(session: session, presentation: shell))
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [.borderless], backing: .buffered, defer: false)
+        shell.window = window; window.contentView = host; host.frame = window.contentLayoutRect
+        func settle() { host.layoutSubtreeIfNeeded(); RunLoop.main.run(until: Date().addingTimeInterval(0.1)) }
+        settle()
+        guard !shell.markdownVisible, let rich = shell.richCommands.target else { throw NotesError.invalid("Default rich editor did not mount") }
+        window.makeFirstResponder(rich)
+        rich.insertText("\n" + outgoing + "\n", replacementRange: NSRange(location: rich.string.utf16.count, length: 0))
+        rich.setSelectedRange((rich.string as NSString).range(of: outgoing)); shell.format("Bold"); settle()
+        rich.setSelectedRange(NSRange(location: rich.string.utf16.count, length: 0))
+        shell.richCommands.insertTable(rows: 2, columns: 2)
+        let cell = (rich.string as NSString).range(of: "Cell")
+        guard cell.location != NSNotFound else { throw NotesError.invalid("Native rich fixture table did not insert") }
+        rich.insertText("O2N native", replacementRange: cell); settle()
+        guard session.source.contains("**" + outgoing + "**"), session.source.contains("| O2N native |") else {
+            throw NotesError.invalid("Default rich formatting/table save failed")
+        }
+        shell.perform("Markdown"); settle()
+        guard shell.markdownVisible, let source = shell.sourceCommands.target else { throw NotesError.invalid("Markdown ribbon did not reveal its editor") }
+        window.makeFirstResponder(source)
+        let changed = session.source + "\n![Synthetic blue square](\(imagePath))\n\n```mermaid\n" + diagramSource + "```\n"
+        source.insertText(changed, replacementRange: NSRange(location: 0, length: source.string.utf16.count)); settle()
+        guard session.source == changed else { throw NotesError.invalid("Markdown fixture assets did not save") }
+        shell.perform("Markdown"); settle()
+        guard !shell.markdownVisible, shell.richCommands.target === rich, session.source == changed, !window.isVisible else {
+            throw NotesError.invalid("Returning to rich editing changed source or replaced the native view")
+        }
+        return window
     }
 }

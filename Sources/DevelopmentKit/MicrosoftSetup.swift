@@ -24,7 +24,8 @@ extension DevelopmentWorkflow {
             throw DevelopmentError.invalidArguments("SharePoint target identity did not match; no registration changed")
         }
         let name = "OpenOneNote"
-        let callback = "msauth.dev.senguttuvang.OpenOneNote://auth"
+        let preferredCallback = "msauth.dev.senguttuvang.OpenOneNote://auth/callback"
+        let earlierCallback = "msauth.dev.senguttuvang.OpenOneNote://auth"
         let resource = "00000003-0000-0000-c000-000000000000"
         let permission = "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a" // delegated Notes.ReadWrite
         let matches = try json(["ad", "app", "list", "--display-name", name]) as? [[String: Any]] ?? []
@@ -40,7 +41,7 @@ extension DevelopmentWorkflow {
         if let existing = exact.first { app = existing }
         else {
             guard let created = try json(["ad", "app", "create", "--display-name", name, "--sign-in-audience", "AzureADMyOrg",
-                                          "--is-fallback-public-client", "true", "--public-client-redirect-uris", callback,
+                                          "--is-fallback-public-client", "true", "--public-client-redirect-uris", preferredCallback,
                                           "--required-resource-access", "@" + permissions.path]) as? [String: Any] else {
                 throw DevelopmentError.invalidArguments("Azure did not return the created registration; rediscover before retrying")
             }
@@ -52,15 +53,19 @@ extension DevelopmentWorkflow {
         let readback = try json(["ad", "app", "show", "--id", clientID]) as? [String: Any] ?? [:]
         let access = readback["requiredResourceAccess"] as? [[String: Any]] ?? []
         let scopes = access.first?["resourceAccess"] as? [[String: Any]] ?? []
+        let callbacks = (readback["publicClient"] as? [String: Any])?["redirectUris"] as? [String] ?? []
         guard readback["displayName"] as? String == name, readback["signInAudience"] as? String == "AzureADMyOrg",
               readback["isFallbackPublicClient"] as? Bool == true,
-              (readback["publicClient"] as? [String: Any])?["redirectUris"] as? [String] == [callback],
+              !callbacks.isEmpty, Set(callbacks).isSubset(of: [preferredCallback, earlierCallback]),
               access.count == 1, access.first?["resourceAppId"] as? String == resource,
               scopes.count == 1, scopes.first?["id"] as? String == permission, scopes.first?["type"] as? String == "Scope",
               (readback["passwordCredentials"] as? [Any] ?? []).isEmpty,
               (readback["keyCredentials"] as? [Any] ?? []).isEmpty else {
             throw DevelopmentError.invalidArguments("Existing/readback O2N registration does not match the narrow public-client contract; no overwrite attempted")
         }
+        // Reuse existing registrations without mutation. Explicitly migrated clients prefer a path,
+        // avoiding the provider's documented trailing-slash normalization of pathless redirects.
+        let callback = callbacks.contains(preferredCallback) ? preferredCallback : earlierCallback
         let principals = try json(["ad", "sp", "list", "--filter", "appId eq '\(clientID)'"]) as? [[String: Any]] ?? []
         guard principals.count <= 1 else { throw DevelopmentError.invalidArguments("Ambiguous O2N service principal") }
         let principal = try principals.first ?? (json(["ad", "sp", "create", "--id", clientID]) as? [String: Any] ?? [:])

@@ -7,12 +7,13 @@ private final class RegistrationRunner: ProcessRunning {
     var existing = false
     var badTenant = false
     var broadPermission = false
+    var callbacks = ["msauth.dev.senguttuvang.OpenOneNote://auth/callback"]
     let tenant = "11111111-1111-1111-1111-111111111111"
     let client = "22222222-2222-2222-2222-222222222222"
     let site = "synthetic.sharepoint.com,site,web"
     var registration: [String: Any] {
         ["id": "registration", "appId": client, "displayName": "OpenOneNote", "signInAudience": "AzureADMyOrg",
-         "isFallbackPublicClient": true, "publicClient": ["redirectUris": ["msauth.dev.senguttuvang.OpenOneNote://auth"]],
+         "isFallbackPublicClient": true, "publicClient": ["redirectUris": callbacks],
          "passwordCredentials": [], "keyCredentials": [],
          "requiredResourceAccess": [["resourceAppId": "00000003-0000-0000-c000-000000000000", "resourceAccess": [["id": broadPermission ? "unapproved" : "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a", "type": "Scope"]]]]]
     }
@@ -49,6 +50,23 @@ private final class RegistrationRunner: ProcessRunning {
     let config = try JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent(".o2n/config/microsoft-client.json"))) as? [String: String]
     #expect(config?["clientID"] == runner.client)
     #expect(config?["graphRoot"] == "sites/" + runner.site)
+    #expect(config?["redirectURI"] == "msauth.dev.senguttuvang.OpenOneNote://auth/callback")
+}
+
+@Test @MainActor func dedicatedRegistrationPrefersExplicitPathAndRejectsUnregisteredReturnTargets() throws {
+    let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: root) }
+    let runner = RegistrationRunner(); runner.existing = true
+    runner.callbacks.append("msauth.dev.senguttuvang.OpenOneNote://auth")
+    try DevelopmentWorkflow(root: root, runner: runner).microsoftRegister(azure: "/usr/bin/true", vault: root, tenant: runner.tenant, siteID: runner.site)
+    let config = try JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent(".o2n/config/microsoft-client.json"))) as? [String: String]
+    #expect(config?["redirectURI"] == runner.callbacks.first)
+    #expect(!runner.calls.contains { $0.contains("create") || $0.contains("update") })
+    runner.callbacks.append("https://unregistered.invalid/return")
+    #expect(throws: DevelopmentError.self) {
+        try DevelopmentWorkflow(root: root, runner: runner).microsoftRegister(azure: "/usr/bin/true", vault: root, tenant: runner.tenant, siteID: runner.site)
+    }
+    #expect(!runner.calls.contains { $0.contains("update") })
 }
 
 @Test @MainActor func dedicatedRegistrationRetryReusesExactIdentityWithoutMutation() throws {
