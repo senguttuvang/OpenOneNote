@@ -4,9 +4,9 @@
 
 O2N's independently authored code is available under the [MIT license](LICENSE), including for personal and commercial use. Microsoft and other third-party materials retain their own rights; see [third-party notices](THIRD_PARTY.md). O2N is not affiliated with or endorsed by Microsoft or ArtCraft.
 
-![O2N's native editor showing the fictional Orbit startup notebook, product brief, roadmap pages and six team sections](artifacts/previews/orbit-startup/product-brief.png)
+![O2N's Markdown split view showing the fictional Orbit startup notebook, onboarding source beside its rendered Mermaid flowchart, and six team sections](artifacts/previews/orbit-startup/markdown-onboarding.png)
 
-*Developer preview on macOS. Orbit is a fictional startup; the notebook, metrics and planning content are sample data. [Open the full-resolution screenshot](artifacts/previews/orbit-startup/product-brief.png).*
+*Markdown source, rendered notes and a locally rendered Mermaid diagram in the same notebook. Developer preview on macOS; Orbit is a fictional startup with sample content. [Open the full-resolution screenshot](artifacts/previews/orbit-startup/markdown-onboarding.png).*
 
 ## For People Who Use OneNote
 
@@ -17,9 +17,9 @@ O2N's independently authored code is available under the [MIT license](LICENSE),
 
 **Current stage: developer preview.** Native local editing and Graph transport/recovery paths have automated coverage. A synthetic native O2N ↔ official OneNote web-editor roundtrip passed on 31 October, including same-page identity, table/image/diagram-source preservation and an observed 81-second return refresh. Separate offline/reconnect/conflict checks passed. The final installed build also verified saved-identity reuse and synthetic asset downloads; ad-hoc development updates can require renewed macOS Keychain approval. See the [precise acceptance and deployment boundaries](reconstruction/oauth-sharepoint-acceptance.md). O2N does not yet promise production-ready interoperability, complete OneNote feature parity, or lossless handling of every OneNote page.
 
-![The same Orbit notebook in Markdown split mode, with onboarding source beside its rendered Mermaid flowchart and product requirements](artifacts/previews/orbit-startup/markdown-onboarding.png)
+![O2N's native editor showing the same fictional Orbit notebook, product brief, roadmap pages and six team sections](artifacts/previews/orbit-startup/product-brief.png)
 
-*Markdown and a locally rendered onboarding diagram, inside the same notebook. [Screenshot details and demo instructions](artifacts/previews/orbit-startup/README.md).*
+*The same notebook in the normal native editor. All metrics and planning content are sample data. [Screenshot details and demo instructions](artifacts/previews/orbit-startup/README.md).*
 
 ## For Teams And Business Users
 
