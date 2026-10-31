@@ -33,6 +33,31 @@ private func page(_ first: String, _ second: String = "Second") -> String {
     "<html><body><div id='outer'><p id='p1'>\(first)</p><p id='p2'>\(second)</p></div></body></html>"
 }
 
+@Test func officialTrailingBreakIsPreservedWithoutBlockingSupportedEdits() async throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory)
+    let imageURL = "https://graph.microsoft.com/v1.0/me/onenote/resources/original/$value"
+    let imageBytes = Data([0x89, 0x50, 0x4e, 0x47, 1, 2, 3])
+    let original = "<body><div id='outer'><p id='keep'><b>Keep தமிழ் 🌿</b></p><p id='edit'>Original</p><img id='picture' src='\(imageURL)' /><iframe id='protected'></iframe><br id='empty' /></div></body>"
+    let remote = SyntheticRemote(original)
+    await remote.addResource(imageURL, bytes: imageBytes)
+    let sync = NoteSync(vault: vault, remote: remote)
+    let ledger = try await sync.open(PageIdentity(pageID: "official-origin"))
+    let source = try vault.markdown(ledger).replacingOccurrences(of: "Original", with: "Changed in O2N")
+    _ = try await sync.save(ledger.id, markdown: source)
+    await remote.setAfterWrite(original.replacingOccurrences(of: "Original", with: "Changed in O2N"))
+    let result = try await sync.sync(ledger.id)
+    #expect(result.state == "synced")
+    let commands = try #require(await remote.writes.first)
+    #expect(commands.count == 1)
+    #expect(commands[0].target == "edit")
+    #expect(await remote.uploadedBytes.isEmpty)
+    #expect(result.assets == ledger.assets)
+    #expect(result.assets.first?.hash == MarkdownVault.hash(imageBytes))
+    #expect(try vault.markdown(result).contains("Keep தமிழ் 🌿"))
+}
+
 @Test func samePageOfflineReconnectAndRemotePull() async throws {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: directory) }
