@@ -17,10 +17,6 @@ O2N's independently authored code is available under the [MIT license](LICENSE),
 
 **Current stage: developer preview.** Native local editing and Graph transport/recovery paths have automated coverage. A synthetic native O2N ↔ official OneNote web-editor roundtrip passed on 31 October, including same-page identity, table/image/diagram-source preservation and an observed 81-second return refresh. Separate offline/reconnect/conflict checks passed. The final installed build also verified saved-identity reuse and synthetic asset downloads; ad-hoc development updates can require renewed macOS Keychain approval. See the [precise acceptance and deployment boundaries](reconstruction/oauth-sharepoint-acceptance.md). O2N does not yet promise production-ready interoperability, complete OneNote feature parity, or lossless handling of every OneNote page.
 
-![O2N's native editor showing the same fictional Orbit notebook, product brief, roadmap pages and six team sections](artifacts/previews/orbit-startup/product-brief.png)
-
-*The same notebook in the normal native editor. All metrics and planning content are sample data. [Screenshot details and demo instructions](artifacts/previews/orbit-startup/README.md).*
-
 ## For Teams And Business Users
 
 The aim is to let colleagues keep using official OneNote while Mac users gain Markdown and code-oriented tools over the same supported pages. Microsoft still hosts the cloud notebook; organizational access and consent policies still apply. O2N uses delegated user access, not an embedded client secret or a separate O2N cloud service.
