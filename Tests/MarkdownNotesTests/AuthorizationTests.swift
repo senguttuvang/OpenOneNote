@@ -27,7 +27,15 @@ private final class MemoryCredentials: MicrosoftCredentialStore, @unchecked Send
     #expect(!(request.state ?? "").isEmpty)
     #expect(!(request.nonce ?? "").isEmpty)
     #expect(request.scope?.split(separator: " ").contains("offline_access") == true)
-    #expect(!MicrosoftSignIn.scopes.contains(where: { $0.contains("Sites.") || $0.contains("ReadWrite.All") }))
+    #expect(MicrosoftSignIn.scopes == ["openid", "profile", "offline_access", "https://graph.microsoft.com/Notes.ReadWrite.All"])
+}
+
+@Test func personalNotesGrantCannotSilentlySatisfySharedNotebookAccess() {
+    #expect(!MicrosoftSignIn.hasRequiredNotesScope("openid profile Notes.ReadWrite"))
+    #expect(!MicrosoftSignIn.hasRequiredNotesScope("Sites.ReadWrite.All Files.ReadWrite.All"))
+    #expect(!MicrosoftSignIn.hasRequiredNotesScope(nil))
+    #expect(MicrosoftSignIn.hasRequiredNotesScope("openid profile Notes.ReadWrite.All"))
+    #expect(MicrosoftSignIn.hasRequiredNotesScope("https://graph.microsoft.com/Notes.ReadWrite.All"))
 }
 
 @Test @MainActor func missingNativeCredentialNeverPromptsOrCreatesAFileCache() async throws {

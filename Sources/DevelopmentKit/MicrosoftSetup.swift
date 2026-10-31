@@ -27,7 +27,8 @@ extension DevelopmentWorkflow {
         let preferredCallback = "msauth.dev.senguttuvang.OpenOneNote://auth/callback"
         let earlierCallback = "msauth.dev.senguttuvang.OpenOneNote://auth"
         let resource = "00000003-0000-0000-c000-000000000000"
-        let permission = "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a" // delegated Notes.ReadWrite
+        let permission = "64ac0503-b4fa-45d9-b544-71a463f05da0" // delegated Notes.ReadWrite.All: shared/site notebooks
+        let earlierPermission = "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a" // preserve existing personal-notes declaration
         let matches = try json(["ad", "app", "list", "--display-name", name]) as? [[String: Any]] ?? []
         let exact = matches.filter { $0["displayName"] as? String == name }
         guard exact.count <= 1 else { throw DevelopmentError.invalidArguments("Multiple O2N registrations exist; resolve their identities before provisioning") }
@@ -53,12 +54,15 @@ extension DevelopmentWorkflow {
         let readback = try json(["ad", "app", "show", "--id", clientID]) as? [String: Any] ?? [:]
         let access = readback["requiredResourceAccess"] as? [[String: Any]] ?? []
         let scopes = access.first?["resourceAccess"] as? [[String: Any]] ?? []
+        let scopeIDs = scopes.compactMap { $0["id"] as? String }
         let callbacks = (readback["publicClient"] as? [String: Any])?["redirectUris"] as? [String] ?? []
         guard readback["displayName"] as? String == name, readback["signInAudience"] as? String == "AzureADMyOrg",
               readback["isFallbackPublicClient"] as? Bool == true,
               !callbacks.isEmpty, Set(callbacks).isSubset(of: [preferredCallback, earlierCallback]),
               access.count == 1, access.first?["resourceAppId"] as? String == resource,
-              scopes.count == 1, scopes.first?["id"] as? String == permission, scopes.first?["type"] as? String == "Scope",
+              scopeIDs.count == scopes.count, Set(scopeIDs).count == scopes.count,
+              scopeIDs.contains(permission), Set(scopeIDs).isSubset(of: [permission, earlierPermission]),
+              scopes.allSatisfy({ $0["type"] as? String == "Scope" }),
               (readback["passwordCredentials"] as? [Any] ?? []).isEmpty,
               (readback["keyCredentials"] as? [Any] ?? []).isEmpty else {
             throw DevelopmentError.invalidArguments("Existing/readback O2N registration does not match the narrow public-client contract; no overwrite attempted")
@@ -76,9 +80,9 @@ extension DevelopmentWorkflow {
         try JSONSerialization.data(withJSONObject: config, options: [.prettyPrinted, .sortedKeys]).write(to: directory.appendingPathComponent("microsoft-client.json"), options: .atomic)
         let evidence: [String: Any] = ["clientID": clientID, "tenant": tenant, "siteID": siteID, "siteURL": web,
                                       "registrationID": readback["id"] ?? "", "servicePrincipalID": principal["id"] ?? "",
-                                      "delegatedScopes": ["Notes.ReadWrite"], "callback": callback,
+                                      "delegatedScopes": ["Notes.ReadWrite.All"], "callback": callback,
                                       "consent": "User consent pending; no admin consent granted", "verifiedAt": ISO8601DateFormatter().string(from: Date())]
         try JSONSerialization.data(withJSONObject: evidence, options: [.prettyPrinted, .sortedKeys]).write(to: directory.appendingPathComponent("registration-verification.json"), options: .atomic)
-        print("Dedicated O2N single-tenant public client and service principal verified. Notes.ReadWrite only; no secret or tenant-wide consent. Public metadata saved locally. User Sign in is next.")
+        print("Dedicated O2N public client verified with delegated Notes.ReadWrite.All for shared notebooks; no secret or tenant-wide consent. Public metadata saved locally. User Sign in is next.")
     }
 }

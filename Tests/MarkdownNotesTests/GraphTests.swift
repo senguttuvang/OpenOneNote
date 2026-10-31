@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 import Testing
 import MarkdownNotes
 import MarkdownEditor
@@ -106,8 +107,16 @@ private actor ScriptedTransport: GraphTransport {
     let session = try MarkdownSession(vault: vault); session.select(ledger.id)
     session.graph = GraphClient(authorization: SyntheticAuthorization(), transport: transport)
     session.sync()
-    let deadline = Date().addingTimeInterval(3)
-    while session.busy && Date() < deadline { try await Task.sleep(for: .milliseconds(10)) }
+    // Other native UI tests can occupy MainActor beyond a wall-clock polling
+    // deadline. Await the actual completion transition; the suite's process
+    // deadline still fails an operation that never completes.
+    while session.busy {
+        await withCheckedContinuation { continuation in
+            withObservationTracking { _ = session.busy } onChange: {
+                Task { @MainActor in continuation.resume() }
+            }
+        }
+    }
     #expect(!session.busy)
     #expect(session.source == "Remote refresh\n")
     session.edit("Next local edit\n")

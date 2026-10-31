@@ -36,6 +36,7 @@ import CryptoKit
         try run(native, ["--diagram-self-test", temporary.appendingPathComponent("diagrams").path])
         try run(native, ["--self-test", temporary.appendingPathComponent("native/notebook.json").path])
         for width in [1728, 1280, 960] { try run(native, ["--render-preview", temporary.appendingPathComponent("preview-\(width).png").path, "\(width)"]) }
+        try run(native, ["--render-interface", temporary.appendingPathComponent("interface").path])
         guard try run(native, ["--notebook"], allowFailure: true).exitCode != 0,
               try run(native, ["--render-preview", temporary.appendingPathComponent("invalid.png").path, "invalid"], allowFailure: true).exitCode != 0 else {
             throw DevelopmentError.invalidArguments("Native app accepted invalid arguments")

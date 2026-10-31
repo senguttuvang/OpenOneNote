@@ -8,160 +8,74 @@ import NotebookCore
     static let ribbon = Color(white: 0.153)
     static let selected = Color(white: 0.23)
     static let secondary = Color(white: 0.68)
-    static let accent = Color(red: 0.62, green: 0.20, blue: 0.79)
+    static let accent = Color(red: 0.57, green: 0.17, blue: 0.73)
     static let line = Color.black.opacity(0.55)
 }
 
 @MainActor public struct EditorView: View {
     @ObservedObject public var session: NotebookSession
-    @StateObject private var formatting = EditorFormatting()
-    @State private var tab = "Home"
-    @State private var link = "https://"
-    public init(session: NotebookSession) { self.session = session }
-
+    @StateObject private var commands: EditorCommands
+    public init(session: NotebookSession, commands: EditorCommands? = nil) {
+        self.session = session
+        _commands = StateObject(wrappedValue: commands ?? EditorCommands(session: session))
+    }
+    private var canvas: Color { commands.lightCanvas ? .white : PaperPalette.canvas }
     public var body: some View {
         GeometryReader { geometry in
             if let notebook = session.notebook {
                 VStack(spacing: 0) {
-                    ribbon
+                    RibbonView(commands: commands)
                     HStack(spacing: 0) {
                         appRail
-                        VStack(spacing: 0) {
-                            notebookHeader
-                            HStack(spacing: 0) {
-                                sidebar(notebook).frame(width: geometry.size.width >= 1400 ? 250 : 200)
-                                pageList.frame(width: geometry.size.width >= 1400 ? 301 : 220)
-                            }
-                        }.frame(width: geometry.size.width >= 1400 ? 551 : 420).background(PaperPalette.navigation)
+                        if !commands.navigationHidden {
+                            VStack(spacing: 0) {
+                                notebookHeader
+                                if commands.searching { searchField }
+                                HStack(spacing: 0) {
+                                    sidebar(notebook).frame(width: (geometry.size.width >= 1400 ? 250 : 200) + commands.navigationAdjustment)
+                                    pageList.frame(width: geometry.size.width >= 1400 ? 301 : 220)
+                                }
+                            }.frame(width: (geometry.size.width >= 1400 ? 551 : 420) + commands.navigationAdjustment).background(PaperPalette.navigation)
+                        }
                         pageContent
                     }
-                }
+                }.onAppear { updateViewport(geometry.size.width) }
+                    .onChange(of: geometry.size.width) { _, width in updateViewport(width) }
+                    .onChange(of: commands.navigationHidden) { _, _ in updateViewport(geometry.size.width) }
+                    .onChange(of: commands.navigationAdjustment) { _, _ in updateViewport(geometry.size.width) }
             } else {
                 ContentUnavailableView("Couldn’t open notebook", systemImage: "exclamationmark.triangle", description: Text(session.errorMessage ?? "The original file has been preserved."))
             }
-        }
-        .background(PaperPalette.canvas).foregroundStyle(Color(nsColor: EditorTheme.foreground))
-        .preferredColorScheme(.dark).tint(PaperPalette.accent)
-        .onChange(of: session.selectedPageID) { _, _ in formatting.clear() }
+        }.background(canvas).foregroundStyle(Color(nsColor: EditorTheme.foreground)).preferredColorScheme(.dark).tint(PaperPalette.accent)
+            .onChange(of: session.selectedPageID) { _, _ in commands.formatting.clear() }
     }
-
-    private var ribbon: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button { session.undoManager.undo() } label: { Image(systemName: "arrow.uturn.backward") }.help("Undo (⌘Z)")
-                Button { session.undoManager.redo() } label: { Image(systemName: "arrow.uturn.forward") }.help("Redo (⇧⌘Z)")
-                Spacer()
-                Text("OpenOneNote").font(.system(size: 12, weight: .medium))
-                Spacer()
-                Text(session.status).font(.system(size: 11)).foregroundStyle(PaperPalette.secondary)
-                Button { session.saveNow() } label: { Image(systemName: "square.and.arrow.down") }.help("Save (⌘S)").accessibilityLabel("Save Notebook")
-            }.padding(.horizontal, 24).frame(height: 36)
-            HStack(spacing: 24) {
-                ForEach(["Home", "Insert", "Draw", "View"], id: \.self) { title in
-                    Button { tab = title } label: {
-                        Text(title).font(.system(size: 13, weight: tab == title ? .bold : .medium))
-                            .padding(.vertical, 8).overlay(alignment: .bottom) { if tab == title { Capsule().fill(.white).frame(height: 3) } }
-                    }
-                }
-                Spacer()
-            }.padding(.horizontal, 12).frame(height: 36)
-            ScrollView(.horizontal) {
-                HStack(spacing: 12) {
-                    if tab == "Home" { homeTools }
-                    if tab == "Insert" {
-                        tool("Text Container", "text.badge.plus") { session.addContainer() }
-                        tool("Table", "tablecells") { formatting.table() }.disabled(!formatting.available)
-                        Divider().frame(height: 54)
-                        TextField("Link URL", text: $link).frame(width: 240).textFieldStyle(.roundedBorder)
-                        Button("Apply Link") { formatting.link(link) }.disabled(!formatting.available)
-                    }
-                    if tab == "Draw" { Text("Ink tools are not available in this local editor.").foregroundStyle(PaperPalette.secondary) }
-                    if tab == "View" {
-                        Text("100% • Document coordinates are preserved when resizing.").foregroundStyle(PaperPalette.secondary)
-                        tool("Add Text", "text.badge.plus") { session.addContainer() }
-                    }
-                }.padding(.horizontal, 16).frame(height: 76)
-            }.scrollIndicators(.hidden)
-        }
-        .buttonStyle(.plain).background(PaperPalette.ribbon)
-        .overlay(alignment: .bottom) { PaperPalette.line.frame(height: 1) }
-    }
-
-    private var homeTools: some View {
-        Group {
-            tool("Paste", "doc.on.clipboard") { formatting.perform("paste:") }.disabled(!formatting.available)
-            VStack(alignment: .leading, spacing: 7) {
-                Button("Cut") { formatting.perform("cut:") }
-                Button("Copy") { formatting.perform("copy:") }
-            }.disabled(!formatting.available).font(.system(size: 12))
-            Divider().frame(height: 60)
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 4) {
-                    Picker("Font", selection: Binding(get: { formatting.fontName }, set: { formatting.font(name: $0) })) {
-                        ForEach(Array(Set(["Calibri", "Helvetica", "Arial", "Times New Roman", "Menlo", formatting.fontName])).sorted(), id: \.self) { Text($0).tag($0) }
-                    }.labelsHidden().frame(width: 105)
-                    Picker("Font Size", selection: Binding(get: { formatting.fontSize }, set: { formatting.font(size: $0) })) {
-                        ForEach(Array(Set([10.0, 12, 14, 16, 18, 20, 24, 28, 36, formatting.fontSize])).sorted(), id: \.self) { Text($0.formatted()).tag($0) }
-                    }.labelsHidden().frame(width: 58)
-                }
-                HStack(spacing: 14) {
-                    formatButton("Bold", "bold", active: formatting.bold) { formatting.perform("toggleBoldface:") }
-                    formatButton("Italic", "italic", active: formatting.italic) { formatting.perform("toggleItalics:") }
-                    formatButton("Underline", "underline", active: formatting.underline) { formatting.attribute(.underlineStyle, value: formatting.underline ? 0 : 1, action: "Underline") }
-                    formatButton("Strikethrough", "strikethrough") { formatting.attribute(.strikethroughStyle, value: 1, action: "Strikethrough") }
-                    formatButton("Highlight", "highlighter") { formatting.attribute(.backgroundColor, value: NSColor.systemYellow.withAlphaComponent(0.4), action: "Highlight") }
-                    formatButton("Text Color", "a.underline") { formatting.attribute(.foregroundColor, value: EditorTheme.link, action: "Text Color") }
-                }
-            }.disabled(!formatting.available)
-            Divider().frame(height: 60)
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 18) {
-                    formatButton("Bulleted List", "list.bullet") { formatting.list(numbered: false) }
-                    formatButton("Numbered List", "list.number") { formatting.list(numbered: true) }
-                }
-                HStack(spacing: 18) {
-                    formatButton("Align Left", "text.alignleft") { formatting.perform("alignLeft:") }
-                    formatButton("Align Center", "text.aligncenter") { formatting.perform("alignCenter:") }
-                    formatButton("Align Right", "text.alignright") { formatting.perform("alignRight:") }
-                }
-            }.disabled(!formatting.available)
-            Divider().frame(height: 60)
-            VStack(alignment: .leading, spacing: 8) {
-                Button("Heading 1") { formatting.heading(1) }.font(.system(size: 14, weight: .medium))
-                Button("Heading 2") { formatting.heading(2) }.font(.system(size: 12))
-            }.foregroundStyle(Color(nsColor: EditorTheme.link)).frame(width: 150, alignment: .leading)
-                .padding(10).background(Color.white.opacity(0.08)).disabled(!formatting.available)
-            Divider().frame(height: 60)
-            tool("Add Text", "text.badge.plus") { session.addContainer() }
-        }
-    }
-
-    private func tool(_ title: String, _ symbol: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) { VStack(spacing: 5) { Image(systemName: symbol).font(.system(size: 23)); Text(title).font(.system(size: 11)) } }
-            .help(title).accessibilityLabel(title).focusable(false)
-    }
-    private func formatButton(_ title: String, _ symbol: String, active: Bool = false, action: @escaping () -> Void) -> some View {
-        Button(action: action) { Image(systemName: symbol).frame(width: 18, height: 20).background(active ? Color.white.opacity(0.2) : .clear) }
-            .help(title).accessibilityLabel(title).focusable(false)
+    private func updateViewport(_ width: Double) {
+        commands.viewportWidth = max(240, width - 47 - (commands.navigationHidden ? 0 : (width >= 1400 ? 551 : 420) + commands.navigationAdjustment))
     }
     private var appRail: some View {
-        VStack(spacing: 26) {
-            Image(systemName: "sidebar.left")
-            Image(systemName: "books.vertical.fill").foregroundStyle(.purple)
+        VStack(spacing: 0) {
+            Button { commands.navigationHidden.toggle() } label: { Image(systemName: "rectangle.righthalf.inset.filled").frame(width: 47, height: 45) }.help("Hide Section and Page Lists").accessibilityLabel("Hide Section and Page Lists")
+            Button { commands.searching.toggle(); commands.navigationHidden = false } label: { Image(systemName: "magnifyingglass").foregroundStyle(.pink).frame(width: 47, height: 45) }.help("Search").accessibilityLabel("Search")
+            Button { commands.navigationHidden = false } label: { Image(systemName: "book.closed.fill").foregroundStyle(.purple).frame(width: 47, height: 45).overlay(alignment: .leading) { Color.purple.opacity(0.6).frame(width: 3) } }.help("Notebooks").accessibilityLabel("Notebooks")
+            Button {} label: { Image(systemName: "clock").frame(width: 47, height: 45) }.disabled(true).help("Recent Notes • edit history is not available yet").accessibilityLabel("Recent Notes")
             Spacer()
-            Image(systemName: "internaldrive").help("Stored on this Mac")
-        }.font(.system(size: 17)).foregroundStyle(PaperPalette.secondary).padding(.vertical, 18).frame(width: 47)
-            .background(Color(white: 0.19)).accessibilityLabel("Local notebook")
+            Menu { Text("Local notebook • no account signed in"); Button("Sign In…") {}.disabled(true) } label: { Image(systemName: "person.crop.circle.fill").font(.system(size: 34)).foregroundStyle(Color(red: 0.56, green: 0.38, blue: 0.76)) }.menuIndicator(.hidden).padding(.bottom, 6).help("Account Settings").accessibilityLabel("Account Settings")
+        }.font(.system(size: 17)).foregroundStyle(PaperPalette.secondary).frame(width: 47).background(Color(white: 0.19)).buttonStyle(.plain)
     }
     private var notebookHeader: some View {
-        HStack {
-            Image(systemName: "book.closed.fill").foregroundStyle(.blue)
-            TextField("Notebook name", text: Binding(get: { session.notebook?.title ?? "" }, set: { session.renameNotebook($0) }))
-                .textFieldStyle(.plain).font(.system(size: 14, weight: .semibold)).accessibilityLabel("Notebook name")
+        HStack(spacing: 8) {
+            Menu {
+                Text(session.notebook?.title ?? "Notebook")
+                TextField("Notebook name", text: Binding(get: { session.notebook?.title ?? "" }, set: { session.renameNotebook($0) }))
+                Divider(); Button("New Notebook…") {}.disabled(true); Button("Open Notebook…") {}.disabled(true)
+            } label: { HStack(spacing: 8) { Image(systemName: "book.closed.fill").foregroundStyle(.blue); Text(session.notebook?.title ?? "Notebook") }.font(.system(size: 14, weight: .semibold)) }.menuIndicator(.hidden).fixedSize().help("Current notebook")
             Spacer()
-            TextField("Section name", text: Binding(get: { session.selectedSection?.title ?? "" }, set: { session.renameSection($0) }))
-                .textFieldStyle(.plain).font(.system(size: 12)).foregroundStyle(PaperPalette.secondary).frame(maxWidth: 150).accessibilityLabel("Section name")
-        }.padding(.horizontal, 12).frame(height: 45).overlay(alignment: .bottom) { PaperPalette.line.frame(height: 1) }
+            Button { commands.navigationHidden.toggle() } label: { Image(systemName: "sidebar.left") }.help("Hide Section and Page Lists").accessibilityLabel("Hide Section and Page Lists")
+            Menu { ForEach(["Original Order", "Title A–Z", "Title Z–A"], id: \.self) { order in Button(order) { commands.pageSort = order } }; Button("Recent Notes") {}.disabled(true) } label: { Image(systemName: "line.3.horizontal.decrease") }.menuIndicator(.hidden).fixedSize().help("Sort Pages").accessibilityLabel("Sort Pages")
+        }.buttonStyle(.plain).padding(.horizontal, 12).frame(height: 45).overlay(alignment: .bottom) { PaperPalette.line.frame(height: 1) }
+    }
+    private var searchField: some View {
+        HStack { Image(systemName: "magnifyingglass"); TextField("Search this \(commands.searchScope)", text: $commands.search); Button { commands.search = ""; commands.searching = false } label: { Image(systemName: "xmark") } }.padding(10).font(.system(size: 12))
     }
     private func sidebar(_ notebook: Notebook) -> some View {
         VStack(spacing: 0) {
@@ -171,27 +85,39 @@ import NotebookCore
                         Button { session.selectSection(section.id) } label: {
                             HStack(spacing: 14) {
                                 RoundedRectangle(cornerRadius: 3).fill([Color.blue, .yellow, .pink, .green][index % 4]).frame(width: 8, height: 26)
-                                Text(section.title).font(.system(size: 14)).lineLimit(1)
-                                Spacer(minLength: 4)
+                                Text(section.title).font(.system(size: 14)).lineLimit(1); Spacer(minLength: 4)
                             }.padding(.leading, 13).frame(height: 36).background(section.id == session.selectedSectionID ? PaperPalette.selected : .clear).contentShape(Rectangle())
-                        }.buttonStyle(.plain)
+                        }.buttonStyle(.plain).contextMenu {
+                            TextField("Section name", text: Binding(get: { section.title }, set: { session.selectSection(section.id); session.renameSection($0) }))
+                            Button("New Section") { session.addSection() }
+                            Button("New Section Group") {}.disabled(true)
+                        }
                     }
                 }
             }
             footer("Add section") { session.addSection() }
         }.overlay(alignment: .trailing) { PaperPalette.line.frame(width: 1) }
     }
+    private var pages: [NotePage] {
+        let values = commands.searching && commands.searchScope == "notebook" ? (session.notebook?.sections.flatMap(\.pages) ?? []) : commands.searching && commands.searchScope == "page" ? session.selectedPage.map { [$0] } ?? [] : session.selectedSection?.pages ?? []
+        let filtered = commands.search.isEmpty ? values : values.filter { ($0.title + " " + $0.blocks.map(\.text).joined(separator: " ")).localizedCaseInsensitiveContains(commands.search) }
+        if commands.pageSort == "Title A–Z" { return filtered.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending } }
+        if commands.pageSort == "Title Z–A" { return filtered.sorted { $0.title.localizedStandardCompare($1.title) == .orderedDescending } }
+        return filtered
+    }
     private var pageList: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 0) {
-                    ForEach(session.selectedSection?.pages ?? []) { page in
-                        Button { session.selectPage(page.id) } label: {
+                    ForEach(pages) { page in
+                        Button {
+                            if let section = session.notebook?.sections.first(where: { $0.pages.contains(where: { $0.id == page.id }) }) { session.selectSection(section.id) }
+                            session.selectPage(page.id)
+                        } label: {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(page.title.isEmpty ? "Untitled page" : page.title).font(.system(size: 14)).lineLimit(1)
                                 Text(page.blocks.first?.text ?? "Start writing…").font(.system(size: 12)).foregroundStyle(PaperPalette.secondary).lineLimit(1)
-                            }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 20).frame(height: 56)
-                                .background(page.id == session.selectedPageID ? PaperPalette.selected : .clear).contentShape(Rectangle())
+                            }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 20).frame(height: 56).background(page.id == session.selectedPageID ? PaperPalette.selected : .clear).contentShape(Rectangle())
                         }.buttonStyle(.plain)
                     }
                 }
@@ -200,67 +126,75 @@ import NotebookCore
         }.overlay(alignment: .trailing) { PaperPalette.line.frame(width: 1) }
     }
     private func footer(_ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) { Text(title).font(.system(size: 14, weight: .semibold)).foregroundStyle(Color(red: 0.79, green: 0.69, blue: 0.91)).frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 20).frame(height: 44) }
-            .buttonStyle(.plain).overlay(alignment: .top) { PaperPalette.line.frame(height: 1) }
+        Button(action: action) { Text(title).font(.system(size: 14, weight: .semibold)).foregroundStyle(Color(red: 0.79, green: 0.69, blue: 0.91)).frame(maxWidth: .infinity, alignment: .leading).padding(.leading, 20).frame(height: 44) }.buttonStyle(.plain).overlay(alignment: .top) { PaperPalette.line.frame(height: 1) }
     }
     private var pageContent: some View {
         VStack(spacing: 0) {
-            if let error = session.errorMessage {
-                HStack { Text("Couldn’t save: \(error)"); Button("Retry") { session.saveNow() } }.padding(12).foregroundStyle(.red)
-            }
+            if let error = session.errorMessage { HStack { Text("Couldn’t save: \(error)"); Button("Retry") { session.saveNow() } }.padding(12).foregroundStyle(.red) }
             if let page = session.selectedPage {
-                HStack {
-                    TextField("Page title", text: Binding(get: { session.selectedPage?.title ?? "" }, set: { session.renamePage($0, pageID: page.id) }))
-                        .textFieldStyle(.plain).font(.system(size: 24)).accessibilityLabel("Page title")
-                        .frame(maxWidth: 420).padding(.bottom, 5).overlay(alignment: .bottom) { Color.gray.frame(height: 1) }
-                    Spacer(minLength: 0)
-                }.padding(.leading, 48).padding(.top, 22).padding(.bottom, 12)
+                if !commands.hidePageTitle {
+                    HStack {
+                        TextField("Page title", text: Binding(get: { session.selectedPage?.title ?? "" }, set: { session.renamePage($0, pageID: page.id) }))
+                            .textFieldStyle(.plain).font(.system(size: 24, weight: .regular)).accessibilityLabel("Page title").frame(maxWidth: 310).padding(.bottom, 5).overlay(alignment: .bottom) { Color.gray.frame(height: 1) }
+                        Spacer(minLength: 0)
+                    }.foregroundStyle(commands.lightCanvas ? .black : Color(nsColor: EditorTheme.foreground)).padding(.leading, 48).padding(.top, 22).padding(.bottom, 12)
+                }
                 ScrollView([.horizontal, .vertical]) {
+                    let width = max(760, (page.blocks.map { $0.x + $0.width }.max() ?? 0) + 48)
+                    let height = max(900, (page.blocks.map { $0.y + ($0.height ?? 260) }.max() ?? 0) + 100)
                     ZStack(alignment: .topLeading) {
-                        PaperPalette.canvas
+                        canvas
+                        PaperLines(style: commands.paperStyle)
                         ForEach(page.blocks) { block in
-                            TextContainerView(session: session, formatting: formatting, pageID: page.id, block: block).id(block.id)
-                                .offset(x: block.x, y: block.y)
+                            TextContainerView(session: session, formatting: commands.formatting, lightCanvas: commands.lightCanvas, pageID: page.id, block: block).id(block.id).offset(x: block.x, y: block.y)
                         }
-                    }.frame(width: max(760, (page.blocks.map { $0.x + $0.width }.max() ?? 0) + 48),
-                            height: max(900, (page.blocks.map { $0.y + ($0.height ?? 260) }.max() ?? 0) + 100))
+                    }.frame(width: width, height: height).scaleEffect(commands.zoom, anchor: .topLeading)
+                        .frame(width: width * commands.zoom, height: height * commands.zoom, alignment: .topLeading)
                 }
             } else { ContentUnavailableView("Choose a page", systemImage: "doc.text", description: Text("Add a page to start writing.")) }
-        }.background(PaperPalette.canvas)
+        }.background(canvas)
+    }
+}
+
+private struct PaperLines: View {
+    let style: String
+    var body: some View {
+        Canvas { context, size in
+            guard style != "None" else { return }
+            let step: CGFloat = style.contains("Narrow") || style.contains("Small") ? 16 : style.contains("Wide") || style.contains("Very Large") ? 40 : style.contains("Large") ? 32 : 24
+            var path = Path()
+            for y in stride(from: step, through: size.height, by: step) { path.move(to: CGPoint(x: 0, y: y)); path.addLine(to: CGPoint(x: size.width, y: y)) }
+            if style.contains("Grid") { for x in stride(from: step, through: size.width, by: step) { path.move(to: CGPoint(x: x, y: 0)); path.addLine(to: CGPoint(x: x, y: size.height)) } }
+            context.stroke(path, with: .color(.gray.opacity(0.3)), lineWidth: 0.5)
+        }.allowsHitTesting(false)
     }
 }
 
 @MainActor private struct TextContainerView: View {
     @ObservedObject var session: NotebookSession
     let formatting: EditorFormatting
+    let lightCanvas: Bool
     let pageID: UUID
     let block: NoteBlock
     @State private var drag: CGSize = .zero
     @State private var resize: CGSize = .zero
-
     private var editor: RichTextEditor {
-        var editor = RichTextEditor(text: block.text, richText: block.richText, undoManager: session.undoManager,
-            onChange: { session.editText(pageID: pageID, blockID: block.id, text: $0, richText: $1) }, onError: { session.reportError($0) })
-        editor.formatting = formatting
+        var editor = RichTextEditor(text: block.text, richText: block.richText, undoManager: session.undoManager, onChange: { session.editText(pageID: pageID, blockID: block.id, text: $0, richText: $1) }, onError: { session.reportError($0) })
+        editor.formatting = formatting; editor.lightCanvas = lightCanvas
         return editor
     }
     var body: some View {
         VStack(spacing: 0) {
-            HStack { Spacer(); Text("····").font(.system(size: 10)); Spacer() }
-                .frame(height: 9).background(Color.white.opacity(0.09)).contentShape(Rectangle()).help("Drag to move text container")
+            HStack { Spacer(); Text("····").font(.system(size: 10)); Spacer() }.frame(height: 9).background(Color.gray.opacity(0.22)).contentShape(Rectangle()).help("Drag to move text container")
                 .gesture(DragGesture().onChanged { drag = $0.translation }.onEnded { value in
-                    session.setGeometry(pageID: pageID, blockID: block.id, x: block.x + value.translation.width, y: block.y + value.translation.height, width: block.width, height: block.height ?? 260)
-                    drag = .zero
+                    session.setGeometry(pageID: pageID, blockID: block.id, x: block.x + value.translation.width, y: block.y + value.translation.height, width: block.width, height: block.height ?? 260); drag = .zero
                 })
             editor
-        }.frame(width: max(240, block.width + resize.width), height: max(140, (block.height ?? 260) + resize.height))
-            .background(PaperPalette.canvas).overlay(Rectangle().stroke(Color.gray.opacity(0.22), lineWidth: 1))
+        }.frame(width: max(240, block.width + resize.width), height: max(140, (block.height ?? 260) + resize.height)).overlay(Rectangle().stroke(Color.gray.opacity(0.22), lineWidth: 1))
             .overlay(alignment: .bottomTrailing) {
-                Image(systemName: "arrow.down.right").font(.system(size: 10)).foregroundStyle(PaperPalette.secondary).padding(5)
-                    .contentShape(Rectangle()).help("Drag to resize text container")
+                Image(systemName: "arrow.down.right").font(.system(size: 10)).foregroundStyle(PaperPalette.secondary).padding(5).contentShape(Rectangle()).help("Drag to resize text container")
                     .gesture(DragGesture().onChanged { resize = $0.translation }.onEnded { value in
-                        session.setGeometry(pageID: pageID, blockID: block.id, x: block.x, y: block.y, width: block.width + value.translation.width, height: (block.height ?? 260) + value.translation.height)
-                        resize = .zero
+                        session.setGeometry(pageID: pageID, blockID: block.id, x: block.x, y: block.y, width: block.width + value.translation.width, height: (block.height ?? 260) + value.translation.height); resize = .zero
                     })
             }.offset(drag)
     }

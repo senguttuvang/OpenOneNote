@@ -5,6 +5,28 @@ import MarkdownNotes
 import OneNoteGraph
 
 extension CloudVerification {
+    public static func fixtureStatus(vault directory: URL) async throws {
+        let vault = try MarkdownVault(root: directory)
+        let run = try String(contentsOf: vault.safeURL(".o2n/acceptance/current-run"), encoding: .utf8)
+        guard UUID(uuidString: run) != nil else { throw NotesError.invalid("Invalid synthetic run") }
+        let evidence = try vault.safeURL(".o2n/acceptance/\(run)")
+        let registry = try JSONDecoder().decode([String: String].self, from: Data(contentsOf: evidence.appendingPathComponent("registry.json")))
+        let session = try MarkdownSession(vault: vault)
+        guard registry["classification"] == "synthetic-only", registry["root"] == session.root,
+              let id = registry["pageID"], let graph = session.graph else { throw NotesError.invalid("No matching synthetic page") }
+        let identity = PageIdentity(root: session.root, pageID: id, accountKey: try await graph.authorization.identityKey())
+        let page = try await graph.fetch(identity)
+        guard page.title == "O2N Cloud Acceptance " + String(run.prefix(8)) else { throw NotesError.invalid("Synthetic title mismatch") }
+        try Data(page.html.utf8).write(to: evidence.appendingPathComponent("diagnostic-page.html"), options: .atomic)
+        let metadata = try await graph.request(graph.url(root: session.root, path: "pages/\(GraphClient.component(id))?$select=id,links"))
+        try metadata.write(to: evidence.appendingPathComponent("diagnostic-links.json"), options: .atomic)
+        for (index, source) in try HTMLConversion().resourceURLs(page.html).enumerated() {
+            guard let url = URL(string: source) else { continue }
+            do { let data = try await graph.resource(url); print("Synthetic resource \(index): \(data.count) bytes") }
+            catch { print("Synthetic resource \(index): \(error.localizedDescription)") }
+        }
+        print("Synthetic page HTML and links saved locally. No writes performed.")
+    }
     /// Native O2N source edit/save/sync followed by a real official-client edit supplied externally.
     /// This process never simulates the official editor using Graph PATCH.
     public static func officialRoundtrip(vault directory: URL) async throws {
@@ -13,13 +35,22 @@ extension CloudVerification {
         let session = try MarkdownSession(vault: vault)
         guard let graph = session.graph, session.root.hasPrefix("sites/") else { throw NotesError.invalid("Configure the verified SharePoint site and dedicated O2N identity first") }
         let account = try await graph.authorization.identityKey()
-        let run = UUID().uuidString
+        let current = try vault.safeURL(".o2n/acceptance/current-run")
+        let pending: [String: String]?
+        if let previous = try? String(contentsOf: current, encoding: .utf8), UUID(uuidString: previous) != nil,
+           let data = try? Data(contentsOf: vault.safeURL(".o2n/acceptance/\(previous)/registry.json")),
+           let saved = try? JSONDecoder().decode([String: String].self, from: data),
+           saved["status"] == "creating", saved["root"] == session.root, saved["run"] == previous,
+           saved["classification"] == "synthetic-only" {
+            pending = saved
+        } else { pending = nil }
+        let run = pending?["run"] ?? UUID().uuidString
         let label = "O2N Cloud Acceptance " + String(run.prefix(8))
         let outgoing = "O2N-TO-OFFICIAL-" + run
         let incoming = "OFFICIAL-TO-O2N-" + run
         let evidence = try vault.safeURL(".o2n/acceptance/\(run)")
         try FileManager.default.createDirectory(at: evidence, withIntermediateDirectories: true)
-        var registry = ["run": run, "root": session.root, "classification": "synthetic-only", "outgoingMarker": outgoing,
+        var registry = pending ?? ["run": run, "root": session.root, "classification": "synthetic-only", "outgoingMarker": outgoing,
                         "expectedOfficialMarker": incoming, "status": "creating", "startedAt": ISO8601DateFormatter().string(from: Date())]
         func record() throws {
             try JSONEncoder().encode(registry).write(to: evidence.appendingPathComponent("registry.json"), options: .atomic)
@@ -33,28 +64,46 @@ extension CloudVerification {
             let value = try JSONDecoder().decode(GraphItem.self, from: await graph.request(graph.url(root: session.root, path: path)))
             guard value.id == id, value.name == name else { throw NotesError.invalid("Synthetic target identity changed; no write attempted") }
         }
-        let notebook = try await create("notebooks", data: JSONEncoder().encode(["displayName": label]))
+        let notebook: GraphItem
+        if let id = registry["notebookID"] { notebook = GraphItem(id: id, displayName: label) }
+        else { notebook = try await create("notebooks", data: JSONEncoder().encode(["displayName": label])) }
         registry["notebookID"] = notebook.id; try record()
         try await verify("notebooks/\(GraphClient.component(notebook.id))?$select=id,displayName", id: notebook.id, name: label)
-        let section = try await create("notebooks/\(GraphClient.component(notebook.id))/sections", data: JSONEncoder().encode(["displayName": "Bidirectional test"]))
+        let section: GraphItem
+        if let id = registry["sectionID"] { section = GraphItem(id: id, displayName: "Bidirectional test") }
+        else { section = try await create("notebooks/\(GraphClient.component(notebook.id))/sections", data: JSONEncoder().encode(["displayName": "Bidirectional test"])) }
         registry["sectionID"] = section.id; try record()
         try await verify("sections/\(GraphClient.component(section.id))?$select=id,displayName", id: section.id, name: "Bidirectional test")
         let html = "<html><head><title>\(label)</title></head><body><div><p>Synthetic acceptance base</p><p>Official edit goes below this paragraph.</p></div></body></html>"
-        let page = try await create("sections/\(GraphClient.component(section.id))/pages", data: Data(html.utf8), type: "text/html")
+        let page: GraphItem
+        if let id = registry["pageID"] { page = GraphItem(id: id, displayName: label) }
+        else { page = try await create("sections/\(GraphClient.component(section.id))/pages", data: Data(html.utf8), type: "text/html") }
         registry["pageID"] = page.id; try record()
         let identity = PageIdentity(root: session.root, pageID: page.id, accountKey: account)
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
-        let ledger = try await sync.open(identity)
+        let ledger: NoteLedger
+        do { ledger = try await sync.open(identity) }
+        catch { throw NotesError.invalid("Opening recorded synthetic page after creation: " + error.localizedDescription) }
         session.select(ledger.id)
         while session.busy { try await Task.sleep(for: .milliseconds(50)) }
         let image = try vault.storeAsset(fixturePNG(), resourceURL: "", extension: "png")
         let diagramSource = "flowchart LR\n O2N-->Official\n"
         registry["imageSHA256"] = image.hash
         registry["diagramSourceSHA256"] = MarkdownVault.hash(diagramSource)
-        let window = try editRoundtripFixture(session: session, outgoing: outgoing, imagePath: image.path, diagramSource: diagramSource)
+        let window: NSWindow
+        if session.source.contains(outgoing) {
+            guard session.source.contains("**" + outgoing + "**"), session.source.contains("| O2N native |"),
+                  session.source.contains(image.path), session.source.contains("```mermaid\n" + diagramSource) else {
+                throw NotesError.invalid("Recorded native fixture is incomplete; source retained without another edit")
+            }
+            window = NSWindow(contentRect: .zero, styleMask: [.borderless], backing: .buffered, defer: false)
+        } else {
+            window = try editRoundtripFixture(session: session, outgoing: outgoing, imagePath: image.path, diagramSource: diagramSource)
+        }
         defer { withExtendedLifetime(window) {} }
         guard try vault.markdown(ledger) == session.source, !window.isVisible else { throw NotesError.invalid("Native rich/source edit/save failed") }
         registry["nativeEditPath"] = "default rich text and table; Markdown ribbon for image/diagram source"
+        try record()
         let before = try await graph.fetch(identity)
         guard before.id == page.id, before.title == label else { throw NotesError.invalid("Synthetic page identity changed before native sync") }
         session.sync()
