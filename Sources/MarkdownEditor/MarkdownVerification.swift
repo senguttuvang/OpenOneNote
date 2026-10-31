@@ -8,6 +8,7 @@ import MarkdownNotes
         let vault = try MarkdownVault(root: directory)
         let codec = MarkdownConversion()
         try NativeRichVerification.exercise(at: directory.appendingPathComponent("rich-editor"))
+        try NativeSectionVerification.exercise(at: directory.appendingPathComponent("inline-section"))
         let source = "A synthetic notebook for native interface verification. All content is generated locally.\n\n| Person | Project role |\n| --- | --- |\n| Avery | Project priorities and acceptance |\n| Morgan | Consulting and technical review |\n| Riley | Operations collaboration |\n| Jordan | Application support |\n\n## Project outcomes\n\nPreserve customer journeys, content and recovery while improving the application. Use the linked strategy, findings and delivery plan for detail.\n\n## Knowledge ownership\n\nThe notebook holds team-safe findings and roadmap material. Private information remains outside the synthetic verification vault.\n\n## Learning catalog and integration\n\n[Knowledge Hub](https://example.com/knowledge) — project learning resources and the proposed pilot.\n\n## Related pages\n\n- [Goals and outcomes](https://example.com/goals)\n- [Delivery milestones](https://example.com/milestones)\n- [Source evidence](https://example.com/evidence)\n"
         var ledger = NoteLedger(identity: PageIdentity(root: "local", pageID: "synthetic-local"), title: "Project — Home", baseline: try codec.parse(source), markdown: source, htmlHash: "fixture", assets: [])
         ledger.state = "local-only"; ledger.hierarchy = ["Synthetic Notebook", "00 Project Home"]
@@ -119,7 +120,7 @@ import MarkdownNotes
     public static func render(session: MarkdownSession, to url: URL, width: Double) throws {
         try capture(MarkdownEditorView(session: session), to: url, width: width, height: width == 1728 ? 1088 : 800)
     }
-    private static func capture<Content: View>(_ content: Content, to url: URL, width: Double, height: Double, dark: Bool = true) throws {
+    static func capture<Content: View>(_ content: Content, to url: URL, width: Double, height: Double, dark: Bool = true) throws {
         guard NSApp.activationPolicy() == .prohibited else { throw NotesError.invalid("Preview requires prohibited activation") }
         let host = NSHostingView(rootView: content.environment(\.colorScheme, dark ? .dark : .light).background(NativePalette(dark ? .dark : .light).canvas))
         host.safeAreaRegions = []

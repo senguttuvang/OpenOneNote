@@ -22,7 +22,7 @@ import MarkdownNotes
             case .notebooks: notebooks
             case .settings: settings
             case .recovery: recovery
-            case .newNotebook, .newSection: creation
+            case .newNotebook: creation
             }
         }.padding(24).frame(minWidth: surface == .recovery ? 780 : 540, idealWidth: surface == .recovery ? 900 : 600, minHeight: 260)
             .onAppear {
@@ -32,10 +32,10 @@ import MarkdownNotes
             }
     }
     private var title: String {
-        switch surface { case .account: "Account"; case .notebooks: "Open Notebook"; case .settings: "Preferences"; case .recovery: "Sync and Recovery"; case .newNotebook: "New Notebook"; case .newSection: "New Section" }
+        switch surface { case .account: "Account"; case .notebooks: "Open Notebook"; case .settings: "Preferences"; case .recovery: "Sync and Recovery"; case .newNotebook: "New Notebook" }
     }
     private var icon: String {
-        switch surface { case .account: "person.crop.circle"; case .notebooks, .newNotebook: "book.closed"; case .settings: "gearshape"; case .recovery: "arrow.triangle.2.circlepath"; case .newSection: "rectangle.stack" }
+        switch surface { case .account: "person.crop.circle"; case .notebooks, .newNotebook: "book.closed"; case .settings: "gearshape"; case .recovery: "arrow.triangle.2.circlepath" }
     }
     private var account: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -130,12 +130,11 @@ import MarkdownNotes
     }
     private var creation: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Create a local \(surface == .newNotebook ? "notebook" : "section"). Existing Microsoft pages can be opened separately.").foregroundStyle(.secondary)
+            Text("Create a local notebook. Existing Microsoft pages can be opened separately.").foregroundStyle(.secondary)
             TextField("Name", text: $name).textFieldStyle(.roundedBorder)
             HStack { Spacer(); Button("Create") {
                 let value = name.trimmingCharacters(in: .whitespacesAndNewlines)
-                if surface == .newNotebook { shell.createPage(notebook: value, section: "Notes") }
-                else { shell.createPage(section: value) }
+                shell.createPage(notebook: value, section: "Notes")
                 dismiss()
             }.disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || shell.session.busy) }
         }

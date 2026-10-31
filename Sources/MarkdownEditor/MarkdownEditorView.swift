@@ -22,7 +22,7 @@ import MarkdownNotes
             }.background(palette.canvas).foregroundStyle(palette.ink)
         }.frame(minWidth: 960, minHeight: 600).tint(palette.accent)
             .onChange(of: session.selectedID) { _, _ in titleFocused = false; shell.followSelection() }
-            .onChange(of: shell.titleFocusRequest) { _, _ in titleFocused = true }
+            .onChange(of: shell.titleFocusRequest) { _, _ in if shell.editingSectionID == nil { titleFocused = true } }
             .onChange(of: shell.markdownVisible) { _, _ in
                 titleFocused = false
                 if let view = shell.editor.target { view.window?.makeFirstResponder(view) }

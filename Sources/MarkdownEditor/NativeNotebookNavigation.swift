@@ -5,6 +5,7 @@ import MarkdownNotes
     @Bindable var shell: NativeShellState
     let wide: Bool
     @State private var selectedPage: UUID?
+    @FocusState private var sectionNameFocused: Bool
     @Environment(\.colorScheme) private var scheme
     private var palette: NativePalette { NativePalette(scheme) }
     var body: some View {
@@ -45,12 +46,19 @@ import MarkdownNotes
                         ForEach(Array(shell.sections.enumerated()), id: \.element) { index, name in
                             HStack(spacing: 12) {
                                 RoundedRectangle(cornerRadius: 2).fill([Color.blue, .yellow, .pink, .green][index % 4]).frame(width: 8, height: 25)
-                                Text(name).font(.system(size: 14)).lineLimit(1); Spacer(minLength: 0)
+                                if shell.editingSectionName == name {
+                                    TextField("Section name", text: $shell.sectionNameDraft)
+                                        .textFieldStyle(.plain).font(.system(size: 14)).focused($sectionNameFocused)
+                                        .accessibilityLabel("Section name").onAppear { sectionNameFocused = true }
+                                        .onSubmit { if shell.finishSectionName() { sectionNameFocused = false } }
+                                        .onExitCommand { shell.cancelSectionName(); sectionNameFocused = false }
+                                } else { Text(name).font(.system(size: 14)).lineLimit(1) }
+                                Spacer(minLength: 0)
                             }.frame(height: 36).tag(name).listRowInsets(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 8)).listRowSeparator(.hidden)
                                 .listRowBackground(shell.section == name ? palette.selected : .clear)
                         }
                     }.listStyle(.plain).scrollContentBackground(.hidden).tint(.gray).disabled(shell.session.busy)
-                    footer("Add section") { shell.sheet = .newSection }
+                    footer("Add section") { shell.createSection() }
                 }.frame(width: sectionWidth)
                 NativeColumnDivider(width: $shell.sectionWidth, bounds: 190...360, title: "Section column width")
                 VStack(spacing: 0) {
@@ -73,6 +81,9 @@ import MarkdownNotes
                 }.frame(width: pageWidth)
             }
         }.frame(width: sectionWidth + pageWidth + 1).background(palette.navigation)
+            .onChange(of: sectionNameFocused) { _, focused in
+                if !focused && shell.editingSectionID != nil && !shell.finishSectionName(focusTitle: false) { sectionNameFocused = true }
+            }
             .overlay(alignment: .trailing) { NativeColumnDivider(width: $shell.pageWidth, bounds: 241...400, title: "Page column width") }
     }
     private func railButton(_ title: String, _ symbol: String, tint: Color? = nil, action: @escaping () -> Void) -> some View {
