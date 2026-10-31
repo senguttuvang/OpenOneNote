@@ -40,7 +40,7 @@ extension NativeShellState {
         case "Undo": activeTextTarget?.undoManager?.undo()
         case "Redo": activeTextTarget?.undoManager?.redo()
         case "New Page": createPage()
-        case "New Section": sheet = .newSection
+        case "New Section": createSection()
         case "New Notebook…": sheet = .newNotebook
         case "Open Notebook…": sheet = .notebooks
         case "Open local Markdown…": session.openLocal(); followSelection()

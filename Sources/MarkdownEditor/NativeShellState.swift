@@ -4,7 +4,7 @@ import MarkdownNotes
 
 public enum MarkdownEditorMode: String, CaseIterable, Sendable { case write = "Write", split = "Split", read = "Read" }
 public enum NativeSearchScope { case section, notebook, all }
-public enum NativeShellSheet: String, Identifiable { case account, notebooks, settings, recovery, newNotebook, newSection; public var id: String { rawValue } }
+public enum NativeShellSheet: String, Identifiable { case account, notebooks, settings, recovery, newNotebook; public var id: String { rawValue } }
 
 /// Presentation state only. Auth, Graph and document recovery stay in MarkdownSession.
 @MainActor @Observable public final class NativeShellState {
@@ -16,6 +16,9 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
     public var mode: MarkdownEditorMode = .write
     public var markdownVisible = false
     public var titleFocusRequest = 0
+    public var editingSectionID: UUID?
+    public var editingSectionName: String?
+    public var sectionNameDraft = ""
     public var sheet: NativeShellSheet?
     public var navigationHidden = false
     public var ribbonCollapsed = false
@@ -80,16 +83,17 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
         else { notebook = notebooks.first ?? "On My Mac"; section = sections.first ?? "Notes" }
     }
     public func selectNotebook(_ value: String) {
-        guard !session.busy, session.save() else { return }
+        guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
         notebook = value; section = sections.first ?? "Notes"
         if let page = pages.first { session.select(page.id) }
     }
     public func selectSection(_ value: String) {
-        guard !session.busy, session.save() else { return }
+        guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
         section = value
         if let page = pages.first { session.select(page.id) }
     }
     public func createPage(notebook newNotebook: String? = nil, section newSection: String? = nil) {
+        guard finishSectionName(focusTitle: false) else { return }
         let destination = newNotebook ?? (session.selected?.identity.root == "local" && !notebook.isEmpty ? notebook : "On My Mac")
         let destinationSection = newSection ?? (destination == notebook && !section.isEmpty ? section : "Notes")
         let old = session.selectedID
