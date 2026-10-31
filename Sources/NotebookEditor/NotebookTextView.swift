@@ -51,15 +51,16 @@ import AppKit
         formatting?.refresh(self)
     }
 
-    public func insertTable() {
-        let table = NSTextTable(); table.numberOfColumns = 2
+    public func insertTable(rows: Int = 3, columns: Int = 2) {
+        guard (1...8).contains(rows), (1...10).contains(columns) else { return }
+        let table = NSTextTable(); table.numberOfColumns = columns
         let content = NSMutableAttributedString()
-        for row in 0..<3 {
-            for column in 0..<2 {
+        for row in 0..<rows {
+            for column in 0..<columns {
                 let cell = NSTextTableBlock(table: table, startingRow: row, rowSpan: 1, startingColumn: column, columnSpan: 1)
                 cell.setBorderColor(.gray); cell.setWidth(0.5, type: .absoluteValueType, for: .border)
                 cell.setWidth(5, type: .absoluteValueType, for: .padding)
-                cell.setContentWidth(220, type: .absoluteValueType)
+                cell.setContentWidth(440 / Double(columns), type: .absoluteValueType)
                 let style = NSMutableParagraphStyle(); style.textBlocks = [cell]
                 content.append(NSAttributedString(string: row == 0 ? "Column \(column + 1)\n" : "Cell\n", attributes: [
                     .font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground, .paragraphStyle: style
@@ -67,8 +68,14 @@ import AppKit
             }
         }
         let updated = NSMutableAttributedString(attributedString: attributedString())
-        let range = selectedRange(); updated.replaceCharacters(in: range, with: content)
-        replaceRichText(updated, selection: NSRange(location: range.location, length: content.length))
+        let range = selectedRange()
+        // A table cell must start a paragraph; otherwise TextKit adopts the preceding
+        // prose paragraph's style and silently discards the first cell boundary.
+        let prefix = range.location > 0 && (string as NSString).substring(with: NSRange(location: range.location - 1, length: 1)) != "\n" ? "\n" : ""
+        let insertion = NSMutableAttributedString(string: prefix, attributes: [.font: EditorTheme.bodyFont, .foregroundColor: EditorTheme.foreground])
+        insertion.append(content)
+        updated.replaceCharacters(in: range, with: insertion)
+        replaceRichText(updated, selection: NSRange(location: range.location + prefix.utf16.count, length: content.length))
         undoManager?.setActionName("Insert Table")
     }
 

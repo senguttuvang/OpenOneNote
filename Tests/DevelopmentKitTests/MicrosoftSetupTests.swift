@@ -15,7 +15,7 @@ private final class RegistrationRunner: ProcessRunning {
         ["id": "registration", "appId": client, "displayName": "OpenOneNote", "signInAudience": "AzureADMyOrg",
          "isFallbackPublicClient": true, "publicClient": ["redirectUris": callbacks],
          "passwordCredentials": [], "keyCredentials": [],
-         "requiredResourceAccess": [["resourceAppId": "00000003-0000-0000-c000-000000000000", "resourceAccess": [["id": broadPermission ? "unapproved" : "615e26af-c38a-4150-ae3e-c3b0d4cb1d6a", "type": "Scope"]]]]]
+         "requiredResourceAccess": [["resourceAppId": "00000003-0000-0000-c000-000000000000", "resourceAccess": [["id": broadPermission ? "unapproved" : "64ac0503-b4fa-45d9-b544-71a463f05da0", "type": "Scope"]]]]]
     }
     func run(_ tool: String, _ arguments: [String], at directory: URL, capture: Bool, timeout: TimeInterval, allowFailure: Bool, environment: [String: String]) throws -> ProcessResult {
         calls.append(arguments)

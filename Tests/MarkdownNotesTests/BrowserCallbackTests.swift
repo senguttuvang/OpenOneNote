@@ -8,16 +8,35 @@ import Testing
     var failed: NSError?
     var resumes = 0
     var cancellations = 0
+    var resumedOnMainThread = false
     func cancel() { cancellations += 1 }
     func cancel(completion: (@Sendable () -> Void)?) { cancel(); completion?() }
     func resumeExternalUserAgentFlow(with url: URL) -> Bool {
         do { try resumeExternalUserAgentFlow(url); return true } catch { return false }
     }
     func resumeExternalUserAgentFlow(_ url: URL) throws {
+        resumedOnMainThread = Thread.isMainThread
         resumes += 1
         if let rejection { throw rejection }
     }
     func failExternalUserAgentFlowWithError(_ error: any Error) { failed = error as NSError }
+}
+
+@Test @MainActor func backgroundSDKCallbackSynchronouslyReturnsThroughTheMainActor() async throws {
+    let probe = BrowserSessionProbe()
+    let callback = MicrosoftBrowserCallback(session: probe) { _ in #expect(Thread.isMainThread) }
+    let arrivedOffMain = try await Task.detached { try invokeBackgroundCallback(callback) }.value
+    #expect(arrivedOffMain)
+    #expect(probe.resumes == 1)
+    #expect(probe.resumedOnMainThread)
+    #expect(probe.cancellations == 1)
+}
+
+private func invokeBackgroundCallback(_ callback: MicrosoftBrowserCallback) throws -> Bool {
+    let offMain = !Thread.isMainThread
+    try callback.resumeExternalUserAgentFlow(URL(string: "synthetic://return")!)
+    callback.cancel()
+    return offMain
 }
 
 @Test @MainActor func rejectedBrowserCallbackFailsFlowAndNeverLogsItsURLOrErrorDescription() {

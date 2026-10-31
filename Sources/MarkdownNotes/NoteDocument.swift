@@ -32,7 +32,7 @@ public enum NotesError: Error, LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .invalid(let reason), .unsupported(let reason): return reason
-        case .authenticationRequired: return "Microsoft delegated sign-in with Notes.ReadWrite is required."
+        case .authenticationRequired: return "Microsoft delegated sign-in with the required Notes access is needed."
         case .http(let status): return "Microsoft Graph returned HTTP \(status). Local notes are retained."
         case .conflict: return "Overlapping edits need resolution. Local, remote and baseline copies are retained."
         case .remoteChanged: return "The remote page changed during sync. Refresh before retrying."

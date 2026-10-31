@@ -3,12 +3,13 @@ import Foundation
 import Security
 
 extension DevelopmentWorkflow {
-    public func buildApp() throws {
+    public func buildApp(inspection: Bool = false) throws {
         try run("swift", ["build", "-c", "release", "--product", "OpenOneNoteMac", "--jobs", "2"])
         let bin = try releaseDirectory()
-        let app = root.appendingPathComponent("dist/OpenOneNote.app")
+        let app = root.appendingPathComponent(inspection ? "dist/OpenOneNote Inspection.app" : "dist/OpenOneNote.app")
+        let identifier = inspection ? "dev.senguttuvang.OpenOneNote.Inspection" : "dev.senguttuvang.OpenOneNote"
         if FileManager.default.fileExists(atPath: app.path) {
-            guard Bundle(url: app)?.bundleIdentifier == "dev.senguttuvang.OpenOneNote",
+            guard Bundle(url: app)?.bundleIdentifier == identifier,
                   !NSWorkspace.shared.runningApplications.contains(where: { $0.bundleURL?.standardizedFileURL == app.standardizedFileURL }) else {
                 throw DevelopmentError.invalidArguments("Existing app is not an inactive OpenOneNote build; preserve it and choose a clean build directory")
             }
@@ -41,13 +42,15 @@ extension DevelopmentWorkflow {
             ("Sources/MarkdownEditor/Resources/Mermaid/LICENSE", "Mermaid.txt")
         ] { try FileManager.default.copyItem(at: root.appendingPathComponent(source), to: notices.appendingPathComponent(name)) }
         let plist: [String: Any] = [
-            "CFBundleName": "OpenOneNote", "CFBundleDisplayName": "OpenOneNote", "CFBundleIdentifier": "dev.senguttuvang.OpenOneNote",
+            "CFBundleName": inspection ? "OpenOneNote Inspection" : "OpenOneNote", "CFBundleDisplayName": inspection ? "OpenOneNote Inspection" : "OpenOneNote", "CFBundleIdentifier": identifier,
             "CFBundleExecutable": "OpenOneNoteMac", "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "0.3.0",
             "CFBundleVersion": "4", "CFBundleIconFile": "AppIcon", "LSMinimumSystemVersion": "14.0",
             "NSHighResolutionCapable": true, "NSPrincipalClass": "NSApplication"
         ]
         var appPlist = plist
-        appPlist["CFBundleURLTypes"] = [["CFBundleURLName": "O2N Microsoft sign-in", "CFBundleURLSchemes": ["msauth.dev.senguttuvang.OpenOneNote"]]]
+        if !inspection {
+            appPlist["CFBundleURLTypes"] = [["CFBundleURLName": "O2N Microsoft sign-in", "CFBundleURLSchemes": ["msauth.dev.senguttuvang.OpenOneNote"]]]
+        }
         try PropertyListSerialization.data(fromPropertyList: appPlist, format: .xml, options: 0).write(to: contents.appendingPathComponent("Info.plist"))
         let iconset = root.appendingPathComponent("scratch/AppIcon.iconset")
         try AppIcon.write(to: iconset)
@@ -88,6 +91,7 @@ extension DevelopmentWorkflow {
         for width in [1728, 1280, 960] {
             try run(binary, ["--render-preview", previews.appendingPathComponent("native-\(width).png").path, "\(width)"])
         }
+        try run(binary, ["--render-interface", previews.appendingPathComponent("interface-0.3.0").path])
         let metadata = try Data(contentsOf: app.appendingPathComponent("Contents/Resources/build.json"))
         var verification = try JSONSerialization.jsonObject(with: metadata) as? [String: String] ?? [:]
         let capability = try run(binary, ["--signing-status"], allowFailure: true)

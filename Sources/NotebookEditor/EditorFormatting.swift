@@ -11,19 +11,23 @@ import Combine
     @Published public private(set) var italic = false
     @Published public private(set) var underline = false
     @Published public private(set) var available = false
+    @Published public private(set) var inTable = false
 
     public func attach(_ view: NotebookTextView) { target = view; refresh(view) }
-    public func clear() { target = nil; available = false }
+    public func clear() { target = nil; available = false; inTable = false }
     public func refresh(_ view: NotebookTextView) {
         guard target === view else { return }
         available = true
         let attributes = view.selectedRange().length > 0 && view.selectedRange().location < view.attributedString().length
             ? view.attributedString().attributes(at: view.selectedRange().location, effectiveRange: nil) : view.typingAttributes
         let font = attributes[.font] as? NSFont ?? EditorTheme.bodyFont
-        fontName = font.familyName ?? "System"; fontSize = font.pointSize
+        let family = font.familyName ?? "System"
+        fontName = family.hasPrefix(".") ? "System" : family
+        fontSize = font.pointSize
         bold = NSFontManager.shared.traits(of: font).contains(.boldFontMask)
         italic = NSFontManager.shared.traits(of: font).contains(.italicFontMask)
         underline = (attributes[.underlineStyle] as? Int ?? 0) != 0
+        inTable = (attributes[.paragraphStyle] as? NSParagraphStyle)?.textBlocks.contains { $0 is NSTextTableBlock } == true
     }
     public func perform(_ action: String) {
         guard let target else { return }
@@ -50,7 +54,7 @@ import Combine
     public func heading(_ level: Int) {
         guard let target else { return }
         target.formatSelection(action: "Heading", paragraphs: true) { attributes in
-            attributes[.font] = NSFont.systemFont(ofSize: level == 1 ? 20 : 18, weight: .medium)
+            attributes[.font] = NSFont.systemFont(ofSize: [22.0, 20, 18, 17, 16, 15][min(5, max(0, level - 1))], weight: .medium)
             attributes[.foregroundColor] = EditorTheme.link
             let style = (attributes[.paragraphStyle] as? NSParagraphStyle)?.mutableCopy() as? NSMutableParagraphStyle ?? NSMutableParagraphStyle()
             style.paragraphSpacingBefore = 10; style.paragraphSpacing = 4
@@ -72,5 +76,5 @@ import Combine
     public static let background = NSColor(srgbRed: 32/255, green: 32/255, blue: 32/255, alpha: 1)
     public static let foreground = NSColor(srgbRed: 235/255, green: 235/255, blue: 235/255, alpha: 1)
     public static let link = NSColor(srgbRed: 100/255, green: 174/255, blue: 229/255, alpha: 1)
-    public static var bodyFont: NSFont { NSFont(name: "Calibri", size: 18) ?? .systemFont(ofSize: 18) }
+    public static var bodyFont: NSFont { NSFont(name: "Calibri", size: 14 * 4 / 3) ?? .systemFont(ofSize: 14 * 4 / 3) }
 }
