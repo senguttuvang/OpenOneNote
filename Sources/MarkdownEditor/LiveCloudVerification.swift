@@ -99,7 +99,7 @@ extension CloudVerification {
         guard let target = decoded.blocks.first(where: { $0.node.text == text && $0.editable }) else { throw NotesError.invalid("Synthetic remote edit anchor missing") }
         try await graph.update(identity, commands: [PageCommand(target: target.target, action: "replace", content: "<p>" + MarkdownConversion.escape(replacement) + "</p>")], parts: [])
     }
-    private static func fixturePNG() throws -> Data {
+    static func fixturePNG() throws -> Data {
         guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 32, pixelsHigh: 32, bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0),
               let context = NSGraphicsContext(bitmapImageRep: bitmap) else { throw NotesError.invalid("PNG fixture allocation failed") }
         NSGraphicsContext.saveGraphicsState(); NSGraphicsContext.current = context
