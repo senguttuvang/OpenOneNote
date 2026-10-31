@@ -143,7 +143,19 @@ public struct GraphClient: OneNoteRemote, Sendable {
     public func resource(_ url: URL) async throws -> Data {
         try Self.validate(url)
         guard url.path.contains("/onenote/resources/"), url.path.hasSuffix("/$value") else { throw NotesError.invalid("Not a OneNote resource endpoint") }
-        return try await request(url)
+        // OneNote's returned SharePoint resource links use the internal siteCollections
+        // spelling. Graph v1.0 exposes the identical site/resource IDs under sites.
+        var endpoint = url
+        if url.path.hasPrefix("/v1.0/siteCollections/") {
+            guard url.path.split(separator: "/").count == 7,
+                  var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+                throw NotesError.invalid("Invalid SharePoint OneNote resource endpoint")
+            }
+            components.percentEncodedPath = "/v1.0/sites/" + components.percentEncodedPath.dropFirst("/v1.0/siteCollections/".count)
+            guard let normalized = components.url else { throw NotesError.invalid("Invalid SharePoint resource URL") }
+            endpoint = normalized
+        }
+        return try await request(endpoint)
     }
     public func update(_ identity: PageIdentity, commands: [PageCommand], parts: [BinaryPart]) async throws {
         try await verifyIdentity(identity)

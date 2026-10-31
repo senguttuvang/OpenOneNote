@@ -68,7 +68,12 @@ public struct HTMLConversion: Sendable {
                 }
                 return [.element("pre", ["language": ""], [.text(rawText(element))])]
             }
-            var children = try element.getChildNodes().flatMap { try convert($0, editable: &editable) }
+            let structuralTable = ["table", "thead", "tbody", "tr"].contains(tag)
+            let childNodes = element.getChildNodes().filter { node in
+                guard structuralTable, let text = node as? TextNode else { return true }
+                return !text.getWholeText().trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
+            var children = try childNodes.flatMap { try convert($0, editable: &editable) }
             let styles = try element.attr("style").lowercased().split(separator: ";").map { $0.replacingOccurrences(of: " ", with: "") }
             if styles.contains("font-weight:bold") || styles.contains("font-weight:700") { children = [.element("strong", [:], children)] }
             if styles.contains("font-style:italic") { children = [.element("em", [:], children)] }
