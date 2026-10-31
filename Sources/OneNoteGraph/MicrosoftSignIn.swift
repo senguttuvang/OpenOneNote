@@ -100,8 +100,9 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
         }
         let request = Self.authorizationRequest(configuration: configuration, clientID: clientID, redirect: redirect)
         progress?("Presenting system-browser authorization with PKCE; awaiting the user callback.")
+        let browser = MicrosoftBrowserAgent(window: window) { [weak self] in self?.progress?($0) }
         let response: MicrosoftAuthorizationResponse = try await withCheckedThrowingContinuation { continuation in
-            flow = OIDAuthorizationService.present(request, presenting: window) { @Sendable value, error in
+            flow = OIDAuthorizationService.present(request, externalUserAgent: browser) { @Sendable value, error in
                 guard let value else {
                     continuation.resume(throwing: Self.authorizationFailure(error)); return
                 }
@@ -126,9 +127,17 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
     }
     public func cancel() { flow?.cancel(); flow = nil }
     @discardableResult public func resume(_ url: URL) -> Bool {
-        guard url.scheme?.caseInsensitiveCompare(redirect.scheme ?? "") == .orderedSame,
-              url.host == redirect.host, url.path == redirect.path else { return false }
-        do { try flow?.resumeExternalUserAgentFlow(url); return flow != nil } catch { return false }
+        let scheme = url.scheme?.caseInsensitiveCompare(redirect.scheme ?? "") == .orderedSame
+        let host = url.host == redirect.host
+        let path = url.path == redirect.path
+        progress?("Native return received; scheme/host/path match: \(scheme)/\(host)/\(path); active flow: \(flow != nil).")
+        guard scheme, host, path, let flow else { return false }
+        do { try flow.resumeExternalUserAgentFlow(url); return true }
+        catch {
+            let value = error as NSError
+            progress?("AppAuth rejected native return (\(value.domain):\(value.code)).")
+            return false
+        }
     }
     static func authorizationRequest(configuration: OIDServiceConfiguration, clientID: String, redirect: URL) -> OIDAuthorizationRequest {
         OIDAuthorizationRequest(configuration: configuration, clientId: clientID, clientSecret: nil,
