@@ -1,6 +1,6 @@
 # Third-Party Notices And License Scope
 
-This document distinguishes OpenOneNote's independently authored MIT-licensed code, its open-source dependencies, and Microsoft materials retained only for private research.
+This document distinguishes OpenOneNote's independently authored MIT-licensed code, its open-source dependencies, and legacy Microsoft research outside O2N's license grant.
 
 ## O2N Code
 
@@ -17,13 +17,13 @@ Retain upstream copyright and license notices when distributing source or binari
 
 The packaging command gathers dependency licenses into `Contents/Resources/Licenses`. A public binary release must also include O2N's own MIT notice with its distribution and verify notices for newly added dependencies. Apple's SDKs, system frameworks and SF Symbols remain subject to Apple's applicable terms; they are not relicensed by O2N.
 
-## Microsoft Research: Excluded From MIT And Public Distribution
+## Legacy Microsoft Research: Outside O2N's MIT Grant
 
-Original archives, assets, extracts, assembly, sampled pseudocode and related files under `research/` derive from a Microsoft application. Original copyright and third-party notices remain applicable. Private preservation does not grant redistribution rights. No O2N license is assigned to these materials.
+Original archives, assets, extracts, assembly, sampled pseudocode and related files under `research/` derive from a Microsoft application. They remain in this now-public repository and its history. Original copyright and third-party notices remain applicable; public availability does not grant redistribution rights. No O2N license is assigned to these materials, and they must be excluded from O2N release assets.
 
-The private archive includes an original notice at `research/assets/16.114.1/ThirdPartyNotice.txt`; it does not grant a blanket right to redistribute the Microsoft app or assets. Additional notices remain in the original archive. Git LFS pointers and old commits still reference these materials and require review before publication.
+The legacy archive includes an original notice at `research/assets/16.114.1/ThirdPartyNotice.txt`; it does not grant a blanket right to redistribute the Microsoft app or assets. Additional notices remain in the original archive. Git LFS pointers and old commits still reference these materials. Their continued presence is an unresolved repository-distribution concern; a README edit or source-only release asset does not remove that history.
 
-O2N's app targets do not link, embed or execute the archived Microsoft binaries, JavaScript, icons or frameworks. The independent research CLI reads a user-selected static bundle; it does not make the app depend on a Microsoft installation. Do not copy research materials into app resources, test fixtures or public bundles. Follow [PUBLIC_RELEASE.md](PUBLIC_RELEASE.md) for source-only publication.
+O2N's app targets do not link, embed or execute the archived Microsoft binaries, JavaScript, icons or frameworks. The independent research CLI reads a user-selected static bundle; it does not make the app depend on a Microsoft installation. Do not copy research materials into app resources, test fixtures or release bundles. Follow [PUBLIC_RELEASE.md](PUBLIC_RELEASE.md) for release selection within this repository.
 
 ## Names And Related Projects
 
