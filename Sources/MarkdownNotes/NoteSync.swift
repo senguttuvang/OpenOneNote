@@ -110,11 +110,17 @@ public actor NoteSync {
                 }
                 // Grouping/normalization can differ from Markdown. Protect pages where mapping is ambiguous.
                 let rawCanonicalBlocks = try current.blocks.map { try canonical(NoteDocument(blocks: [$0.node])).blocks }
-                guard rawCanonicalBlocks.allSatisfy({ $0.count == 1 }), rawCanonicalBlocks.flatMap({ $0 }) == currentDocument.blocks else {
+                guard rawCanonicalBlocks.allSatisfy({ $0.count <= 1 }), rawCanonicalBlocks.flatMap({ $0 }) == currentDocument.blocks else {
                     throw NotesError.unsupported("Remote block boundaries require explicit conversion; local changes retained.")
                 }
                 var mapped = current
-                for index in mapped.blocks.indices { mapped.blocks[index].node = rawCanonicalBlocks[index][0] }
+                // Official clients leave empty caret/break blocks, especially after
+                // pictures. They have no portable semantic block: leave their DOM
+                // targets untouched instead of refusing every other supported edit.
+                mapped.blocks = current.blocks.enumerated().compactMap { index, block in
+                    guard let node = rawCanonicalBlocks[index].first else { return nil }
+                    var block = block; block.node = node; return block
+                }
                 var commands = try html.commands(from: mapped, to: desired, render: { self.markdown.html(presented($0)) })
                 var parts: [BinaryPart] = []
                 // Re-upload referenced local assets as binary multipart, never as file:// or authenticated URLs.
