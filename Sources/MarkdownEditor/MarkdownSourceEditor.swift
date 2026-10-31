@@ -25,7 +25,7 @@ public struct MarkdownSourceEditor: NSViewRepresentable {
     }
     public func makeCoordinator() -> Coordinator { Coordinator(onChange: onChange, identity: identity) }
     public func makeTextView(coordinator: Coordinator) -> NSTextView {
-        let view = NSTextView()
+        let view = NativeDocumentTextView()
         view.isRichText = false; view.allowsUndo = true; view.isAutomaticQuoteSubstitutionEnabled = false
         view.isAutomaticDashSubstitutionEnabled = false; view.isAutomaticTextReplacementEnabled = false
         view.font = .monospacedSystemFont(ofSize: 16, weight: .regular)

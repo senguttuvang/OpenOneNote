@@ -9,9 +9,13 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
 /// Presentation state only. Auth, Graph and document recovery stay in MarkdownSession.
 @MainActor @Observable public final class NativeShellState {
     public let session: MarkdownSession
-    public let editor = MarkdownTextCommands()
+    public let sourceCommands = MarkdownTextCommands()
+    public let richCommands = MarkdownTextCommands()
+    public var editor: MarkdownTextCommands { markdownVisible ? sourceCommands : richCommands }
     public var tab = "Home"
-    public var mode: MarkdownEditorMode = .read
+    public var mode: MarkdownEditorMode = .write
+    public var markdownVisible = false
+    public var titleFocusRequest = 0
     public var sheet: NativeShellSheet?
     public var navigationHidden = false
     public var ribbonCollapsed = false
@@ -22,8 +26,8 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
     public var section = ""
     public var lightPaper = false
     public var zoom = 1.0
-    public var sectionWidth = 250.0
-    public var pageWidth = 301.0
+    public var sectionWidth = 300.0
+    public var pageWidth = 250.0
     public var newWindow: (() -> Void)?
     public weak var window: NSWindow?
     var menuTarget: NSObject?
@@ -40,9 +44,18 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
             return scopeMatches && (search.isEmpty || $0.title.localizedCaseInsensitiveContains(search))
         }
     }
+    public func pagePreview(_ note: NoteLedger) -> String {
+        let document = note.id == session.selectedID ? session.preview : (try? MarkdownConversion().parse(String((note.pendingMarkdown ?? note.baselineMarkdown).prefix(512))))
+        let text = document?.blocks.map(\.text).joined(separator: " ").replacingOccurrences(of: "\n", with: " ") ?? ""
+        return text.isEmpty ? "No additional text" : text
+    }
     public var tableContext: Bool {
         _ = editor.selectionRevision
         guard mode != .read, let view = editor.target else { return false }
+        if !markdownVisible, view.attributedString().length > 0 {
+            let index = min(view.selectedRange().location, view.attributedString().length - 1)
+            return (view.attributedString().attribute(.paragraphStyle, at: index, effectiveRange: nil) as? NSParagraphStyle)?.textBlocks.first is NSTextTableBlock
+        }
         let text = view.string as NSString
         let range = text.paragraphRange(for: view.selectedRange())
         return text.substring(with: range).contains("|") && view.string.contains("---")
@@ -83,7 +96,13 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
         session.newLocal()
         guard session.selectedID != old, var note = session.selected else { return }
         note.hierarchy = [destination, destinationSection]
-        do { try session.vault.saveLedger(note); session.replace(note); followSelection(); mode = .write }
+        do {
+            note.title = "Untitled Page"
+            try session.vault.saveLedger(note); session.replace(note)
+            session.edit("")
+            followSelection(); mode = .write; markdownVisible = false
+            titleFocusRequest += 1
+        }
         catch { session.message = error.localizedDescription }
     }
     public func insert(_ value: String, action: String) { mode = .write; editor.insert(value, action: action) }
