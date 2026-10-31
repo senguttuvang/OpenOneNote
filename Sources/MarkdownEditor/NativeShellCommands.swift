@@ -1,21 +1,33 @@
 import AppKit
 
 extension NativeShellState {
+    private var activeTextTarget: NSTextView? {
+        if let field = window?.firstResponder as? NSTextView, field.isFieldEditor { return field }
+        return editor.target
+    }
     static let textActions = ["Cut": "cut:", "Copy": "copy:", "Paste": "paste:", "Keep Source Formatting": "paste:", "Match Formatting": "pasteAsPlainText:", "Keep Text Only": "pasteAsPlainText:", "Paste and Match Formatting": "pasteAsPlainText:", "Paste and Keep Text Only": "pasteAsPlainText:", "Delete": "delete:", "Select All": "selectAll:"]
     static let markdownActions = ["Bold", "Italic", "Strikethrough", "Code", "Quote", "Citation", "Bulletpoints", "Numbering", "To Do", "Important", "Normal", "Increase Indent", "Table"] + (1...6).map { "Heading \($0)" }
     public func canPerform(_ title: String) -> Bool {
         if ["About OpenOneNote", "Increase Navigation Pane Width", "Decrease Navigation Pane Width"].contains(title) { return true }
-        if title == "Undo" { return !session.busy && editor.target?.undoManager?.canUndo == true }
-        if title == "Redo" { return !session.busy && editor.target?.undoManager?.canRedo == true }
+        if title == "Undo" { return !session.busy && activeTextTarget?.undoManager?.canUndo == true }
+        if title == "Redo" { return !session.busy && activeTextTarget?.undoManager?.canRedo == true }
         if title == "New Window" { return newWindow != nil }
         if ["New Page", "New Section", "New Notebook…", "Open Notebook…", "Open local Markdown…", "Preferences…", "Microsoft account", "Ribbon", "Hide Section and Page Lists", "Switch Background", "Zoom In", "Zoom Out", "Reset Zoom", "Zoom to Page Width", "Search This Page", "Search This Section", "Search This Notebook", "Search All Notebooks", "Find Next", "Find Previous", "Find and Replace", "Save", "Write", "Split", "Read", "Markdown", "Close", "Minimise", "Zoom", "Enter Full Screen", "Bring All to Front"].contains(title) { return !session.busy }
         if title == "Sync This Page" || title == "Sync page" { return !session.busy && session.selected != nil && session.selected?.identity.root != "local" && session.graph != nil }
-        if Self.textActions[title] != nil || Self.markdownActions.contains(title) || ["Date", "Date & Time", "File…", "Picture…", "Link…"].contains(title) { return session.selectedID != nil && !session.busy }
+        if Self.markdownActions.contains(title), !markdownVisible {
+            if activeTextTarget?.isFieldEditor == true { return false }
+            if tableContext && (["Table", "Bulletpoints", "Numbering"].contains(title) || title.hasPrefix("Heading ")) { return false }
+            return session.selectedID != nil && !session.busy && (["Bold", "Italic", "Strikethrough", "Code", "Normal", "Bulletpoints", "Numbering", "Table"].contains(title) || title.hasPrefix("Heading "))
+        }
+        if Self.textActions[title] != nil || Self.markdownActions.contains(title) || ["Date", "Date & Time", "File…", "Picture…", "Link…"].contains(title) { return session.selectedID != nil && !session.busy && (markdownVisible || !["Link…"].contains(title)) }
         return false
     }
     public func perform(_ title: String) {
         guard canPerform(title) else { return }
         if let selector = Self.textActions[title] {
+            if let field = activeTextTarget, field.isFieldEditor {
+                _ = field.tryToPerform(NSSelectorFromString(selector), with: nil); return
+            }
             if title == "Copy", NSApp.sendAction(NSSelectorFromString(selector), to: nil, from: nil) { return }
             if title != "Copy" { mode = .write; editor.target?.isEditable = true }
             editor.native(selector); return
@@ -25,8 +37,8 @@ extension NativeShellState {
         case "About OpenOneNote": NSApp.orderFrontStandardAboutPanel(nil)
         case "Increase Navigation Pane Width": sectionWidth = min(360, sectionWidth + 20); pageWidth = min(400, pageWidth + 20)
         case "Decrease Navigation Pane Width": sectionWidth = max(140, sectionWidth - 20); pageWidth = max(160, pageWidth - 20)
-        case "Undo": editor.target?.undoManager?.undo()
-        case "Redo": editor.target?.undoManager?.redo()
+        case "Undo": activeTextTarget?.undoManager?.undo()
+        case "Redo": activeTextTarget?.undoManager?.redo()
         case "New Page": createPage()
         case "New Section": sheet = .newSection
         case "New Notebook…": sheet = .newNotebook
@@ -42,9 +54,10 @@ extension NativeShellState {
         case "Zoom In": zoom = min(2, zoom + 0.1)
         case "Zoom Out": zoom = max(0.5, zoom - 0.1)
         case "Reset Zoom", "Zoom to Page Width": zoom = 1
-        case "Write", "Markdown": mode = .write
-        case "Split": mode = .split
-        case "Read": mode = .read
+        case "Markdown": markdownVisible.toggle(); mode = .write
+        case "Write": mode = .write
+        case "Split": markdownVisible = true; mode = .split
+        case "Read": markdownVisible = true; mode = .read
         case "Search This Section": searchScope = .section; searching = true
         case "Search This Notebook": searchScope = .notebook; searching = true
         case "Search All Notebooks": searchScope = .all; searching = true

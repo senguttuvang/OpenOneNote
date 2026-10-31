@@ -51,7 +51,6 @@ struct NativeToolStyle: ButtonStyle {
                             .overlay(alignment: .bottom) { if shell.tab == tab { Capsule().fill(palette.ink).frame(height: 3) } }
                     }.accessibilityAddTraits(shell.tab == tab ? .isSelected : [])
                 }
-                Button { shell.mode = .write; shell.tab = "Markdown"; shell.ribbonCollapsed = false } label: { Label("Markdown", systemImage: "text.badge.star") }.font(.system(size: 12)).help("Edit Markdown (⌥⌘M)")
                 Button { shell.searching.toggle() } label: { Label("Tell me", systemImage: "lightbulb") }.font(.system(size: 12))
                 Spacer(minLength: 12)
                 Menu("Page sync status", systemImage: "checkmark.icloud") {
@@ -70,7 +69,6 @@ struct NativeToolStyle: ButtonStyle {
                         case "Insert": insert
                         case "Draw": draw
                         case "View": view
-                        case "Markdown": markdown
                         case "Table": table
                         default: home
                         }
@@ -92,8 +90,8 @@ struct NativeToolStyle: ButtonStyle {
             divider
             VStack(alignment: .leading, spacing: 5) {
                 HStack(spacing: 4) {
-                    NativeFontCombo(value: Binding(get: { shell.mode == .read ? "Calibri" : shell.editor.fontName }, set: { shell.editor.fontName = $0; shell.mode = .write }), choices: NSFontManager.shared.availableFontFamilies.sorted()).frame(width: 99, height: 24)
-                    Menu { ForEach([10, 11, 12, 14, 16, 18, 20, 24, 28], id: \.self) { size in Button("\(size)") { shell.editor.fontSize = Double(size) * 4 / 3 } } } label: { HStack { Text("\(Int(shell.editor.fontSize * 0.75))"); Image(systemName: "chevron.down").font(.system(size: 7)) }.frame(width: 48, height: 22).background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 3)) }.menuIndicator(.hidden).fixedSize().help("Font Size")
+                    NativeFontCombo(value: Binding(get: { !shell.markdownVisible || shell.mode == .read ? "Calibri" : shell.editor.fontName }, set: { shell.editor.fontName = $0; shell.mode = .write }), choices: NSFontManager.shared.availableFontFamilies.sorted()).frame(width: 99, height: 24).disabled(!shell.markdownVisible).help("Font changes are available for source display; portable rich font metadata is unavailable")
+                    Menu { ForEach([10, 11, 12, 14, 16, 18, 20, 24, 28], id: \.self) { size in Button("\(size)") { shell.editor.fontSize = Double(size) * 4 / 3 } } } label: { HStack { Text("\(Int(shell.editor.fontSize * 0.75))"); Image(systemName: "chevron.down").font(.system(size: 7)) }.frame(width: 48, height: 22).background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 3)) }.menuIndicator(.hidden).fixedSize().disabled(!shell.markdownVisible).help("Font Size • source display only")
                     galleryTool("Bulletpoints", "list.bullet", kind: "bullets"); galleryTool("Numbering", "list.number", kind: "numbering")
                     tool("Decrease Indent", "decrease.indent"); tool("Increase Indent", "increase.indent"); tool("Clear Formatting", "eraser")
                 }
@@ -111,6 +109,11 @@ struct NativeToolStyle: ButtonStyle {
             gallery("Tags", first: "To Do", second: "Important", width: 238, items: InterfaceCatalog.tags)
             divider
             large("Dictate", "mic.fill", width: 48)
+            divider
+            Button { shell.markdownVisible.toggle(); shell.mode = .write } label: {
+                tile("Markdown", "chevron.left.forwardslash.chevron.right", width: 64)
+            }.accessibilityLabel("Markdown source").help("Show or hide Markdown source (⌥⌘M)")
+            if shell.markdownVisible { modes }
         }
     }
     private var insert: some View {
@@ -144,15 +147,7 @@ struct NativeToolStyle: ButtonStyle {
             VStack(alignment: .leading, spacing: 2) { Text("\(Int(shell.zoom * 100))%").font(.system(size: 12)).frame(width: 90, height: 22).background(.primary.opacity(0.07)); small("Reset Zoom", "doc.plaintext"); small("Page Width", "arrow.left.and.right", command: "Zoom to Page Width") }; divider
             large("Password Protection", "lock", width: 64); divider
             galleryTile("Paper Colour", "paintpalette", width: 50, kind: "paper"); galleryTile("Paper Style", "list.bullet.rectangle", width: 50, kind: "ruling"); large("Hide Page Title", "doc.text", width: 56); large("Hide Authors", "person.text.rectangle", width: 50); divider
-            modes
-        }
-    }
-    private var markdown: some View {
-        Group {
-            modes; divider
-            large("Heading", "textformat.size", width: 50, command: "Heading 1"); large("Bold", "bold", width: 40); large("Italic", "italic", width: 40); large("Code", "chevron.left.forwardslash.chevron.right", width: 45); large("Table", "tablecells", width: 45); large("Link", "link", width: 40, command: "Link…"); divider
-            small("Save", "square.and.arrow.down"); small("Sync page", "arrow.triangle.2.circlepath")
-            Text("Markdown · portable .md").font(.system(size: 12)).foregroundStyle(palette.secondary)
+            if shell.markdownVisible { modes }
         }
     }
     private var table: some View {

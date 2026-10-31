@@ -1,0 +1,21 @@
+# Native rich editing and inline page creation
+
+Beads `oon-qar`; based on native-shell source `fe7609e`. The supplied 31 October reference was inspected locally. Its notebook/page text and original image are excluded from publication. The current user instruction supersedes the earlier source/Read default in the Markdown-first material.
+
+## Implemented workflows
+
+- Add page immediately creates a selected blank local page, exposes Untitled Page in navigation, scrolls to it, and focuses the empty inline canvas title. No naming modal is involved. Hidden native tests type the title through the real field editor and verify persistence. Local titles are independent of body headings; cloud rename remains unavailable and disabled.
+- Ordinary editing uses a proportional native rich NSTextView over the portable Markdown semantic tree. Unicode formatting, selection, native undo/redo and save/reopen are exercised with Tamil and emoji. Headings, bold, italic, strikethrough, imported links, inline code and simple lists retain portable semantics. Return continues a visible list; Normal removes its list presentation. Heading Return resumes ordinary typing.
+- A Home ribbon code icon reveals Markdown source/split/read in the same page and shell. There is no Markdown tab or top-level menu. Both projections remain mounted and have separate undo managers. Tests verify view identity, selection and rich undo through repeated toggles. A content change through the other projection clears only stale undo.
+- Native table insertion and cell text editing persist through Markdown and reopen. Structural table edits, nested table insertion and headings/lists inside cells are unavailable. Rich changes crossing protected structures are rejected with an actionable message. Complex lists, code blocks, images and attachments retain their source rather than being rewritten through lossy HTML/RTF conversion.
+- Notebook/section/page navigation, observed menu inventory, local recovery and existing cloud API surfaces remain in place. The latest reference uses 300/250pt section/page columns at wide sizes. Page rows show bounded content previews or No additional text.
+
+## Verification and scope
+
+`swift run --jobs 2 openonenote-dev check` is the full local merge gate. The delivery PR and Beads ledger record its exact tested revision and outcome. GitHub Actions is disabled. The gate includes the native unit workflows above, release build, hidden packaged-capable rich editing/title/table acceptance through `--markdown-self-test`, native source/legacy editing, synthetic renders at 1728/1280/960, light/dark surfaces, offline Mermaid, CLI rejection and tamper/whitespace checks.
+
+Synthetic captures live in the isolated worktree's ignored `scratch/ux-parity-render/`. No user notes, installed app, credentials or official OneNote selection were modified for UI verification. The cloud peer retains the shared installed-app/auth fixture lease until explicitly released. No lease release, installation or live cloud result is inferred from elapsed time or queued coordination messages.
+
+This is an implemented interaction improvement, not complete OneNote parity. The image establishes composition; it cannot prove official focus sequencing, popup behaviour or animation timing. Prior reference/menu evidence is recorded in `native-shell-acceptance.md`. New native tests exercise O2N, not the official client. Full desktop keyboard traversal, VoiceOver, actual popup workflows, official transition timing, precise fonts/metrics/artwork, the page creation timestamp display, arbitrary rich font/size/colour/underline persistence, spatial layout, ink, recording/dictation and sharing still need further implementation or evidence. Cloud page creation/title mutation and official two-client roundtrip remain separate backend acceptance work.
+
+JetBrains preparation returned no indexed revision. Discovery used scoped direct authored-source reads and the existing observation/acceptance records; no provider upload or binary/research semantic coverage is claimed.

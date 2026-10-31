@@ -6,6 +6,7 @@ import MarkdownNotes
     @Bindable private var session: MarkdownSession
     @State private var shell: NativeShellState
     @Environment(\.colorScheme) private var scheme
+    @FocusState private var titleFocused: Bool
     private var palette: NativePalette { NativePalette(scheme) }
     public init(session: MarkdownSession, presentation: NativeShellState? = nil) {
         self.session = session; _shell = State(initialValue: presentation ?? NativeShellState(session: session))
@@ -20,7 +21,12 @@ import MarkdownNotes
                 }
             }.background(palette.canvas).foregroundStyle(palette.ink)
         }.frame(minWidth: 960, minHeight: 600).tint(palette.accent)
-            .onChange(of: session.selectedID) { _, _ in shell.followSelection() }
+            .onChange(of: session.selectedID) { _, _ in titleFocused = false; shell.followSelection() }
+            .onChange(of: shell.titleFocusRequest) { _, _ in titleFocused = true }
+            .onChange(of: shell.markdownVisible) { _, _ in
+                titleFocused = false
+                if let view = shell.editor.target { view.window?.makeFirstResponder(view) }
+            }
             .sheet(item: $shell.sheet) { sheet in NativeAccountSurfaces(shell: shell, surface: sheet) }
     }
     private var page: some View {
@@ -28,7 +34,11 @@ import MarkdownNotes
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(session.selected?.title ?? "OpenOneNote").font(.system(size: 24, weight: .regular)).lineLimit(1)
+                        TextField("", text: Binding(get: { session.selected?.title == "Untitled Page" ? "" : (session.selected?.title ?? "") }, set: session.renameSelected))
+                            .textFieldStyle(.plain).font(.system(size: 24, weight: .regular)).focused($titleFocused)
+                            .accessibilityLabel("Page title").disabled(session.selectedID == nil || session.busy || session.selected?.identity.root != "local")
+                            .help(session.selected?.identity.root == "local" ? "Page title" : "Cloud page rename is unavailable")
+                            .onSubmit { titleFocused = false; shell.editor.target?.window?.makeFirstResponder(shell.editor.target) }
                         Rectangle().fill(palette.secondary.opacity(0.7)).frame(width: 310, height: 0.5)
                     }
                     Spacer(minLength: 8)
@@ -37,6 +47,10 @@ import MarkdownNotes
                     }
                 }.padding(.leading, 48).padding(.trailing, 24).padding(.top, 22).frame(height: 74, alignment: .top)
                 if session.selectedID != nil {
+                    ZStack {
+                        richPane
+                            .disabled(session.busy || shell.markdownVisible).padding(.leading, 36).padding(.trailing, 24)
+                            .opacity(shell.markdownVisible ? 0 : 1).allowsHitTesting(!shell.markdownVisible).accessibilityHidden(shell.markdownVisible)
                     ScrollView([.horizontal, .vertical]) {
                         HStack(alignment: .top, spacing: 0) {
                             sourcePane.frame(maxWidth: shell.mode == .read ? 0 : .infinity).clipped().accessibilityHidden(shell.mode == .read)
@@ -47,6 +61,8 @@ import MarkdownNotes
                             .overlay(Rectangle().stroke(.primary.opacity(0.12), lineWidth: 0.5))
                             .overlay(alignment: .top) { Text("····").font(.system(size: 11)).foregroundStyle(palette.secondary).frame(maxWidth: .infinity).frame(height: 9).background(.primary.opacity(0.08)).accessibilityHidden(true) }
                             .padding(.leading, 72).padding(.trailing, 24).padding(.top, 24).padding(.bottom, 12)
+                    }
+                    .opacity(shell.markdownVisible ? 1 : 0).allowsHitTesting(shell.markdownVisible).accessibilityHidden(!shell.markdownVisible)
                     }
                 } else {
                     ContentUnavailableView("Choose a page", systemImage: "book.closed", description: Text("Open a notebook or add a page. Markdown is available from the ribbon.")).frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -60,8 +76,14 @@ import MarkdownNotes
     }
     private var sourcePane: some View {
         var editor = MarkdownSourceEditor(source: session.source, identity: session.selectedID, onChange: session.edit)
-        editor.commands = shell.editor; editor.pointSize = shell.editor.fontSize * shell.zoom; editor.fontName = shell.editor.fontName; editor.lightPaper = shell.lightPaper
-        return editor.disabled(session.busy || shell.mode == .read).padding(.top, 12)
+        editor.commands = shell.sourceCommands; editor.pointSize = shell.sourceCommands.fontSize * shell.zoom; editor.fontName = shell.sourceCommands.fontName; editor.lightPaper = shell.lightPaper
+        return editor.disabled(session.busy || shell.mode == .read || !shell.markdownVisible).padding(.top, 12)
+    }
+    private var richPane: some View {
+        var editor = NativeRichEditor(source: session.source, identity: session.selectedID, commands: shell.richCommands, onChange: session.edit)
+        editor.zoom = shell.zoom; editor.lightPaper = shell.lightPaper
+        editor.onRejectedEdit = { session.message = $0 }
+        return editor
     }
     private var readingPane: some View {
         ScrollView {

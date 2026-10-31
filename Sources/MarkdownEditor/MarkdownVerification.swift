@@ -7,6 +7,7 @@ import MarkdownNotes
         guard NSApp.activationPolicy() == .prohibited else { throw NotesError.invalid("Native verification must prohibit activation") }
         let vault = try MarkdownVault(root: directory)
         let codec = MarkdownConversion()
+        try NativeRichVerification.exercise(at: directory.appendingPathComponent("rich-editor"))
         let source = "A synthetic notebook for native interface verification. All content is generated locally.\n\n| Person | Project role |\n| --- | --- |\n| Avery | Project priorities and acceptance |\n| Morgan | Consulting and technical review |\n| Riley | Operations collaboration |\n| Jordan | Application support |\n\n## Project outcomes\n\nPreserve customer journeys, content and recovery while improving the application. Use the linked strategy, findings and delivery plan for detail.\n\n## Knowledge ownership\n\nThe notebook holds team-safe findings and roadmap material. Private information remains outside the synthetic verification vault.\n\n## Learning catalog and integration\n\n[Knowledge Hub](https://example.com/knowledge) — project learning resources and the proposed pilot.\n\n## Related pages\n\n- [Goals and outcomes](https://example.com/goals)\n- [Delivery milestones](https://example.com/milestones)\n- [Source evidence](https://example.com/evidence)\n"
         var ledger = NoteLedger(identity: PageIdentity(root: "local", pageID: "synthetic-local"), title: "Project — Home", baseline: try codec.parse(source), markdown: source, htmlHash: "fixture", assets: [])
         ledger.state = "local-only"; ledger.hierarchy = ["Synthetic Notebook", "00 Project Home"]
@@ -33,16 +34,18 @@ import MarkdownNotes
         if var restored = session.selected { restored.title = "Project — Home"; try vault.saveLedger(restored); session.replace(restored) }
         let shell = NativeShellState(session: session)
         for width in [1728.0, 1280.0, 960.0] { try render(session: session, to: directory.appendingPathComponent("preview-\(Int(width)).png"), width: width) }
-        for tab in ["Insert", "Draw", "View", "Markdown"] {
+        for tab in ["Insert", "Draw", "View"] {
             shell.tab = tab
             try capture(MarkdownEditorView(session: session, presentation: shell), to: directory.appendingPathComponent("ribbon-\(tab.lowercased()).png"), width: 1280, height: 800)
         }
         shell.tab = "Home"
         try capture(MarkdownEditorView(session: session, presentation: shell), to: directory.appendingPathComponent("preview-light.png"), width: 1280, height: 800, dark: false)
+        shell.markdownVisible = true
         for mode in MarkdownEditorMode.allCases {
             shell.mode = mode
             try capture(MarkdownEditorView(session: session, presentation: shell), to: directory.appendingPathComponent("mode-\(mode.rawValue.lowercased()).png"), width: 1280, height: 800)
         }
+        shell.markdownVisible = false
         for surface in [NativeShellSheet.account, .notebooks, .settings, .recovery] {
             try capture(NativeAccountSurfaces(shell: shell, surface: surface), to: directory.appendingPathComponent("dialog-\(surface.rawValue).png"), width: 900, height: 600)
         }
@@ -87,6 +90,7 @@ import MarkdownNotes
     }
     private static func modeTransitions(session: MarkdownSession) throws {
         let shell = NativeShellState(session: session)
+        shell.markdownVisible = true
         let host = NSHostingView(rootView: MarkdownEditorView(session: session, presentation: shell))
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [.borderless], backing: .buffered, defer: false)
         window.contentView = host; host.frame = window.contentLayoutRect

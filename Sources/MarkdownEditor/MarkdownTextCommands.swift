@@ -52,6 +52,11 @@ import Observation
         view.setSelectedRange(NSRange(location: range.location, length: edited.utf16.count))
     }
     public func perform(_ title: String) {
+        if let rich = target as? NativeRichTextView {
+            if title == "Table" { insertTable(rows: 3, columns: 2) }
+            else { rich.format(title) }
+            return
+        }
         switch title {
         case "Bold": wrap("**")
         case "Italic": wrap("*")
@@ -79,7 +84,19 @@ import Observation
         let header = "| " + (1...columns).map { "Column \($0)" }.joined(separator: " | ") + " |\n"
         let divider = "| " + Array(repeating: "---", count: columns).joined(separator: " | ") + " |\n"
         let row = "| " + Array(repeating: "Cell", count: columns).joined(separator: " | ") + " |\n"
-        insert("\n\n" + header + divider + String(repeating: row, count: max(0, rows - 1)), action: "Insert Table")
+        let source = header + divider + String(repeating: row, count: max(0, rows - 1))
+        if let view = target as? NativeRichTextView, let table = try? NativeRichTextCodec.render(source) {
+            view.window?.makeFirstResponder(view)
+            view.breakUndoCoalescing()
+            let content = NSMutableAttributedString()
+            if view.selectedRange().location > 0, (view.string as NSString).character(at: view.selectedRange().location - 1) != 10 {
+                content.append(NSAttributedString(string: "\n", attributes: NativeRichTextCodec.body))
+            }
+            content.append(table)
+            content.append(NSAttributedString(string: "\n", attributes: NativeRichTextCodec.body))
+            view.insertText(content, replacementRange: view.selectedRange())
+            view.undoManager?.setActionName("Insert Table")
+        } else { insert("\n\n" + source, action: "Insert Table") }
     }
     public func find(_ action: NSTextFinder.Action) {
         guard let view = target else { return }

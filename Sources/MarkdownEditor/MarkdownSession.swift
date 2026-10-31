@@ -37,6 +37,12 @@ import OneNoteGraph
         }
     }
     public var selected: NoteLedger? { notes.first { $0.id == selectedID } }
+    public func renameSelected(_ title: String) {
+        guard !busy, selected?.identity.root == "local", save(), var note = selected else { return }
+        note.title = title.isEmpty ? "Untitled Page" : title
+        do { try vault.saveLedger(note); replace(note) }
+        catch { message = error.localizedDescription }
+    }
     @discardableResult public func save() -> Bool {
         guard let id = selectedID else { return true }
         do {
@@ -51,9 +57,6 @@ import OneNoteGraph
                     ledger.externalRecoveryMarkdown = disk; ledger.pendingMarkdown = source; ledger.state = "external-file-conflict"
                     try vault.saveLedger(ledger); replace(ledger); throw NotesError.conflict
                 }
-            }
-            if ledger.identity.root == "local", let heading = preview.blocks.first, case .element("h1", _, _) = heading, !heading.text.isEmpty {
-                ledger.title = heading.text
             }
             try vault.saveOffline(source, ledger: &ledger)
             loadedFileHash = MarkdownVault.hash(source)

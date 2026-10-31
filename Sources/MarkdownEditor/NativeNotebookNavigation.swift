@@ -54,18 +54,21 @@ import MarkdownNotes
                 }.frame(width: sectionWidth)
                 NativeColumnDivider(width: $shell.sectionWidth, bounds: 190...360, title: "Section column width")
                 VStack(spacing: 0) {
+                    ScrollViewReader { proxy in
                     List(selection: $selectedPage) {
                         ForEach(shell.pages) { note in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(note.title).font(.system(size: 14)).lineLimit(1)
-                                Text(note.state == "synced" ? "Synced" : "Markdown page").font(.system(size: 12)).foregroundStyle(palette.secondary).lineLimit(1)
-                            }.frame(height: 56).tag(note.id)
+                                Text(shell.pagePreview(note)).font(.system(size: 12)).foregroundStyle(palette.secondary).lineLimit(1)
+                            }.frame(height: 56).tag(note.id).id(note.id)
                                 .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 12)).listRowSeparator(.hidden)
                                 .listRowBackground(shell.session.selectedID == note.id ? palette.selected : .clear)
                                 .contextMenu { Button("Relink moved Markdown…") { shell.session.relink(note.id) }; Button("Sync details…") { shell.sheet = .recovery } }
                         }
                     }.listStyle(.plain).scrollContentBackground(.hidden).tint(.gray).disabled(shell.session.busy)
                         .onChange(of: selectedPage) { _, value in if let value { shell.session.select(value); selectedPage = shell.session.selectedID } }
+                        .onChange(of: shell.session.selectedID) { _, value in if let value { proxy.scrollTo(value, anchor: .bottom) } }
+                    }
                     footer("Add page") { shell.createPage() }
                 }.frame(width: pageWidth)
             }
