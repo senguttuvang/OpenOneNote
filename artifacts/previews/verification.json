@@ -1,10 +1,13 @@
 {
   "architecture" : "arm64",
+  "diagrams" : "Bundled offline Mermaid PNG, preview and malformed-source rejection passed",
   "limits" : "No full desktop keyboard\/VoiceOver automation or Microsoft OneNote parity claim",
-  "nativeEditing" : "Packaged binary: text, bold, undo\/redo, save and reopen passed; expanded ribbon\/RTF cases run in the local check suite",
+  "nativeCredentialCache" : "AppAuth secure archive in app-private macOS Keychain; actual persistence and human sign-in remain separate live checks",
+  "nativeEditing" : "Packaged binary: legacy rich text and Markdown source edit\/undo\/redo\/save\/reopen passed",
   "renderScope" : "Real native views in hidden windows at 1728x1088, 1280x800 and 960x800; one pixel per point; prohibited activation policy",
-  "scope" : "Local-first editor alpha; import and sync not implemented",
+  "scope" : "Markdown vault editor with delegated Graph same-page sync; see build verification for live evidence",
   "signature" : "Ad-hoc deep\/strict verification passed",
-  "sourceRevision" : "be794c51d41c12ea573f09bc38df9071c05736b7",
+  "signingMode" : "ad-hoc; app-private macOS Keychain; no shared entitlement",
+  "sourceRevision" : "87be99a0946a6efa05955c318debb8b2a1e77214",
   "sourceState" : "committed"
 }

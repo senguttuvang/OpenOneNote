@@ -4,9 +4,10 @@ import Darwin
 public struct ProcessResult: Sendable {
     public let exitCode: Int32
     public let stdout: String
+    public init(exitCode: Int32, stdout: String) { self.exitCode = exitCode; self.stdout = stdout }
 }
 
-public enum DevelopmentError: Error, CustomStringConvertible {
+public enum DevelopmentError: Error, CustomStringConvertible, LocalizedError {
     case invalidArguments(String)
     case commandFailed(String, Int32)
     case timedOut(String)
@@ -22,6 +23,7 @@ public enum DevelopmentError: Error, CustomStringConvertible {
         case .uncommittedSource: "Commit Package.swift and Sources before archiving a reproducible build"
         }
     }
+    public var errorDescription: String? { description }
 }
 
 /// Typed process boundary following the existing Maintenance ProcessClient convention.

@@ -32,6 +32,8 @@ import CryptoKit
         let duplicate = try run(bin.appendingPathComponent("openonenote").path, ["create-demo", notebook.path], allowFailure: true)
         guard duplicate.exitCode != 0 else { throw DevelopmentError.invalidArguments("Demo creation overwrote an existing file") }
         let native = bin.appendingPathComponent("OpenOneNoteMac").path
+        try run(native, ["--markdown-self-test", temporary.appendingPathComponent("markdown-vault").path])
+        try run(native, ["--diagram-self-test", temporary.appendingPathComponent("diagrams").path])
         try run(native, ["--self-test", temporary.appendingPathComponent("native/notebook.json").path])
         for width in [1728, 1280, 960] { try run(native, ["--render-preview", temporary.appendingPathComponent("preview-\(width).png").path, "\(width)"]) }
         guard try run(native, ["--notebook"], allowFailure: true).exitCode != 0,
@@ -52,8 +54,8 @@ import CryptoKit
         guard try run(research, ["verify", fixture.deletingLastPathComponent().path, inventory.path], allowFailure: true).exitCode != 0 else {
             throw DevelopmentError.invalidArguments("Evidence verifier accepted modified bytes")
         }
-        try run("git", ["diff", "--check", "--", ".", ":!research"])
-        try run("git", ["diff", "--cached", "--check", "--", ".", ":!research"])
+        try run("git", ["diff", "--check", "--", ".", ":!research", ":!Sources/MarkdownEditor/Resources"])
+        try run("git", ["diff", "--cached", "--check", "--", ".", ":!research", ":!Sources/MarkdownEditor/Resources"])
         print("Swift tests, release build, native edit/format/undo/reopen, native renders, CLI rejection and evidence integrity checks passed")
     }
 

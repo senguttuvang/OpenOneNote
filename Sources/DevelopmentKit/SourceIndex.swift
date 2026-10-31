@@ -33,6 +33,7 @@ public struct SourceIndex: Codable, Sendable {
                 guard values.isRegularFile == true, values.isSymbolicLink != true else { continue }
                 // Enumerator depth avoids /var versus /private/var spelling differences.
                 let path = directory + "/" + url.pathComponents.suffix(files.level).joined(separator: "/")
+                guard !path.hasPrefix("Sources/MarkdownEditor/Resources/") else { skipped.append(path); continue }
                 guard extensions.contains(url.pathExtension), (values.fileSize ?? 0) <= 32 * 1024 * 1024 else { skipped.append(path); continue }
                 let data = try Data(contentsOf: url)
                 guard let text = String(data: data, encoding: .utf8), !text.hasPrefix("version https://git-lfs.github.com/spec/v1"), !text.contains("\0") else { skipped.append(path); continue }

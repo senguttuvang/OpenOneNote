@@ -7,6 +7,7 @@ scratch/
 .agents/skills/
 .claude/
 .codex/
+.playwright-cli/
 *.xcuserstate
 xcuserdata/
 *.partial

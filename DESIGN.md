@@ -1,3 +1,21 @@
+# OpenOneNote Shell with Native Rich Editing
+
+The OneNote for Mac reference governs the application shell. Markdown is the portable document format and an integrated editor mode; it does not replace the ribbon or notebook hierarchy. The earlier generic split workspace is superseded. Legacy canvas data and its editor remain preserved.
+
+## Current workspace
+
+The title/actions, tabs and ribbon occupy 148pt. A 47pt application rail precedes the notebook/section and page columns, measuring 300/250pt at wide sizes and 250/169pt at compact sizes, following the 31 October reference. Home, Insert, Draw and View preserve the observed groups. A code icon inside Home reveals Markdown Write/Split/Read in the same page; there is no Markdown tab. The ordinary canvas is proportional native rich editing below an editable local title and underline. Add page immediately creates/selects a blank page and focuses its title, without a name dialog. The title persists independently of body headings. Cloud rename is unavailable and its title is read-only. At compact widths rich text reflows; source Split permits horizontal scrolling. Navigation can be hidden and its widths adjusted from View. System appearance chooses the measured dark neutrals or light equivalents, with purple actions and accessible blue headings/links.
+
+Account and Open Notebook dialogs contain ordinary sign-in and discovery flows. Advanced client/tenant/redirect/root configuration lives only in Preferences. The sync detail dialog provides scrollable baseline/local/remote comparisons and the existing explicit recovery actions. Both notebook-wide sync labels are retained but disabled: only Sync This Page invokes the current backend. New pages/notebooks/sections are local, and creating a page while viewing a Microsoft notebook moves to On My Mac. Moved Markdown remains relinkable from the page context menu.
+
+The actual native menu bar preserves the observed families and labels, with unavailable features disabled rather than substituted. The rich projection supports paragraphs, headings, bold/italic/strikethrough, links, inline code, simple lists, native table insertion and cell text editing over the existing portable semantic tree. Complex blocks retain source and reject rich changes. Both NSTextViews remain mounted, with separate undo managers so refreshing a hidden projection cannot erase active undo. Find/Replace, keyboard shortcuts, zoom, window actions and native clipboard operations supplement the reference shell. Font/size persistence, underline, arbitrary colours, spatial objects, table structural commands, ink, recording, dictation and sharing remain unavailable; this is not full feature parity. The supplied still image does not establish official transition timing.
+
+Local source saves immediately and survives offline operation. The auth foundation owns selected-page read-only adaptive refresh, focus/wake behavior and full-content deadlines; see its acceptance record. Background refresh never pushes edits or opens consent. A single busy operation disables source changes and supports cancellation. Actual errors remain visible in the status area; failed saves prevent window termination. Native undo is scoped to the current note.
+
+Verification uses prohibited activation and hidden owned windows. The local gate exercises selection-aware Unicode formatting, native undo/reopen, hierarchy preservation, observed menu labels, mode transitions and source-view identity, actual ribbon/mode/dialog renders in both appearances, local diagram PNGs and malformed diagram rejection. Synthetic content follows the reference's structure without reproducing client notes. Packaged checks repeat the native behavior with copied resources and nested signatures. Live Graph readback, native authentication and official OneNote round-trip acceptance remain separate evidence owned by the cloud session. Reference layout reconstruction does not establish pixel-perfect or complete interaction parity.
+
+## Preserved legacy canvas reference
+
 # OpenOneNote Native Editor Design
 
 The 25 October 2026 OneNote Mac screenshot is the visual authority for this native local notebook editor. This replaces the earlier blue/white alpha direction. OpenOneNote keeps its own identity and system-symbol assets.

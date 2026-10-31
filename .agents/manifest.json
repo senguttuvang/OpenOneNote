@@ -1,8 +1,8 @@
 {
   "project": "OpenOneNote",
   "instructions": "AGENTS.md",
-  "specifications": ["specs/reconstruction.md"],
-  "architecture": "reconstruction/architecture-and-method.md",
+  "specifications": ["specs/markdown-first.md", "specs/reconstruction.md"],
+  "architecture": "reconstruction/markdown-first-architecture.md",
   "evidence": "research/findings.md",
   "authoredSourceRoots": ["Sources", "Tests", "Tools"],
   "thirdPartyResearchRoots": ["research"],

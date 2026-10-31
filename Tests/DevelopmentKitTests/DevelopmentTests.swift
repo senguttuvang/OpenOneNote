@@ -62,3 +62,17 @@ import DevelopmentKit
     try Data("new file".utf8).write(to: root.appendingPathComponent("Sources/Added.swift"))
     #expect(throws: (any Error).self) { try fresh.verify(root: root) }
 }
+
+@Test func signingProfileMustAuthorizeExactO2NTeamAndKeychainGroup() throws {
+    let team = "SYNTHETIC"
+    let app = team + ".dev.senguttuvang.OpenOneNote"
+    let now = Date(timeIntervalSince1970: 1000)
+    var profile: [String: Any] = ["ExpirationDate": Date(timeIntervalSince1970: 2000), "TeamIdentifier": [team], "Entitlements": ["com.apple.application-identifier": app, "keychain-access-groups": [app]]]
+    try DevelopmentWorkflow.validateSigningProfile(profile, team: team, now: now)
+    #expect(throws: DevelopmentError.self) { try DevelopmentWorkflow.validateSigningProfile(profile, team: "OTHER", now: now) }
+    profile["ExpirationDate"] = Date(timeIntervalSince1970: 500)
+    #expect(throws: DevelopmentError.self) { try DevelopmentWorkflow.validateSigningProfile(profile, team: team, now: now) }
+    profile["ExpirationDate"] = Date(timeIntervalSince1970: 2000)
+    profile["Entitlements"] = ["com.apple.application-identifier": app, "keychain-access-groups": [team + ".another-app"]]
+    #expect(throws: DevelopmentError.self) { try DevelopmentWorkflow.validateSigningProfile(profile, team: team, now: now) }
+}
