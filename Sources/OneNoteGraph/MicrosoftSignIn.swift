@@ -18,7 +18,7 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
     private var flow: (any OIDExternalUserAgentSession)?
     private var cacheFailure: Error?
     public var progress: (@MainActor (String) -> Void)?
-    public static let scopes = ["openid", "profile", "offline_access", "https://graph.microsoft.com/Notes.ReadWrite"]
+    public static let scopes = ["openid", "profile", "offline_access", "https://graph.microsoft.com/Notes.ReadWrite.All"]
     private static let configureNetworking: Void = {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.httpCookieStorage = nil; configuration.urlCache = nil
@@ -58,7 +58,7 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
     }
     public func accessToken() async throws -> String {
         if let cacheFailure { throw cacheFailure }
-        guard let state, state.isAuthorized else { throw NotesError.authenticationRequired }
+        guard let state, state.isAuthorized, Self.hasRequiredNotesScope(state.scope) else { throw NotesError.authenticationRequired }
         let token: String = try await withCheckedThrowingContinuation { continuation in
             state.performAction { @Sendable accessToken, _, _ in
                 guard let accessToken else { continuation.resume(throwing: NotesError.authenticationRequired); return }
@@ -67,6 +67,7 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
         }
         try Task.checkCancellation()
         try persist(state)
+        guard Self.hasRequiredNotesScope(state.scope) else { throw NotesError.authenticationRequired }
         return token
     }
     public func identityKey() async throws -> String {
@@ -76,9 +77,13 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
         return MarkdownVault.hash(issuer.absoluteString + ":" + token.subject)
     }
     public func notesScopeSummary() -> (readWrite: Bool, readWriteAll: Bool) {
-        let scopes = Set((state?.lastTokenResponse?.scope ?? "").split(separator: " ").map(String.init))
+        let scopes = Set((state?.scope ?? "").split(separator: " ").map(String.init))
         return (scopes.contains("Notes.ReadWrite") || scopes.contains("https://graph.microsoft.com/Notes.ReadWrite"),
                 scopes.contains("Notes.ReadWrite.All") || scopes.contains("https://graph.microsoft.com/Notes.ReadWrite.All"))
+    }
+    nonisolated static func hasRequiredNotesScope(_ scope: String?) -> Bool {
+        let values = Set((scope ?? "").split(separator: " ").map(String.init))
+        return values.contains("Notes.ReadWrite.All") || values.contains("https://graph.microsoft.com/Notes.ReadWrite.All")
     }
     /// Only explicit sign-in may present browser or Keychain consent UI.
     public func signIn(presenting controller: NSViewController) async throws {
