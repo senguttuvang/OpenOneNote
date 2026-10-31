@@ -88,6 +88,10 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) for build commands, module boundar
 
 Issues and focused pull requests are welcome, especially for native editing, accessibility, compatibility fixtures and reproducible sync failures. Use synthetic notes in bug reports; never attach credentials, personal notebooks or tenant configuration. GitHub Actions remains disabled; the full local check is the merge gate.
 
+## Design Notes And Roadmap
+
+Read the [design and product notes](docs/README.md) for the reasoning behind a compatible OneNote client, Markdown/metadata preservation and the custom-software versus SaaS trade-off. The [product roadmap](ROADMAP.md) separates the implemented preview from pending native editing, interoperability, annotations and shared-extension ideas.
+
 ## Related Open-Source Work
 
 [ArtCraft's Crafting Apps](https://getartcraft.com/apps) bring familiar creative and office workflows to open-source native applications. Their published lineup includes [WordCraft](https://github.com/storytold/wordcraft) for word processing, [GridCraft](https://github.com/storytold/gridcraft) for spreadsheets, and [DeckCraft](https://github.com/storytold/deckcraft) for presentations; it currently does not list a OneNote counterpart.
