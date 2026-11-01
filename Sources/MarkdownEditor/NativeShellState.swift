@@ -94,7 +94,10 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
     }
     public func followSelection() {
         if let note = session.selected { notebook = notebookName(note); section = sectionName(note) }
-        else { notebook = session.remoteNotebookName ?? notebooks.first ?? "On My Mac"; section = sections.first ?? "Notes" }
+        else {
+            notebook = session.remoteNotebookName ?? notebooks.first ?? "On My Mac"
+            section = session.sections.first(where: { $0.id == session.sectionID })?.name ?? sections.first ?? "Notes"
+        }
     }
     public func selectNotebook(_ value: String) {
         guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
@@ -107,6 +110,7 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
     }
     public func selectSection(_ value: String) {
         guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
+        guard value != section else { return }
         section = value
         if isRemoteNotebook {
             session.sectionID = session.sections.first(where: { $0.name == value })?.id
@@ -116,7 +120,12 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
     }
     public func createPage(notebook newNotebook: String? = nil, section newSection: String? = nil) {
         guard finishSectionName(focusTitle: false) else { return }
-        let destination = newNotebook ?? (session.selected?.identity.root == "local" && !notebook.isEmpty ? notebook : "On My Mac")
+        if newNotebook == nil, newSection == nil,
+           isRemoteNotebook || (session.selected?.identity.root != "local" && session.selected.map(notebookName) == notebook) {
+            session.createCloudPage(); mode = .write; markdownVisible = false
+            return
+        }
+        let destination = newNotebook ?? (!notebook.isEmpty ? notebook : "On My Mac")
         let destinationSection = newSection ?? (destination == notebook && !section.isEmpty ? section : "Notes")
         let old = session.selectedID
         session.newLocal()

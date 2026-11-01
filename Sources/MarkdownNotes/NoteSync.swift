@@ -88,6 +88,8 @@ public actor NoteSync {
             let fetched = try await remote.fetch(ledger.identity)
             guard fetched.id == ledger.identity.pageID else { throw NotesError.invalid("Remote page identity mismatch") }
             let (current, currentAssets) = try await materialize(fetched)
+            try Task.checkCancellation()
+            if !allowPush, try vault.markdown(ledger) != localSource { return try vault.load(id) }
             let currentDocument = try canonical(current.document)
             let mergedBlocks: [NoteNode]
             do { mergedBlocks = try SequenceMerge.merge(base: ledger.baseline.blocks, local: local.blocks, remote: currentDocument.blocks) }
@@ -165,6 +167,7 @@ public actor NoteSync {
                 source = retained.joined(separator: "\n\n") + (retained.isEmpty ? "" : "\n")
             }
             // An external file edit during network I/O is preserved; never replace it silently.
+            try Task.checkCancellation()
             guard try vault.markdown(ledger) == localSource else { throw NotesError.conflict }
             if source != localSource {
                 ledger.recoveryVersions = (ledger.recoveryVersions ?? []) + [RecoveryVersion(baseline: ledger.baseline, localMarkdown: localSource, remote: desired)]
@@ -177,6 +180,7 @@ public actor NoteSync {
             ledger.lastSyncedAt = Date()
             ledger.title = fetched.title; try vault.saveLedger(ledger); return ledger
         } catch {
+            if error is CancellationError { throw error }
             // Do not flatten a write timeout/mismatch into a clean baseline. Next sync compares all three copies.
             if ledger.state == "synced" { ledger.state = "offline-or-inaccessible"; ledger.pendingMarkdown = localSource; try vault.saveLedger(ledger) }
             throw error
