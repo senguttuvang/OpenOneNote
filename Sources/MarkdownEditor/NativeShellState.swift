@@ -87,6 +87,8 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
     }
     public var visibleStatus: String {
         if session.busy { return "Working…" }
+        if let id = session.selectedID, let error = session.syncErrors[id] { return error }
+        if session.message.hasPrefix("Microsoft client configured.") { return session.selected == nil ? "Ready" : friendlyState }
         if session.message == session.selected?.state || session.message.hasPrefix("Saved locally") { return friendlyState }
         return session.message
     }

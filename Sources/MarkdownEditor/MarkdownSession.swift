@@ -109,6 +109,7 @@ import OneNoteGraph
         else { notes.append(ledger) }
     }
     public func configure(clientID: String, tenant: String, redirect: String, persist: Bool = true) {
+        account = nil; accountError = nil
         do {
             let value = MicrosoftConfiguration(clientID: clientID, tenant: tenant, redirectURI: redirect, graphRoot: root)
             microsoftConfiguration = value
@@ -271,6 +272,7 @@ import OneNoteGraph
                     let ledger = try await sync.sync(id, allowPush: false)
                     changed = ledger.remoteHTMLHash != selected.remoteHTMLHash
                     self.replace(ledger)
+                    if ledger.state == "synced" { self.syncErrors[id] = nil }
                     if ledger.state == "synced", self.selectedID == id { try self.display(ledger) }
                     self.message = ledger.state == "synced" ? "Remote refresh complete." : "Local edits pending explicit sync."
                 }

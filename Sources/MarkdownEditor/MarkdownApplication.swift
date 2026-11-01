@@ -1,13 +1,25 @@
 import AppKit
 import SwiftUI
 import MarkdownNotes
+import OneNoteGraph
 
 @MainActor public final class MarkdownApplication: NSObject, NSApplicationDelegate, NSWindowDelegate {
     public let session: MarkdownSession
     public var window: NSWindow?
     private var presentations: [NativeShellState] = []
     private var wakeObserver: NSObjectProtocol?
-    public init(vault: URL) throws { session = try MarkdownSession(vault: MarkdownVault(root: vault)) }
+    public init(vault: URL, sharedMicrosoftWorkspace: URL? = nil) throws {
+        session = try MarkdownSession(vault: MarkdownVault(root: vault))
+        if session.microsoftConfiguration == nil {
+            let shared = sharedMicrosoftWorkspace ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("OpenOneNote/Markdown")
+            let source = try MarkdownVault(root: shared).safeURL(".o2n/config/microsoft-client.json")
+            if FileManager.default.fileExists(atPath: source.path) {
+                let configuration = try JSONDecoder().decode(MicrosoftConfiguration.self, from: Data(contentsOf: source))
+                session.root = configuration.graphRoot ?? "me"
+                session.configure(clientID: configuration.clientID, tenant: configuration.tenant, redirect: configuration.redirectURI, persist: false)
+            }
+        }
+    }
     public func applicationDidFinishLaunching(_ notification: Notification) {
         openWindow()
         session.startBackgroundRefresh()
