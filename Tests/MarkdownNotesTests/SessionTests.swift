@@ -65,3 +65,21 @@ import MarkdownEditor
     session.edit("# Editing safely\n")
     #expect(session.preview.warnings == ledger.baseline.warnings)
 }
+
+@Test @MainActor func unchangedSyncedPageSaveDoesNotCreateOutboxOrInventSyncTime() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory)
+    var note = try vault.createLocal()
+    note.identity = PageIdentity(root: "sites/synthetic", pageID: "page", accountKey: "account")
+    note.state = "synced"; note.pendingMarkdown = nil; note.lastSyncedAt = Date(timeIntervalSince1970: 100)
+    try vault.saveLedger(note)
+    let session = try MarkdownSession(vault: vault); session.select(note.id)
+    #expect(session.save())
+    #expect(session.selected?.state == "synced")
+    #expect(session.selected?.pendingMarkdown == nil)
+    #expect(session.selected?.lastSyncedAt == Date(timeIntervalSince1970: 100))
+    session.edit("Changed\n")
+    #expect(session.selected?.state == "outbox")
+    #expect(session.selected?.lastSyncedAt == Date(timeIntervalSince1970: 100))
+}

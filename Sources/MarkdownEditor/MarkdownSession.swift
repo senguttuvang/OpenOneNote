@@ -22,6 +22,13 @@ import OneNoteGraph
     public var graph: GraphClient?
     public var signIn: MicrosoftSignIn?
     public var microsoftConfiguration: MicrosoftConfiguration?
+    public var account: MicrosoftAccount?
+    public var accountError: String?
+    public var remoteNotebookName: String?
+    public var syncingPageID: UUID?
+    public var syncErrors: [UUID: String] = [:]
+    public var recentNotebooks: [RecentNotebook] = []
+    public var recentNotebooksError: String?
     private var operation: Task<Void, Never>?
     private var refreshLoop: Task<Void, Never>?
     private var loadedFileHash: String?
@@ -29,6 +36,11 @@ import OneNoteGraph
     private var refreshIdentity: UUID?
     public init(vault: MarkdownVault) throws {
         self.vault = vault; notes = try vault.ledgers().sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
+        let recents = try vault.safeURL(".o2n/config/recent-notebooks.json")
+        if FileManager.default.fileExists(atPath: recents.path) {
+            do { recentNotebooks = try JSONDecoder().decode([RecentNotebook].self, from: Data(contentsOf: recents)) }
+            catch { recentNotebooksError = "Recent folders couldn’t be loaded. Your notes are still available on this Mac." }
+        }
         let config = try vault.safeURL(".o2n/config/microsoft-client.json")
         if FileManager.default.fileExists(atPath: config.path) {
             let value = try JSONDecoder().decode(MicrosoftConfiguration.self, from: Data(contentsOf: config))
@@ -51,6 +63,9 @@ import OneNoteGraph
                 ledger.pendingMarkdown = source; try vault.saveLedger(ledger); replace(ledger); throw NotesError.conflict
             }
             let disk = try vault.markdown(ledger)
+            if disk == source, ledger.state == "synced" {
+                loadedFileHash = MarkdownVault.hash(source); return true
+            }
             if let loadedFileHash, MarkdownVault.hash(disk) != loadedFileHash, disk != source {
                 if MarkdownVault.hash(source) == loadedFileHash { try display(ledger) }
                 else {
@@ -111,9 +126,58 @@ import OneNoteGraph
             message = error.localizedDescription + codes
         }
     }
-    public func login(controller: NSViewController) {
+    public func restoreAccount() async {
+        guard let signIn else { account = nil; return }
+        do { account = try await signIn.account(); accountError = nil }
+        catch { account = nil; accountError = "Sign in to connect your Microsoft account." }
+    }
+    public func signOut() {
+        guard !busy, save(), let signIn else { return }
+        do {
+            try signIn.signOut(); stopBackgroundRefresh(); account = nil; accountError = nil
+            remoteNotebookName = nil; notebooks = []; sections = []; pages = []
+            notebookID = nil; sectionID = nil; pageID = nil
+            message = "Signed out. Notes saved on this Mac are preserved."
+        } catch { accountError = "Couldn’t sign out. Your account and notes were preserved." }
+    }
+    public func login(controller: NSViewController, connectStorage: Bool = false) {
         guard let signIn else { message = "Configure the sanctioned Microsoft public client first."; return }
-        perform { try await signIn.signIn(presenting: controller); self.message = "Signed in. Load notebooks to verify Notes access." }
+        perform {
+            do {
+                try await signIn.signIn(presenting: controller, connectStorage: connectStorage)
+                await self.restoreAccount(); self.startBackgroundRefresh(); self.message = "Microsoft account connected."
+            } catch {
+                self.accountError = "Microsoft couldn’t connect this account. Try again, or ask your organization to allow storage access."
+                throw error
+            }
+        }
+    }
+    @discardableResult public func openNotebook(root: String, notebook: GraphItem) async -> Bool {
+        guard !busy, let graph, save() else { return false }
+        busy = true; defer { busy = false }
+        do {
+            let sections = try await graph.sections(root: root, notebookID: notebook.id)
+            let pages: [GraphItem]
+            if let first = sections.first {
+                pages = try await graph.list(root: root, path: "sections/\(GraphClient.component(first.id))/pages?$select=id,title&$top=100")
+            } else { pages = [] }
+            try Task.checkCancellation()
+            let accountKey = try await graph.authorization.identityKey()
+            let recent = RecentNotebook(root: root, notebookID: notebook.id, name: notebook.name, accountKey: accountKey, openedAt: Date())
+            let recents = [recent] + self.recentNotebooks.filter { $0.id != recent.id }.prefix(19)
+            let directory = try vault.safeURL(".o2n/config")
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try JSONEncoder().encode(recents).write(to: vault.safeURL(".o2n/config/recent-notebooks.json"), options: .atomic)
+            self.recentNotebooks = recents
+            self.root = root; self.notebooks = [notebook]; self.notebookID = notebook.id
+            self.sections = sections; self.sectionID = sections.first?.id; self.pages = pages; self.pageID = nil
+            self.selectedID = nil; self.source = ""; self.preview = NoteDocument(blocks: [])
+            self.remoteNotebookName = notebook.name; self.message = pages.isEmpty ? "No pages in this section." : "Choose a page."
+            return true
+        } catch {
+            self.message = "This notebook could not be opened. Your current notes are preserved."
+            return false
+        }
     }
     public func loadNotebooks() {
         guard let graph else { message = "Configure Microsoft sign-in first."; return }
@@ -148,11 +212,12 @@ import OneNoteGraph
             var ledger = try await sync.open(identity)
             ledger = try await sync.sync(ledger.id, allowPush: false); ledger.hierarchy = hierarchy
             try self.vault.saveLedger(ledger); try self.display(ledger)
-            self.message = "Cloud page opened as local Markdown."
+            self.syncErrors[ledger.id] = nil; self.message = "Page opened."
         }
     }
     public func sync() {
-        guard let graph, let id = selectedID, selected?.identity.root != "local", save() else { return }
+        guard !busy, let graph, let id = selectedID, selected?.identity.root != "local", save() else { return }
+        syncingPageID = id; syncErrors[id] = nil
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
         perform {
             let ledger = try await sync.sync(id); self.replace(ledger)
@@ -160,7 +225,7 @@ import OneNoteGraph
             self.source = try self.vault.markdown(ledger); self.preview = try MarkdownConversion().parse(self.source)
             self.preview.warnings += ledger.baseline.warnings
             self.loadedFileHash = MarkdownVault.hash(self.source)
-            self.message = "Same-page sync verified by Graph readback."
+            self.message = "Page saved."
         }
     }
     public func cancel() { operation?.cancel(); signIn?.cancel() }
@@ -196,6 +261,7 @@ import OneNoteGraph
         // Focus/resume requests also honor a provider's outstanding Retry-After.
         guard refreshPolicy.canRefresh(now: Date(), force: forceContent) else { return }
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
+        syncingPageID = id
         perform {
             do {
                 let hint = try await graph.modificationHint(selected.identity)
@@ -267,10 +333,11 @@ import OneNoteGraph
         guard !busy else { return }
         busy = true
         operation = Task {
-            defer { busy = false; operation = nil }
+            defer { busy = false; operation = nil; syncingPageID = nil }
             do { try await action() }
             catch is CancellationError { message = "Cancelled. Local content retained." }
             catch {
+                if let id = syncingPageID { syncErrors[id] = "We couldn’t sync this page. Your changes are saved on this Mac." }
                 if let id = self.selectedID, let ledger = try? self.vault.load(id) { self.replace(ledger) }
                 message = error.localizedDescription
             }

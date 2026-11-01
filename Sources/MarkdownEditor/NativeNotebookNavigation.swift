@@ -13,11 +13,13 @@ import MarkdownNotes
             VStack(spacing: 0) {
                 railButton("Hide Section and Page Lists", "rectangle.righthalf.inset.filled") { shell.navigationHidden.toggle() }
                 railButton("Search", "magnifyingglass", tint: .pink) { shell.searching.toggle() }
-                railButton("Notebooks", "book.closed.fill", tint: .purple) { shell.navigationHidden = false; shell.sheet = .notebooks }
+                railButton("Notebooks", "book.closed.fill", tint: .purple) { shell.navigationHidden = false; shell.showCloud(.notebooks) }
                     .overlay(alignment: .leading) { palette.accent.opacity(0.5).frame(width: 3).padding(.vertical, 4) }
                 railButton("Recent Notes", "clock") {}.disabled(true).help("Recent editing history is unavailable")
                 Spacer()
-                railButton("Account Settings", "person.crop.circle.fill", tint: .purple) { shell.sheet = .account }
+                Button { shell.accountPopover.toggle() } label: { NativeAccountAvatar(account: shell.session.account).frame(width: 43, height: 44) }
+                    .buttonStyle(NativeToolStyle()).help("Account Settings").accessibilityLabel("Account Settings")
+                    .popover(isPresented: $shell.accountPopover, arrowEdge: .bottom) { NativeAccountPopover(shell: shell) }
             }.frame(width: 47).background(palette.rail)
             if !shell.navigationHidden { columns }
         }.onAppear { selectedPage = shell.session.selectedID }
@@ -31,7 +33,7 @@ import MarkdownNotes
                 Image(systemName: "book.closed.fill").foregroundStyle(.blue)
                 Menu {
                     ForEach(shell.notebooks, id: \.self) { name in Button(name) { shell.selectNotebook(name) } }
-                    Divider(); Button("Open More Notebooks…") { shell.sheet = .notebooks }; Button("New Notebook…") { shell.sheet = .newNotebook }
+                    Divider(); Button("Open More Notebooks…") { shell.showCloud(.notebooks) }; Button("New Notebook…") { shell.sheet = .newNotebook }
                 } label: { Text(shell.notebook.isEmpty ? "On My Mac" : shell.notebook).font(.system(size: 14, weight: .semibold)) }.menuIndicator(.hidden).fixedSize()
                 Spacer(minLength: 4)
                 Button { shell.navigationHidden = true } label: { Image(systemName: "sidebar.left") }.help("Hide Section and Page Lists")
@@ -64,6 +66,14 @@ import MarkdownNotes
                 VStack(spacing: 0) {
                     ScrollViewReader { proxy in
                     List(selection: $selectedPage) {
+                        if shell.isRemoteNotebook {
+                            ForEach(shell.session.pages) { item in
+                                Button { shell.session.pageID = item.id; shell.session.openPage() } label: {
+                                    Text(item.name).font(.system(size: 14)).frame(maxWidth: .infinity, minHeight: 56, alignment: .leading)
+                                }.buttonStyle(.plain).listRowSeparator(.hidden)
+                                    .listRowBackground(shell.session.selected?.identity.pageID == item.id ? palette.selected : .clear)
+                            }
+                        } else {
                         ForEach(shell.pages) { note in
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(note.title).font(.system(size: 14)).lineLimit(1)
@@ -72,6 +82,7 @@ import MarkdownNotes
                                 .listRowInsets(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 12)).listRowSeparator(.hidden)
                                 .listRowBackground(shell.session.selectedID == note.id ? palette.selected : .clear)
                                 .contextMenu { Button("Relink moved Markdown…") { shell.session.relink(note.id) }; Button("Sync details…") { shell.sheet = .recovery } }
+                        }
                         }
                     }.listStyle(.plain).scrollContentBackground(.hidden).tint(.gray).disabled(shell.session.busy)
                         .onChange(of: selectedPage) { _, value in if let value { shell.session.select(value); selectedPage = shell.session.selectedID } }

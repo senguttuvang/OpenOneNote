@@ -10,7 +10,15 @@ import MarkdownNotes
     @State private var redirect = ""
     @State private var name = ""
     @Environment(\.dismiss) private var dismiss
+    @ViewBuilder
     var body: some View {
+        switch surface {
+        case .account, .storage: NativeStorageAccounts(shell: shell)
+        case .notebooks: NativeNotebookBrowser(shell: shell)
+        default: detail
+        }
+    }
+    private var detail: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Label(title, systemImage: icon).font(.title2)
@@ -18,8 +26,8 @@ import MarkdownNotes
             }
             Divider()
             switch surface {
-            case .account: account
-            case .notebooks: notebooks
+            case .account, .storage: NativeStorageAccounts(shell: shell)
+            case .notebooks: NativeNotebookBrowser(shell: shell)
             case .settings: settings
             case .recovery: recovery
             case .newNotebook: creation
@@ -32,58 +40,10 @@ import MarkdownNotes
             }
     }
     private var title: String {
-        switch surface { case .account: "Account"; case .notebooks: "Open Notebook"; case .settings: "Preferences"; case .recovery: "Sync and Recovery"; case .newNotebook: "New Notebook" }
+        switch surface { case .account, .storage: "Storage Accounts"; case .notebooks: "Open Notebook"; case .settings: "Preferences"; case .recovery: "Sync and Recovery"; case .newNotebook: "New Notebook" }
     }
     private var icon: String {
-        switch surface { case .account: "person.crop.circle"; case .notebooks, .newNotebook: "book.closed"; case .settings: "gearshape"; case .recovery: "arrow.triangle.2.circlepath" }
-    }
-    private var account: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Connect Microsoft to open your OneNote notebooks.").font(.headline)
-            Text("Your notes remain available on this Mac. Signing in opens Microsoft's account window.").foregroundStyle(.secondary)
-            HStack {
-                Button("Sign In", systemImage: "person.crop.circle.badge.plus") {
-                    guard let controller = shell.window?.contentViewController ?? NSApp.keyWindow?.contentViewController else { shell.session.message = "The account window is not available."; return }
-                    shell.session.login(controller: controller)
-                }.disabled(shell.session.signIn == nil || shell.session.busy)
-                Button("Open Notebooks…") { shell.sheet = .notebooks }
-                Spacer()
-                Button("Advanced Setup…") { shell.sheet = .settings }
-            }
-            status
-        }
-    }
-    private var notebooks: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if !shell.notebooks.isEmpty {
-                Text("On this Mac").font(.headline)
-                ScrollView { VStack(alignment: .leading, spacing: 8) { ForEach(shell.notebooks, id: \.self) { notebook in
-                    Button { shell.selectNotebook(notebook); dismiss() } label: { Label(notebook, systemImage: "book.closed.fill").frame(maxWidth: .infinity, alignment: .leading) }
-                } } }.frame(maxHeight: 140)
-            }
-            Divider()
-            HStack { Text("Microsoft OneNote").font(.headline); Spacer(); Button("Refresh notebooks") { shell.session.loadNotebooks() }.disabled(shell.session.graph == nil || shell.session.busy) }
-            if shell.session.graph == nil {
-                Button("Sign in to open more notebooks…") { shell.sheet = .account }
-            } else {
-                Form {
-                    Picker("Notebook", selection: Binding(get: { shell.session.notebookID }, set: { shell.session.notebookID = $0 })) {
-                        Text("Choose a notebook").tag(String?.none)
-                        ForEach(shell.session.notebooks) { Text($0.name).tag(Optional($0.id)) }
-                    }.onChange(of: shell.session.notebookID) { _, _ in shell.session.loadSections() }
-                    Picker("Section", selection: Binding(get: { shell.session.sectionID }, set: { shell.session.sectionID = $0 })) {
-                        Text("Choose a section").tag(String?.none)
-                        ForEach(shell.session.sections) { Text($0.name).tag(Optional($0.id)) }
-                    }.onChange(of: shell.session.sectionID) { _, _ in shell.session.loadPages() }
-                    Picker("Page", selection: Binding(get: { shell.session.pageID }, set: { shell.session.pageID = $0 })) {
-                        Text("Choose a page").tag(String?.none)
-                        ForEach(shell.session.pages) { Text($0.name).tag(Optional($0.id)) }
-                    }
-                }.disabled(shell.session.busy)
-                HStack { Spacer(); Button("Open Page") { shell.session.openPage() }.disabled(shell.session.pageID == nil || shell.session.busy) }
-            }
-            status
-        }
+        switch surface { case .account, .storage: "person.crop.circle"; case .notebooks, .newNotebook: "book.closed"; case .settings: "gearshape"; case .recovery: "arrow.triangle.2.circlepath" }
     }
     private var settings: some View {
         VStack(alignment: .leading, spacing: 16) {

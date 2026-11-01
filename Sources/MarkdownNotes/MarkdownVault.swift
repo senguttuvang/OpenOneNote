@@ -23,6 +23,7 @@ public struct NoteLedger: Codable, Equatable, Identifiable, Sendable {
     public var remoteRecovery: NoteDocument?
     public var externalRecoveryMarkdown: String?
     public var recoveryVersions: [RecoveryVersion]?
+    public var lastSyncedAt: Date?
     public init(identity: PageIdentity, title: String, baseline: NoteDocument, markdown: String, htmlHash: String, assets: [AssetRecord]) {
         id = UUID(); self.identity = identity; self.title = title
         relativePath = id.uuidString.lowercased() + ".md"

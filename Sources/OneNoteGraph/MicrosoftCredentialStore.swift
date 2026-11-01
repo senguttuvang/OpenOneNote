@@ -7,6 +7,10 @@ import MarkdownNotes
 public protocol MicrosoftCredentialStore: Sendable {
     func load(allowInteraction: Bool) throws -> Data?
     func save(_ data: Data, allowInteraction: Bool) throws
+    func remove() throws
+}
+extension MicrosoftCredentialStore {
+    public func remove() throws { throw NotesError.unsupported("This credential store cannot sign out.") }
 }
 
 public struct MicrosoftKeychainStore: MicrosoftCredentialStore {
@@ -40,6 +44,12 @@ public struct MicrosoftKeychainStore: MicrosoftCredentialStore {
     }
     public func save(_ data: Data, allowInteraction: Bool) throws {
         try Self.withInteraction(allowInteraction) { try saveItem(data, allowInteraction: allowInteraction) }
+    }
+    public func remove() throws {
+        try Self.withInteraction(false) {
+            let status = SecItemDelete(query as CFDictionary)
+            guard status == errSecSuccess || status == errSecItemNotFound else { throw Self.failure(status) }
+        }
     }
     private func saveItem(_ data: Data, allowInteraction: Bool) throws {
         let update = [kSecValueData as String: data]
