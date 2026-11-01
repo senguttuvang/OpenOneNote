@@ -253,6 +253,31 @@ import OneNoteGraph
             self.syncErrors[ledger.id] = nil; self.message = "Page opened."
         }
     }
+    public func createCloudPage() {
+        guard !busy, save() else { return }
+        guard let graph, let sectionID, let notebookID,
+              let notebook = notebooks.first(where: { $0.id == notebookID }),
+              let section = sections.first(where: { $0.id == sectionID }) else {
+            message = "Open this notebook from Microsoft notebooks and choose a section before adding a page."
+            return
+        }
+        let root = root
+        perform {
+            let accountKey = try await graph.authorization.identityKey()
+            let url = try graph.url(root: root, path: "sections/\(GraphClient.component(sectionID))/pages")
+            let html = "<!DOCTYPE html><html><head><title>Untitled Page</title></head><body><p></p></body></html>"
+            // POST is issued once. If opening the result fails, retain its ID in
+            // the page list so the user can retry opening without creating a duplicate.
+            let data = try await graph.request(url, method: "POST", body: Data(html.utf8), contentType: "text/html")
+            let item = try JSONDecoder().decode(GraphItem.self, from: data)
+            self.pages.append(item); self.pageID = item.id
+            let sync = NoteSync(vault: self.vault, remote: graph, diagrams: MermaidRenderer())
+            var ledger = try await sync.open(PageIdentity(root: root, pageID: item.id, accountKey: accountKey))
+            ledger.hierarchy = [notebook.name, section.name]
+            try self.vault.saveLedger(ledger); try self.display(ledger)
+            self.message = "Page created in this section."
+        }
+    }
     public func sync() {
         guard !busy, let graph, let id = selectedID, selected?.identity.root != "local", save() else { return }
         syncingPageID = id; syncErrors[id] = nil
