@@ -34,6 +34,8 @@ import OneNoteGraph
     public var recentNotebooksError: String?
     private var operation: Task<Void, Never>?
     private var refreshLoop: Task<Void, Never>?
+    @ObservationIgnored private var refreshTask: Task<Void, Never>?
+    @ObservationIgnored private var refreshRequest: UUID?
     private var loadedFileHash: String?
     private var refreshPolicy = RemoteRefreshPolicy()
     private var refreshIdentity: UUID?
@@ -83,6 +85,7 @@ import OneNoteGraph
         } catch { message = error.localizedDescription; return false }
     }
     public func edit(_ source: String) {
+        cancelPageRefresh()
         self.source = source
         do { preview = try MarkdownConversion().parse(source) }
         catch { preview = NoteDocument(blocks: [.element("pre", [:], [.text(source)])], warnings: [error.localizedDescription]) }
@@ -91,6 +94,7 @@ import OneNoteGraph
     }
     public func select(_ id: UUID) {
         guard !busy, selectedID != id, save() else { return }
+        cancelPageRefresh()
         do {
             var ledger = try vault.load(id); try vault.recover(&ledger)
             try display(ledger)
@@ -184,6 +188,7 @@ import OneNoteGraph
     }
     @discardableResult public func openNotebook(root: String, notebook: GraphItem) async -> Bool {
         guard !busy, let graph, save() else { return false }
+        cancelPageRefresh()
         busy = true; defer { busy = false }
         do {
             let sections = try await graph.sections(root: root, notebookID: notebook.id)
@@ -228,6 +233,9 @@ import OneNoteGraph
     }
     public func loadPages() {
         guard let graph, let sectionID else { return }
+        cancelPageRefresh()
+        selectedID = nil; source = ""; preview = NoteDocument(blocks: [])
+        pages = []; pageID = nil
         let root = root
         perform { self.pages = try await graph.list(root: root, path: "sections/\(GraphClient.component(sectionID))/pages?$select=id,title&$top=100"); self.pageID = nil; self.message = "Choose a page." }
     }
@@ -286,33 +294,43 @@ import OneNoteGraph
         }
     }
     public func refreshSelectedPage(forceContent: Bool = true) {
-        guard !busy, let graph, let id = selectedID, let selected, selected.identity.root != "local" else { return }
+        guard !busy, refreshTask == nil, let graph, let id = selectedID, let selected, selected.identity.root != "local" else { return }
         if refreshIdentity != id { refreshIdentity = id; refreshPolicy.selectedPageChanged() }
         // Focus/resume requests also honor a provider's outstanding Retry-After.
         guard refreshPolicy.canRefresh(now: Date(), force: forceContent) else { return }
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
-        syncingPageID = id
-        perform {
+        let request = UUID(); refreshRequest = request
+        // Background reads must not disable editing or own foreground navigation.
+        refreshTask = Task {
+            defer { if self.refreshRequest == request { self.refreshRequest = nil; self.refreshTask = nil } }
             do {
                 let hint = try await graph.modificationHint(selected.identity)
+                try Task.checkCancellation()
+                guard self.refreshRequest == request, self.selectedID == id, !self.busy else { return }
                 let content = self.refreshPolicy.needsContent(hint: hint, now: Date(), force: forceContent)
                 var changed = false
                 if content {
                     let ledger = try await sync.sync(id, allowPush: false)
+                    try Task.checkCancellation()
+                    guard self.refreshRequest == request, self.selectedID == id, !self.busy else { return }
                     changed = ledger.remoteHTMLHash != selected.remoteHTMLHash
                     self.replace(ledger)
                     if ledger.state == "synced" { self.syncErrors[id] = nil }
-                    if ledger.state == "synced", self.selectedID == id { try self.display(ledger) }
-                    self.message = ledger.state == "synced" ? "Remote refresh complete." : "Local edits pending explicit sync."
+                    if ledger.state == "synced", changed { try self.display(ledger) }
                 }
                 self.refreshPolicy.succeeded(hint: hint, contentChecked: content, changed: changed, now: Date())
-            } catch {
+            } catch is CancellationError { return }
+            catch {
+                guard self.refreshRequest == request, self.selectedID == id else { return }
                 self.refreshPolicy.failed(now: Date(), retryAfter: (error as? GraphRetryRequired)?.delay)
-                throw error
+                self.syncErrors[id] = "We couldn’t refresh this page. Your changes are saved on this Mac."
             }
         }
     }
-    public func stopBackgroundRefresh() { refreshLoop?.cancel(); refreshLoop = nil }
+    public func stopBackgroundRefresh() { refreshLoop?.cancel(); refreshLoop = nil; cancelPageRefresh() }
+    private func cancelPageRefresh() {
+        refreshRequest = nil; refreshTask?.cancel(); refreshTask = nil
+    }
     public func attachFile() {
         guard selectedID != nil, !busy else { return }
         let panel = NSOpenPanel(); panel.canChooseDirectories = false; panel.allowsMultipleSelection = false
@@ -362,6 +380,7 @@ import OneNoteGraph
     }
     private func perform(_ action: @escaping @MainActor () async throws -> Void) {
         guard !busy else { return }
+        cancelPageRefresh()
         busy = true
         operation = Task {
             defer { busy = false; operation = nil; syncingPageID = nil }

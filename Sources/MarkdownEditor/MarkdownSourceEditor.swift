@@ -50,10 +50,15 @@ public struct MarkdownSourceEditor: NSViewRepresentable {
         context.coordinator.commands = commands
         commands?.target = view
         view.isEditable = context.environment.isEnabled
-        view.font = NSFont(name: fontName, size: pointSize) ?? .monospacedSystemFont(ofSize: pointSize, weight: .regular)
-        view.textColor = lightPaper ? .black : .textColor
-        view.backgroundColor = lightPaper ? .white : .textBackgroundColor
-        view.insertionPointColor = lightPaper ? .black : .textColor
+        // Reapplying NSTextView attributes emits selection/layout notifications.
+        // Those drive the contextual ribbon, so unchanged updates must be inert.
+        let font = NSFont(name: fontName, size: pointSize) ?? .monospacedSystemFont(ofSize: pointSize, weight: .regular)
+        if view.font != font { view.font = font }
+        let ink: NSColor = lightPaper ? .black : .textColor
+        let paper: NSColor = lightPaper ? .white : .textBackgroundColor
+        if view.textColor != ink { view.textColor = ink }
+        if view.backgroundColor != paper { view.backgroundColor = paper }
+        if view.insertionPointColor != ink { view.insertionPointColor = ink }
         if context.coordinator.identity != identity { view.undoManager?.removeAllActions(); context.coordinator.identity = identity }
         if view.string != source { view.undoManager?.removeAllActions(); view.string = source }
     }
