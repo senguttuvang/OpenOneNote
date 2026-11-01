@@ -14,6 +14,9 @@ extension NativeShellState {
         if title == "New Window" { return newWindow != nil }
         if ["New Page", "New Section", "New Notebook…", "Open Notebook…", "Open local Markdown…", "Preferences…", "Microsoft account", "Ribbon", "Hide Section and Page Lists", "Switch Background", "Zoom In", "Zoom Out", "Reset Zoom", "Zoom to Page Width", "Search This Page", "Search This Section", "Search This Notebook", "Search All Notebooks", "Find Next", "Find Previous", "Find and Replace", "Save", "Write", "Split", "Read", "Markdown", "Close", "Minimise", "Zoom", "Enter Full Screen", "Bring All to Front"].contains(title) { return !session.busy }
         if title == "Sync This Page" || title == "Sync page" { return !session.busy && session.selected != nil && session.selected?.identity.root != "local" && session.graph != nil }
+        if title == "Sync This Notebook" { return !session.busy && isRemoteNotebook && session.notebookID != nil && session.graph != nil }
+        if title == "Sync All Notebooks" { return !session.busy && session.graph != nil && (session.notebookID != nil || !session.recentNotebooks.isEmpty) }
+        if title == "Cancel Sync" { return session.busy && session.cloudActivity != nil }
         if Self.markdownActions.contains(title), !markdownVisible {
             if activeTextTarget?.isFieldEditor == true { return false }
             if tableContext && (["Table", "Bulletpoints", "Numbering"].contains(title) || title.hasPrefix("Heading ")) { return false }
@@ -53,6 +56,9 @@ extension NativeShellState {
         case "Microsoft account": showCloud(.account)
         case "Save": _ = session.save()
         case "Sync This Page", "Sync page": session.sync()
+        case "Sync This Notebook": session.syncNotebooks(all: false)
+        case "Sync All Notebooks": session.syncNotebooks(all: true)
+        case "Cancel Sync": session.cancel()
         case "Ribbon": ribbonCollapsed.toggle()
         case "Hide Section and Page Lists": navigationHidden.toggle()
         case "Switch Background": lightPaper.toggle()

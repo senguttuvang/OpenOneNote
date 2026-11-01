@@ -16,7 +16,7 @@ extension CloudVerification {
               let id = registry["pageID"], let graph = session.graph else { throw NotesError.invalid("No matching synthetic page") }
         let identity = PageIdentity(root: session.root, pageID: id, accountKey: try await graph.authorization.identityKey())
         let page = try await graph.fetch(identity)
-        guard page.title == "O2N Cloud Acceptance " + String(run.prefix(8)) else { throw NotesError.invalid("Synthetic title mismatch") }
+        guard page.title == (registry["pageTitle"] ?? "O2N Cloud Acceptance " + String(run.prefix(8))) else { throw NotesError.invalid("Synthetic title mismatch") }
         try Data(page.html.utf8).write(to: evidence.appendingPathComponent("diagnostic-page.html"), options: .atomic)
         let metadata = try await graph.request(graph.url(root: session.root, path: "pages/\(GraphClient.component(id))?$select=id,links"))
         try metadata.write(to: evidence.appendingPathComponent("diagnostic-links.json"), options: .atomic)
@@ -29,7 +29,7 @@ extension CloudVerification {
     }
     /// Native O2N source edit/save/sync followed by a real official-client edit supplied externally.
     /// This process never simulates the official editor using Graph PATCH.
-    public static func officialRoundtrip(vault directory: URL) async throws {
+    public static func officialRoundtrip(vault directory: URL, sectionCommands: Bool = false) async throws {
         guard NSApp.activationPolicy() == .prohibited else { throw NotesError.invalid("Cloud verification must stay hidden") }
         let vault = try MarkdownVault(root: directory)
         let session = try MarkdownSession(vault: vault)
@@ -41,7 +41,7 @@ extension CloudVerification {
            let data = try? Data(contentsOf: vault.safeURL(".o2n/acceptance/\(previous)/registry.json")),
            let saved = try? JSONDecoder().decode([String: String].self, from: data),
            saved["status"] == "creating", saved["root"] == session.root, saved["run"] == previous,
-           saved["classification"] == "synthetic-only" {
+           saved["classification"] == "synthetic-only", (saved["sectionCommands"] == "true") == sectionCommands {
             pending = saved
         } else { pending = nil }
         let run = pending?["run"] ?? UUID().uuidString
@@ -52,6 +52,9 @@ extension CloudVerification {
         try FileManager.default.createDirectory(at: evidence, withIntermediateDirectories: true)
         var registry = pending ?? ["run": run, "root": session.root, "classification": "synthetic-only", "outgoingMarker": outgoing,
                         "expectedOfficialMarker": incoming, "status": "creating", "startedAt": ISO8601DateFormatter().string(from: Date())]
+        registry["sectionCommands"] = String(sectionCommands)
+        let pageTitle = sectionCommands ? "Untitled Page" : label
+        registry["pageTitle"] = pageTitle
         func record() throws {
             try JSONEncoder().encode(registry).write(to: evidence.appendingPathComponent("registry.json"), options: .atomic)
             try Data(run.utf8).write(to: vault.safeURL(".o2n/acceptance/current-run"), options: .atomic)
@@ -66,11 +69,28 @@ extension CloudVerification {
         }
         let notebook: GraphItem
         if let id = registry["notebookID"] { notebook = GraphItem(id: id, displayName: label) }
-        else { notebook = try await create("notebooks", data: JSONEncoder().encode(["displayName": label])) }
+        else {
+            guard registry["notebookPostIssued"] == nil else { throw NotesError.invalid("Synthetic notebook creation was unconfirmed; refusing a duplicate POST") }
+            registry["notebookPostIssued"] = "true"; try record()
+            notebook = try await create("notebooks", data: JSONEncoder().encode(["displayName": label]))
+        }
         registry["notebookID"] = notebook.id; try record()
         try await verify("notebooks/\(GraphClient.component(notebook.id))?$select=id,displayName", id: notebook.id, name: label)
         let section: GraphItem
         if let id = registry["sectionID"] { section = GraphItem(id: id, displayName: "Bidirectional test") }
+        else if sectionCommands {
+            guard await session.openNotebook(root: session.root, notebook: notebook) else { throw NotesError.invalid(session.message) }
+            let shell = NativeShellState(session: session)
+            let window = try beginSectionAcceptance(shell: shell)
+            defer { withExtendedLifetime(window) {} }
+            while session.busy { try await Task.sleep(for: .milliseconds(20)) }
+            guard let created = session.selected, created.identity.root == session.root,
+                  created.identity.accountKey == account, created.notebookID == notebook.id,
+                  let sectionID = created.sectionID else { throw NotesError.invalid("Native New Section failed: " + session.message) }
+            section = GraphItem(id: sectionID, displayName: "Bidirectional test")
+            registry["pageID"] = created.identity.pageID
+            registry["sectionCreationPath"] = "mounted native inline name field -> real section and initial page"
+        }
         else { section = try await create("notebooks/\(GraphClient.component(notebook.id))/sections", data: JSONEncoder().encode(["displayName": "Bidirectional test"])) }
         registry["sectionID"] = section.id; try record()
         try await verify("sections/\(GraphClient.component(section.id))?$select=id,displayName", id: section.id, name: "Bidirectional test")
@@ -105,7 +125,7 @@ extension CloudVerification {
         registry["nativeEditPath"] = "default rich text and table; Markdown ribbon for image/diagram source"
         try record()
         let before = try await graph.fetch(identity)
-        guard before.id == page.id, before.title == label else { throw NotesError.invalid("Synthetic page identity changed before native sync") }
+        guard before.id == page.id, before.title == pageTitle else { throw NotesError.invalid("Synthetic page identity changed before native sync") }
         session.sync()
         while session.busy { try await Task.sleep(for: .milliseconds(50)) }
         guard session.selected?.state == "synced", session.source.contains(outgoing) else { throw NotesError.invalid("Native O2N sync failed: " + session.message) }
@@ -124,6 +144,21 @@ extension CloudVerification {
         registry["webURL"] = metadata.links.oneNoteWebUrl.href; registry["nativeURL"] = metadata.links.oneNoteClientUrl.href
         registry["localID"] = ledger.id.uuidString; registry["nativePushReadbackAt"] = ISO8601DateFormatter().string(from: Date())
         registry["status"] = "native push verified; waiting for official-client edit"; try record()
+        if sectionCommands {
+            session.notebooks = [notebook]; session.notebookID = notebook.id
+            session.remoteNotebookName = notebook.name; session.sections = [section]; session.sectionID = section.id
+            let shell = NativeShellState(session: session)
+            shell.createPage()
+            while session.busy { try await Task.sleep(for: .milliseconds(20)) }
+            guard let added = session.selected, added.identity.pageID != page.id,
+                  added.notebookID == notebook.id, added.sectionID == section.id,
+                  added.identity.accountKey == account else { throw NotesError.invalid("Add Page left the newly created cloud section") }
+            registry["secondPageID"] = added.identity.pageID; try record()
+            session.select(ledger.id)
+            session.syncNotebooks(all: false)
+            while session.busy { try await Task.sleep(for: .milliseconds(20)) }
+            guard session.syncFailure == nil, session.lastSyncAt != nil else { throw NotesError.invalid("Synthetic notebook sync failed: " + session.message) }
+        }
         try MarkdownVerification.render(session: session, to: evidence.appendingPathComponent("native-after-push.png"), width: 1280)
         print("Native O2N edit/save/sync and same-page Graph table/image/diagram readback passed. Synthetic links and expected official marker recorded locally. Waiting for the actual official OneNote editor.")
         session.startBackgroundRefresh()
@@ -135,7 +170,7 @@ extension CloudVerification {
             let detectedAt = Date()
             let final = try await graph.fetch(identity)
             let all = try await graph.list(root: session.root, path: "sections/\(GraphClient.component(section.id))/pages?$select=id,title&$top=100")
-            guard final.id == page.id, all.count == 1, all.first?.id == page.id,
+            guard final.id == page.id, all.count == (sectionCommands ? 2 : 1), all.contains(where: { $0.id == page.id }),
                   final.html.contains(outgoing), final.html.contains(incoming), final.html.contains("<table"),
                   final.html.contains("<img"), final.html.contains("<object"), session.source.contains("```mermaid"),
                   session.preview.blocks.contains(where: { $0.text.contains(incoming) }) else { throw NotesError.invalid("Final same-page content/preview/duplicate check failed") }
@@ -153,10 +188,24 @@ extension CloudVerification {
             registry["status"] = "native detected official marker; official UI evidence must be recorded separately"
             try record()
             try MarkdownVerification.render(session: session, to: evidence.appendingPathComponent("native-after-official-edit.png"), width: 1280)
-            print("O2N polling pulled the official marker into native Markdown and reading preview. Same page ID, one page, both markers, table, image bytes and diagram source preserved. Official editor provenance/rendering is a separate UI check.")
+            print("O2N polling pulled the official marker into native Markdown and reading preview. Same page ID, expected page count, both markers, table, image bytes and diagram source preserved. Official editor provenance/rendering is a separate UI check.")
             return
         }
         throw NotesError.invalid("Official editor marker was not observed within 30 minutes; fixture and local evidence retained")
+    }
+
+    private static func beginSectionAcceptance(shell: NativeShellState) throws -> NSWindow {
+        let host = NSHostingView(rootView: MarkdownEditorView(session: shell.session, presentation: shell))
+        let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [.borderless], backing: .buffered, defer: false)
+        shell.window = window; window.contentView = host; host.frame = window.contentLayoutRect
+        func settle() { host.layoutSubtreeIfNeeded(); RunLoop.main.run(until: Date().addingTimeInterval(0.15)) }
+        settle(); shell.createSection(); settle()
+        guard let field = window.firstResponder as? NSTextView, field.isFieldEditor,
+              shell.namingCloudSection, !window.isVisible else { throw NotesError.invalid("Cloud section name did not mount inline in a hidden native window") }
+        field.insertText("Bidirectional test", replacementRange: NSRange(location: 0, length: field.string.utf16.count))
+        field.doCommand(by: NSSelectorFromString("insertNewline:")); settle()
+        guard shell.session.busy || shell.session.selected?.sectionID != nil else { throw NotesError.invalid("Submitting the inline name did not start cloud creation") }
+        return window
     }
 
     /// Exercise the mounted default editor, ribbon formatting/table commands and Markdown projection.
