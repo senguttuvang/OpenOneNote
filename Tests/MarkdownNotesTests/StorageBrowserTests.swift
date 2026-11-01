@@ -142,3 +142,20 @@ private actor DelayedBrowse: StorageBrowsing {
     let entry = StorageEntry(id: "package", name: "Same name", kind: .notebook, root: "me", webURL: URL(string: "https://example.sharepoint.com/Documents/Book%252Fother")!)
     await #expect(throws: NotesError.self) { try await client.notebook(for: entry) }
 }
+
+@Test @MainActor func signedInAccountDoesNotInventConnectedStorageServices() async throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let session = try MarkdownSession(vault: MarkdownVault(root: directory))
+    session.root = "sites/synthetic"
+    session.account = MicrosoftAccount(key: "synthetic-account", name: "Synthetic", email: "synthetic@example.invalid", storageConnected: false)
+    session.graph = GraphClient(authorization: BrowseAuthorization(), transport: BrowseTransport([]))
+    await session.refreshConnectedServices()
+    #expect(session.connectedServices.isEmpty)
+    #expect(session.servicesError != nil)
+    session.graph = GraphClient(authorization: BrowseAuthorization(), transport: BrowseTransport([#"{"value":[]}"#]))
+    await session.refreshConnectedServices()
+    #expect(session.connectedServices == ["SharePoint"])
+    #expect(!session.connectedServices.contains("OneDrive"))
+    #expect(session.servicesError == nil && !session.servicesLoading)
+}

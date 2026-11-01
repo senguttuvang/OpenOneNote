@@ -24,6 +24,9 @@ import OneNoteGraph
     public var microsoftConfiguration: MicrosoftConfiguration?
     public var account: MicrosoftAccount?
     public var accountError: String?
+    public var connectedServices: [String] = []
+    public var servicesLoading = false
+    public var servicesError: String?
     public var remoteNotebookName: String?
     public var syncingPageID: UUID?
     public var syncErrors: [UUID: String] = [:]
@@ -34,6 +37,7 @@ import OneNoteGraph
     private var loadedFileHash: String?
     private var refreshPolicy = RemoteRefreshPolicy()
     private var refreshIdentity: UUID?
+    private var servicesRequest = UUID()
     public init(vault: MarkdownVault) throws {
         self.vault = vault; notes = try vault.ledgers().sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
         let recents = try vault.safeURL(".o2n/config/recent-notebooks.json")
@@ -109,6 +113,7 @@ import OneNoteGraph
         else { notes.append(ledger) }
     }
     public func configure(clientID: String, tenant: String, redirect: String, persist: Bool = true) {
+        servicesRequest = UUID(); servicesLoading = false; connectedServices = []
         account = nil; accountError = nil
         do {
             let value = MicrosoftConfiguration(clientID: clientID, tenant: tenant, redirectURI: redirect, graphRoot: root)
@@ -129,13 +134,37 @@ import OneNoteGraph
     }
     public func restoreAccount() async {
         guard let signIn else { account = nil; return }
-        do { account = try await signIn.account(); accountError = nil }
+        do { account = try await signIn.account(); accountError = nil; await refreshConnectedServices() }
         catch { account = nil; accountError = "Sign in to connect your Microsoft account." }
+    }
+    public func refreshConnectedServices() async {
+        let request = UUID(); servicesRequest = request
+        connectedServices = []; servicesError = nil
+        guard let graph, let account else { return }
+        servicesLoading = true; defer { if servicesRequest == request { servicesLoading = false } }
+        var connected: [String] = []
+        var failure: String?
+        do {
+            guard try await graph.authorization.identityKey() == account.key else { throw NotesError.authenticationRequired }
+            if account.storageConnected {
+                do { _ = try await graph.oneDrive(); connected.append("OneDrive") }
+                catch { failure = "OneDrive couldn’t be reached. Try refreshing its location." }
+                do { _ = try await graph.sites(); connected.append("SharePoint") }
+                catch { failure = "SharePoint couldn’t be reached. Try refreshing its location." }
+            } else {
+                let location = microsoftConfiguration?.graphRoot ?? root
+                _ = try await graph.list(root: location, path: "notebooks?$top=1")
+                connected = [location.hasPrefix("sites/") ? "SharePoint" : location == "me" ? "OneDrive" : "OneNote"]
+            }
+        } catch { failure = "Your account is signed in, but notebooks couldn’t be reached. Try again." }
+        guard servicesRequest == request, self.account?.key == account.key else { return }
+        connectedServices = connected; servicesError = failure
     }
     public func signOut() {
         guard !busy, save(), let signIn else { return }
         do {
-            try signIn.signOut(); stopBackgroundRefresh(); account = nil; accountError = nil
+            try signIn.signOut(); stopBackgroundRefresh(); account = nil; accountError = nil; connectedServices = []
+            servicesRequest = UUID(); servicesLoading = false
             remoteNotebookName = nil; notebooks = []; sections = []; pages = []
             notebookID = nil; sectionID = nil; pageID = nil
             message = "Signed out. Notes saved on this Mac are preserved."

@@ -20,8 +20,15 @@ import OneNoteGraph
                 Button { shell.accountPopover = false; shell.showCloud(.storage) } label: { Image(systemName: "plus") }.accessibilityLabel("Add a service")
             }.padding(.horizontal, 12).padding(.vertical, 5).background(.primary.opacity(0.06))
             if let account = shell.session.account {
-                serviceRow("OneDrive", subtitle: account.email, symbol: "cloud.fill") { shell.accountPopover = false; shell.showCloud(.notebooks); shell.browserLocation = "drive" }
-                serviceRow("SharePoint", subtitle: account.email, symbol: "building.2.fill") { shell.accountPopover = false; shell.showCloud(.notebooks); shell.browserLocation = "sites" }
+                ForEach(shell.session.connectedServices, id: \.self) { service in
+                    serviceRow(service, subtitle: account.email, symbol: service == "SharePoint" ? "building.2.fill" : "cloud.fill") {
+                        shell.accountPopover = false
+                        shell.browserLocation = account.storageConnected ? (service == "SharePoint" ? "sites" : "drive") : "linked"
+                        shell.showCloud(.notebooks)
+                    }
+                }
+                if shell.session.servicesLoading { ProgressView().controlSize(.small).padding(12) }
+                if let error = shell.session.servicesError { Text(error).font(.caption).foregroundStyle(.secondary).padding(12) }
             } else {
                 Text(shell.session.accountError ?? "Sign in to open your OneNote notebooks.").foregroundStyle(.secondary).padding(16)
             }
@@ -66,8 +73,12 @@ struct NativeAccountAvatar: View {
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Connected Accounts").font(.system(size: 26)).frame(maxWidth: .infinity)
                     if let account = shell.session.account {
-                        accountRow("OneDrive", detail: account.email, symbol: "cloud.fill")
-                        accountRow("SharePoint", detail: account.email, symbol: "building.2.fill")
+                        accountRow(account.name, detail: account.email, symbol: "person.crop.circle")
+                        ForEach(shell.session.connectedServices, id: \.self) { service in
+                            accountRow(service, detail: account.storageConnected ? "Connected" : "Notebook access", symbol: service == "SharePoint" ? "building.2.fill" : "cloud.fill")
+                        }
+                        if shell.session.servicesLoading { ProgressView().controlSize(.small) }
+                        if let error = shell.session.servicesError { Text(error).foregroundStyle(.secondary) }
                         if !account.storageConnected {
                             Text("Connect storage to browse OneDrive folders and SharePoint sites. Your existing linked notebooks remain available.").foregroundStyle(.secondary)
                             Button("Connect Storage…") { connect() }.disabled(shell.session.busy)
