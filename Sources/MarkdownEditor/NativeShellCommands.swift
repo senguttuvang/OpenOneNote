@@ -37,8 +37,13 @@ extension NativeShellState {
         case "About OpenOneNote": NSApp.orderFrontStandardAboutPanel(nil)
         case "Increase Navigation Pane Width": sectionWidth = min(360, sectionWidth + 20); pageWidth = min(400, pageWidth + 20)
         case "Decrease Navigation Pane Width": sectionWidth = max(140, sectionWidth - 20); pageWidth = max(160, pageWidth - 20)
-        case "Undo": activeTextTarget?.undoManager?.undo()
-        case "Redo": activeTextTarget?.undoManager?.redo()
+        case "Undo", "Redo":
+            if let target = activeTextTarget {
+                if title == "Undo" { target.undoManager?.undo() } else { target.undoManager?.redo() }
+                // Accessibility/native undo can restore storage without a delegate
+                // notification. Publish it before navigation/save can persist stale text.
+                if !target.isFieldEditor { target.didChangeText() }
+            }
         case "New Page": createPage()
         case "New Section": createSection()
         case "New Notebook…": sheet = .newNotebook

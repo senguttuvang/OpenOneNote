@@ -123,6 +123,30 @@ private actor DelayedReadRemote: OneNoteRemote {
     #expect(session.source == "Text\n")
 }
 
+@Test @MainActor func ribbonUndoPersistsRestoredSourceBeforeReopen() throws {
+    NSApplication.shared.setActivationPolicy(.prohibited)
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory), session = try MarkdownSession(vault: vault)
+    session.newLocal(); session.edit("Original\n")
+    let id = try #require(session.selectedID)
+    let shell = NativeShellState(session: session); shell.markdownVisible = true
+    var editor = MarkdownSourceEditor(source: session.source, identity: id, onChange: session.edit)
+    editor.commands = shell.sourceCommands
+    let coordinator = editor.makeCoordinator()
+    let view = editor.makeTextView(coordinator: coordinator)
+    // Model the native accessibility edit's registered undo, which can restore
+    // NSTextView storage without emitting a delegate text-change notification.
+    view.undoManager?.registerUndo(withTarget: view) { target in target.string = "Original\n" }
+    view.string = "Edited\n"; session.edit(view.string)
+    shell.perform("Undo")
+    #expect(view.string == "Original\n")
+    #expect(session.source == "Original\n")
+    #expect(try vault.markdown(try vault.load(id)) == "Original\n")
+    let reopened = try MarkdownSession(vault: vault); reopened.select(id)
+    #expect(reopened.source == "Original\n")
+}
+
 @Test @MainActor func remoteSectionNavigationClearsOldPageAndKeepsRequestedSection() async throws {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     defer { try? FileManager.default.removeItem(at: directory) }
