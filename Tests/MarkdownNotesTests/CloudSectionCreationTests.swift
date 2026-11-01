@@ -266,3 +266,20 @@ private actor SectionTransport: GraphTransport {
     #expect(try reopened.vault.creationIntents().isEmpty)
     #expect(await transport.requests.filter { $0.httpMethod == "POST" }.count == 1)
 }
+
+@Test @MainActor func offlineReopenSeparatesLocalDraftEvenWithoutRecentNotebookMetadata() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory)
+    var local = try vault.createLocal(); local.hierarchy = ["Cloud", "test 2"]; try vault.saveLedger(local)
+    var remote = try vault.createLocal(); remote.hierarchy = ["Cloud", "Section"]
+    remote.identity = PageIdentity(root: "sites/fixture", pageID: "remote", accountKey: "account")
+    try vault.saveLedger(remote)
+    let session = try MarkdownSession(vault: vault)
+    let shell = NativeShellState(session: session)
+    #expect(session.remoteNotebookName == nil)
+    #expect(session.recentNotebooks.isEmpty)
+    #expect(shell.notebookName(local) == "Cloud (on this Mac)")
+    #expect(shell.notebookName(remote) == "Cloud")
+    #expect(try vault.load(local.id).hierarchy == ["Cloud", "test 2"])
+}

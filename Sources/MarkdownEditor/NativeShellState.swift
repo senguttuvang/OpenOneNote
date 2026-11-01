@@ -50,6 +50,7 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
         let name = note.hierarchy?.first ?? (note.identity.root == "local" ? "On My Mac" : "OneNote")
         // A local draft's saved label is not a remote notebook identity.
         let cloudNames = session.recentNotebooks.map(\.name) + [session.remoteNotebookName].compactMap { $0 }
+            + session.notes.compactMap { $0.identity.root == "local" ? nil : $0.hierarchy?.first }
         return note.identity.root == "local" && cloudNames.contains(name) ? name + " (on this Mac)" : name
     }
     public func sectionName(_ note: NoteLedger) -> String { (note.hierarchy?.count ?? 0) > 1 ? note.hierarchy!.dropFirst().joined(separator: " / ") : "Notes" }
