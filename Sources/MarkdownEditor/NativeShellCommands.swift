@@ -42,10 +42,10 @@ extension NativeShellState {
         case "New Page": createPage()
         case "New Section": createSection()
         case "New Notebook…": sheet = .newNotebook
-        case "Open Notebook…": sheet = .notebooks
+        case "Open Notebook…": showCloud(.notebooks)
         case "Open local Markdown…": session.openLocal(); followSelection()
         case "Preferences…": sheet = .settings
-        case "Microsoft account": sheet = .account
+        case "Microsoft account": showCloud(.account)
         case "Save": _ = session.save()
         case "Sync This Page", "Sync page": session.sync()
         case "Ribbon": ribbonCollapsed.toggle()

@@ -48,7 +48,8 @@ import MarkdownNotes
         }
         shell.markdownVisible = false
         for surface in [NativeShellSheet.account, .notebooks, .settings, .recovery] {
-            try capture(NativeAccountSurfaces(shell: shell, surface: surface), to: directory.appendingPathComponent("dialog-\(surface.rawValue).png"), width: 900, height: 600)
+            let size: (Double, Double) = surface == .notebooks ? (1280, 800) : surface == .account ? (580, 700) : (900, 600)
+            try capture(NativeAccountSurfaces(shell: shell, surface: surface), to: directory.appendingPathComponent("dialog-\(surface.rawValue).png"), width: size.0, height: size.1)
         }
         if var note = session.selected {
             let original = note

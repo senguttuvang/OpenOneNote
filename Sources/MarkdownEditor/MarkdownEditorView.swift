@@ -38,7 +38,16 @@ import MarkdownNotes
                 titleFocused = false
                 if let view = shell.editor.target { view.window?.makeFirstResponder(view) }
             }
-            .sheet(item: $shell.sheet) { sheet in NativeAccountSurfaces(shell: shell, surface: sheet) }
+            .sheet(item: $shell.sheet) { sheet in
+                switch sheet {
+                case .notebooks: NativeNotebookBrowser(shell: shell)
+                case .account, .storage: NativeStorageAccounts(shell: shell)
+                default: NativeAccountSurfaces(shell: shell, surface: sheet)
+                }
+            }
+            .onChange(of: session.remoteNotebookName) { _, value in
+                if let value { shell.notebook = value; shell.section = session.sections.first?.name ?? "" }
+            }
     }
     private var page: some View {
         GeometryReader { geometry in

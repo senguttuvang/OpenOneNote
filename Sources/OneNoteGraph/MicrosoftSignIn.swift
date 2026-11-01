@@ -19,6 +19,16 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
     private var cacheFailure: Error?
     public var progress: (@MainActor (String) -> Void)?
     public static let scopes = ["openid", "profile", "offline_access", "https://graph.microsoft.com/Notes.ReadWrite.All"]
+    public static let storageScopes = ["https://graph.microsoft.com/Files.Read", "https://graph.microsoft.com/Sites.Read.All"]
+    public func account() async throws -> MicrosoftAccount {
+        let key = try await identityKey()
+        guard let raw = state?.lastTokenResponse?.idToken, let token = OIDIDToken(idTokenString: raw), token.issuer == issuer else { throw NotesError.authenticationRequired }
+        let claims = token.claims
+        let email = claims["preferred_username"] as? String ?? claims["email"] as? String ?? ""
+        let name = claims["name"] as? String ?? (email.isEmpty ? "Microsoft account" : email)
+        let granted = Set((state?.scope ?? "").split(separator: " ").map { String($0).replacingOccurrences(of: "https://graph.microsoft.com/", with: "") })
+        return MicrosoftAccount(key: key, name: name, email: email, storageConnected: granted.contains("Sites.Read.All") && granted.contains("Files.Read"))
+    }
     private static let configureNetworking: Void = {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.httpCookieStorage = nil; configuration.urlCache = nil
@@ -86,12 +96,17 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
         return values.contains("Notes.ReadWrite.All") || values.contains("https://graph.microsoft.com/Notes.ReadWrite.All")
     }
     /// Only explicit sign-in may present browser or Keychain consent UI.
-    public func signIn(presenting controller: NSViewController) async throws {
+    public func signIn(presenting controller: NSViewController, connectStorage: Bool = false) async throws {
         progress?("Starting native OAuth; checking O2N’s own Keychain state.")
         guard let window = controller.view.window else { throw NotesError.invalid("Sign-in needs an O2N window.") }
         if cacheFailure != nil { try restore(allowInteraction: true) }
+        let existingToken = (state?.lastTokenResponse?.idToken).flatMap { OIDIDToken(idTokenString: $0) }
         if state?.isAuthorized == true {
-            do { _ = try await accessToken(); return }
+            do {
+                _ = try await accessToken()
+                if !connectStorage { return }
+                if try await account().storageConnected { return }
+            }
             catch NotesError.authenticationRequired { /* User initiated renewal after silent auth failed. */ }
         }
         progress?("Discovering Microsoft’s tenant-specific OAuth configuration.")
@@ -108,7 +123,7 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
               configuration.authorizationEndpoint.scheme == "https", configuration.tokenEndpoint.scheme == "https" else {
             throw NotesError.invalid("Unexpected Microsoft OAuth endpoints.")
         }
-        let request = Self.authorizationRequest(configuration: configuration, clientID: clientID, redirect: redirect)
+        let request = Self.authorizationRequest(configuration: configuration, clientID: clientID, redirect: redirect, connectStorage: connectStorage)
         progress?("Presenting system-browser authorization with PKCE; awaiting the user callback.")
         let browser = MicrosoftBrowserAgent(window: window) { [weak self] in self?.progress?($0) }
         let response: MicrosoftAuthorizationResponse = try await withCheckedThrowingContinuation { continuation in
@@ -129,6 +144,12 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
             }
         }
         let value = OIDAuthState(authorizationResponse: response.value, tokenResponse: token.value)
+        if connectStorage, let existingToken {
+            guard let raw = token.value.idToken, let returned = OIDIDToken(idTokenString: raw),
+                  returned.issuer == existingToken.issuer, returned.subject == existingToken.subject else {
+                throw NotesError.unsupported("A different Microsoft account was selected. Your connected account was preserved. Try again with that account.")
+            }
+        }
         progress?("Native code exchange completed; saving O2N’s Keychain archive.")
         try Task.checkCancellation()
         try persist(value, allowInteraction: true); state = value; cacheFailure = nil
@@ -136,6 +157,9 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
         progress?("Dedicated native identity and Keychain save verified.")
     }
     public func cancel() { flow?.cancel(); flow = nil }
+    public func signOut() throws {
+        cancel(); try store.remove(); state = nil; cacheFailure = nil
+    }
     @discardableResult public func resume(_ url: URL) -> Bool {
         let scheme = url.scheme?.caseInsensitiveCompare(redirect.scheme ?? "") == .orderedSame
         let host = url.host == redirect.host
@@ -149,9 +173,9 @@ private struct MicrosoftTokenResponse: @unchecked Sendable { let value: OIDToken
             return false
         }
     }
-    static func authorizationRequest(configuration: OIDServiceConfiguration, clientID: String, redirect: URL) -> OIDAuthorizationRequest {
+    static func authorizationRequest(configuration: OIDServiceConfiguration, clientID: String, redirect: URL, connectStorage: Bool = false) -> OIDAuthorizationRequest {
         OIDAuthorizationRequest(configuration: configuration, clientId: clientID, clientSecret: nil,
-                                scopes: Self.scopes, redirectURL: redirect, responseType: OIDResponseTypeCode,
+                                scopes: Self.scopes + (connectStorage ? Self.storageScopes : []), redirectURL: redirect, responseType: OIDResponseTypeCode,
                                 additionalParameters: ["prompt": "select_account"])
     }
     nonisolated static func authorizationFailure(_ error: Error?) -> NotesError {

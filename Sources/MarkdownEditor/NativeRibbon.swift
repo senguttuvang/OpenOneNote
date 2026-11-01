@@ -53,12 +53,11 @@ struct NativeToolStyle: ButtonStyle {
                 }
                 Button { shell.searching.toggle() } label: { Label("Tell me", systemImage: "lightbulb") }.font(.system(size: 12))
                 Spacer(minLength: 12)
-                Menu("Page sync status", systemImage: "checkmark.icloud") {
-                    Text(shell.friendlyState)
-                    Button("Sync This Page") { shell.perform("Sync page") }.disabled(!shell.canPerform("Sync page"))
-                    Button("Sync details and recovery…") { shell.sheet = .recovery }
-                }.labelStyle(.iconOnly).menuIndicator(.hidden).fixedSize().help(shell.friendlyState)
-                Menu { Button("Microsoft account…") { shell.sheet = .account }; Button("Open notebooks…") { shell.sheet = .notebooks }; Button("Share page link") {}.disabled(true) } label: {
+                Button { shell.syncPopover.toggle() } label: {
+                    Image(systemName: shell.session.selectedID.flatMap { shell.session.syncErrors[$0] } == nil ? "checkmark.icloud" : "exclamationmark.icloud")
+                }.accessibilityLabel("Page sync status").help(shell.friendlyState)
+                    .popover(isPresented: $shell.syncPopover, arrowEdge: .bottom) { NativeSyncPopover(shell: shell) }
+                Menu { Button("Microsoft account…") { shell.showCloud(.account) }; Button("Open notebooks…") { shell.showCloud(.notebooks) }; Button("Share page link") {}.disabled(true) } label: {
                     Label("Share", systemImage: "square.and.arrow.up").font(.system(size: 12)).padding(.horizontal, 8).padding(.vertical, 3).foregroundStyle(.white).background(palette.accent, in: RoundedRectangle(cornerRadius: 4))
                 }.fixedSize()
             }.padding(.horizontal, 12).frame(height: 36)

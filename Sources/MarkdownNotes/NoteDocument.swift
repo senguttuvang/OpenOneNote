@@ -57,9 +57,15 @@ public struct PageIdentity: Codable, Hashable, Sendable {
 }
 
 public struct GraphItem: Codable, Identifiable, Sendable {
+    public struct Links: Codable, Sendable {
+        public struct Link: Codable, Sendable { public var href: String }
+        public var oneNoteClientUrl: Link?
+        public var oneNoteWebUrl: Link?
+    }
     public let id: String
     public var displayName: String?
     public var title: String?
+    public var links: Links?
     public var name: String { displayName ?? title ?? "Untitled" }
     public init(id: String, displayName: String? = nil, title: String? = nil) {
         self.id = id; self.displayName = displayName; self.title = title

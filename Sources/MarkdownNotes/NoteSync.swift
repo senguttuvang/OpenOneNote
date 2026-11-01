@@ -174,6 +174,7 @@ public actor NoteSync {
             try vault.saveLedger(ledger)
             try vault.writeMarkdown(source, ledger: ledger)
             ledger.pendingMarkdown = nil; ledger.materializationPreviousHash = nil; ledger.remoteRecovery = nil; ledger.state = "synced"
+            ledger.lastSyncedAt = Date()
             ledger.title = fetched.title; try vault.saveLedger(ledger); return ledger
         } catch {
             // Do not flatten a write timeout/mismatch into a clean baseline. Next sync compares all three copies.

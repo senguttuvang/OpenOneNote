@@ -104,3 +104,22 @@ import MarkdownEditor
     let groups = try #require(notebooks.items.first { $0.title == "Section Groups" }?.submenu)
     #expect(groups.items.first { $0.title == "Delete" }?.representedObject as? String == "Delete Section Group")
 }
+
+@Test @MainActor func cloudBrowserAndStorageWindowsStayHiddenDuringVerificationAndReuseIdentity() throws {
+    NSApplication.shared.setActivationPolicy(.prohibited)
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let session = try MarkdownSession(vault: MarkdownVault(root: directory))
+    session.newLocal(); session.edit("Preserved synthetic note\n")
+    let id = session.selectedID
+    let before = Set(NSApp.windows.map(ObjectIdentifier.init))
+    let shell = NativeShellState(session: session)
+    shell.showCloud(.notebooks); shell.showCloud(.notebooks); shell.showCloud(.storage)
+    let owned = NSApp.windows.filter { !before.contains(ObjectIdentifier($0)) }
+    defer { owned.forEach { $0.close() } }
+    #expect(owned.count == 2)
+    #expect(Set(owned.map(\.title)) == ["Open Notebook", "Storage Accounts"])
+    #expect(owned.allSatisfy { !$0.isVisible })
+    #expect(session.selectedID == id && session.source == "Preserved synthetic note\n")
+    #expect(shell.sheet == nil)
+}

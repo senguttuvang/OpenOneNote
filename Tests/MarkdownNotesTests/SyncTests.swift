@@ -234,3 +234,24 @@ private struct MismatchedPageRemote: OneNoteRemote {
     _ = try await sync.sync(ledger.id)
     #expect(try vault.markdown(ledger) == "தமிழ் __bold__\n\nLocal changed\n\nRemote changed\n")
 }
+
+@Test func lastSyncedTimeAdvancesOnlyAfterContentReconciliation() async throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory)
+    let remote = SyntheticRemote(page("Original"))
+    let sync = NoteSync(vault: vault, remote: remote)
+    let original = try await sync.open(PageIdentity(pageID: "timestamp-fixture"))
+    let verified = try await sync.sync(original.id, allowPush: false)
+    let date = try #require(verified.lastSyncedAt)
+    #expect(try vault.load(original.id).lastSyncedAt == date)
+    _ = try await sync.save(original.id, markdown: "Offline change\n\nSecond\n")
+    #expect(try vault.load(original.id).lastSyncedAt == date)
+    await remote.setOffline(true)
+    await #expect(throws: URLError.self) { try await sync.sync(original.id) }
+    #expect(try vault.load(original.id).lastSyncedAt == date)
+    await remote.setOffline(false)
+    let pending = try await sync.sync(original.id, allowPush: false)
+    #expect(pending.state == "outbox")
+    #expect(pending.lastSyncedAt == date)
+}

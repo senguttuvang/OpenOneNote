@@ -4,7 +4,7 @@ import MarkdownNotes
 
 public enum MarkdownEditorMode: String, CaseIterable, Sendable { case write = "Write", split = "Split", read = "Read" }
 public enum NativeSearchScope { case section, notebook, all }
-public enum NativeShellSheet: String, Identifiable { case account, notebooks, settings, recovery, newNotebook; public var id: String { rawValue } }
+public enum NativeShellSheet: String, Identifiable { case account, storage, notebooks, settings, recovery, newNotebook; public var id: String { rawValue } }
 
 /// Presentation state only. Auth, Graph and document recovery stay in MarkdownSession.
 @MainActor @Observable public final class NativeShellState {
@@ -20,6 +20,9 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
     public var editingSectionName: String?
     public var sectionNameDraft = ""
     public var sheet: NativeShellSheet?
+    public var accountPopover = false
+    public var syncPopover = false
+    public var browserLocation = "recent"
     public var navigationHidden = false
     public var ribbonCollapsed = false
     public var searching = false
@@ -34,11 +37,20 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
     public var newWindow: (() -> Void)?
     public weak var window: NSWindow?
     var menuTarget: NSObject?
+    @ObservationIgnored private var cloudWindows: NativeCloudWindows?
+    public func showCloud(_ surface: NativeShellSheet) {
+        if cloudWindows == nil { cloudWindows = NativeCloudWindows(shell: self) }
+        cloudWindows?.present(surface)
+    }
     public init(session: MarkdownSession) { self.session = session; followSelection() }
     public func notebookName(_ note: NoteLedger) -> String { note.hierarchy?.first ?? (note.identity.root == "local" ? "On My Mac" : "OneNote") }
     public func sectionName(_ note: NoteLedger) -> String { (note.hierarchy?.count ?? 0) > 1 ? note.hierarchy!.dropFirst().joined(separator: " / ") : "Notes" }
-    public var notebooks: [String] { Array(Set(session.notes.map(notebookName))).sorted { $0.localizedStandardCompare($1) == .orderedAscending } }
-    public var sections: [String] { Array(Set(session.notes.filter { notebookName($0) == notebook }.map(sectionName))).sorted { $0.localizedStandardCompare($1) == .orderedAscending } }
+    public var notebooks: [String] { Array(Set(session.notes.map(notebookName) + [session.remoteNotebookName].compactMap { $0 })).sorted { $0.localizedStandardCompare($1) == .orderedAscending } }
+    public var isRemoteNotebook: Bool { session.remoteNotebookName != nil && notebook == session.remoteNotebookName }
+    public var sections: [String] {
+        if isRemoteNotebook { return session.sections.map(\.name) }
+        return Array(Set(session.notes.filter { notebookName($0) == notebook }.map(sectionName))).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+    }
     public var pages: [NoteLedger] {
         session.notes.filter {
             let scopeMatches = searching && !search.isEmpty
@@ -75,21 +87,31 @@ public enum NativeShellSheet: String, Identifiable { case account, notebooks, se
     }
     public var visibleStatus: String {
         if session.busy { return "Working…" }
+        if let id = session.selectedID, let error = session.syncErrors[id] { return error }
+        if session.message.hasPrefix("Microsoft client configured.") { return session.selected == nil ? "Ready" : friendlyState }
         if session.message == session.selected?.state || session.message.hasPrefix("Saved locally") { return friendlyState }
         return session.message
     }
     public func followSelection() {
         if let note = session.selected { notebook = notebookName(note); section = sectionName(note) }
-        else { notebook = notebooks.first ?? "On My Mac"; section = sections.first ?? "Notes" }
+        else { notebook = session.remoteNotebookName ?? notebooks.first ?? "On My Mac"; section = sections.first ?? "Notes" }
     }
     public func selectNotebook(_ value: String) {
         guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
         notebook = value; section = sections.first ?? "Notes"
+        if isRemoteNotebook {
+            session.selectedID = nil; session.source = ""
+            session.sectionID = session.sections.first?.id; session.loadPages(); return
+        }
         if let page = pages.first { session.select(page.id) }
     }
     public func selectSection(_ value: String) {
         guard !session.busy, finishSectionName(focusTitle: false), session.save() else { return }
         section = value
+        if isRemoteNotebook {
+            session.sectionID = session.sections.first(where: { $0.name == value })?.id
+            session.loadPages(); return
+        }
         if let page = pages.first { session.select(page.id) }
     }
     public func createPage(notebook newNotebook: String? = nil, section newSection: String? = nil) {

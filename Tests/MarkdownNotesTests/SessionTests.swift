@@ -65,3 +65,38 @@ import MarkdownEditor
     session.edit("# Editing safely\n")
     #expect(session.preview.warnings == ledger.baseline.warnings)
 }
+
+@Test @MainActor func unchangedSyncedPageSaveDoesNotCreateOutboxOrInventSyncTime() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let vault = try MarkdownVault(root: directory)
+    var note = try vault.createLocal()
+    note.identity = PageIdentity(root: "sites/synthetic", pageID: "page", accountKey: "account")
+    note.state = "synced"; note.pendingMarkdown = nil; note.lastSyncedAt = Date(timeIntervalSince1970: 100)
+    try vault.saveLedger(note)
+    let session = try MarkdownSession(vault: vault); session.select(note.id)
+    #expect(session.save())
+    #expect(session.selected?.state == "synced")
+    #expect(session.selected?.pendingMarkdown == nil)
+    #expect(session.selected?.lastSyncedAt == Date(timeIntervalSince1970: 100))
+    session.edit("Changed\n")
+    #expect(session.selected?.state == "outbox")
+    #expect(session.selected?.lastSyncedAt == Date(timeIntervalSince1970: 100))
+}
+
+@Test @MainActor func normalWorkspaceReusesSharedPublicRegistrationWithoutCopyingNotesOrConfig() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let shared = directory.appendingPathComponent("shared")
+    let workspace = directory.appendingPathComponent("workspace")
+    let sharedVault = try MarkdownVault(root: shared)
+    try FileManager.default.createDirectory(at: sharedVault.safeURL(".o2n/config"), withIntermediateDirectories: true)
+    let metadata = #"{"clientID":"11111111-1111-1111-1111-111111111111","tenant":"22222222-2222-2222-2222-222222222222","redirectURI":"msauth.dev.senguttuvang.OpenOneNote://auth","graphRoot":"sites/synthetic"}"#
+    try Data(metadata.utf8).write(to: sharedVault.safeURL(".o2n/config/microsoft-client.json"))
+    let app = try MarkdownApplication(vault: workspace, sharedMicrosoftWorkspace: shared)
+    #expect(app.session.microsoftConfiguration?.clientID == "11111111-1111-1111-1111-111111111111")
+    #expect(app.session.root == "sites/synthetic")
+    #expect(app.session.account == nil)
+    #expect(app.session.notes.isEmpty)
+    #expect(!FileManager.default.fileExists(atPath: try app.session.vault.safeURL(".o2n/config/microsoft-client.json").path))
+}
