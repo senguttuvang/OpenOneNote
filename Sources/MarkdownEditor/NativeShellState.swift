@@ -19,6 +19,9 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
     public var editingSectionID: UUID?
     public var editingSectionName: String?
     public var sectionNameDraft = ""
+    public var namingCloudSection = false
+    var cloudSectionRoot: String?
+    var cloudSectionNotebookID: String?
     public var sheet: NativeShellSheet?
     public var accountPopover = false
     public var syncPopover = false
@@ -43,12 +46,18 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
         cloudWindows?.present(surface)
     }
     public init(session: MarkdownSession) { self.session = session; followSelection() }
-    public func notebookName(_ note: NoteLedger) -> String { note.hierarchy?.first ?? (note.identity.root == "local" ? "On My Mac" : "OneNote") }
+    public func notebookName(_ note: NoteLedger) -> String {
+        let name = note.hierarchy?.first ?? (note.identity.root == "local" ? "On My Mac" : "OneNote")
+        // A local draft's saved label is not a remote notebook identity.
+        let cloudNames = session.recentNotebooks.map(\.name) + [session.remoteNotebookName].compactMap { $0 }
+            + session.notes.compactMap { $0.identity.root == "local" ? nil : $0.hierarchy?.first }
+        return note.identity.root == "local" && cloudNames.contains(name) ? name + " (on this Mac)" : name
+    }
     public func sectionName(_ note: NoteLedger) -> String { (note.hierarchy?.count ?? 0) > 1 ? note.hierarchy!.dropFirst().joined(separator: " / ") : "Notes" }
     public var notebooks: [String] { Array(Set(session.notes.map(notebookName) + [session.remoteNotebookName].compactMap { $0 })).sorted { $0.localizedStandardCompare($1) == .orderedAscending } }
     public var isRemoteNotebook: Bool { session.remoteNotebookName != nil && notebook == session.remoteNotebookName }
     public var sections: [String] {
-        if isRemoteNotebook { return session.sections.map(\.name) }
+        if isRemoteNotebook { return session.sections.map(\.name) + (namingCloudSection ? [editingSectionName].compactMap { $0 } : []) }
         return Array(Set(session.notes.filter { notebookName($0) == notebook }.map(sectionName))).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
     }
     public var pages: [NoteLedger] {
@@ -76,6 +85,8 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
         return text.substring(with: range).contains("|") && view.string.contains("---")
     }
     public var friendlyState: String {
+        if let activity = session.cloudActivity { return activity }
+        if session.refreshingPageID != nil { return "Checking OneNote…" }
         if session.busy { return "Working…" }
         switch session.selected?.state {
         case "synced": return "All changes synced"
@@ -85,7 +96,20 @@ public enum NativeShellSheet: String, Identifiable { case account, storage, note
         default: return session.selected == nil ? "Choose a page or add a new page" : "Saved on this Mac"
         }
     }
+    public var syncStatusSymbol: String {
+        if session.syncFailure != nil || session.selectedID.flatMap({ session.syncErrors[$0] }) != nil { return "exclamationmark.icloud" }
+        guard let note = session.selected else { return "icloud" }
+        if note.identity.root == "local" { return "internaldrive" }
+        switch note.state {
+        case "synced": return "checkmark.icloud"
+        case "outbox": return "icloud.and.arrow.up"
+        case "conflict", "external-file-conflict", "offline-or-inaccessible": return "exclamationmark.icloud"
+        default: return "icloud"
+        }
+    }
     public var visibleStatus: String {
+        if session.cloudActivity != nil || session.refreshingPageID != nil { return friendlyState }
+        if let failure = session.syncFailure { return failure }
         if session.busy { return "Working…" }
         if let id = session.selectedID, let error = session.syncErrors[id] { return error }
         if session.message.hasPrefix("Microsoft client configured.") { return session.selected == nil ? "Ready" : friendlyState }

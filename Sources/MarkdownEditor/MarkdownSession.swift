@@ -28,7 +28,14 @@ import OneNoteGraph
     public var servicesLoading = false
     public var servicesError: String?
     public var remoteNotebookName: String?
+    public var remoteAccountKey: String?
     public var syncingPageID: UUID?
+    public var cloudActivity: String?
+    public var syncFailure: String?
+    public var lastSyncAt: Date?
+    public var refreshingPageID: UUID?
+    public var creationReview: [CloudCreationIntent] = []
+    public var creationJournalError: String?
     public var syncErrors: [UUID: String] = [:]
     public var recentNotebooks: [RecentNotebook] = []
     public var recentNotebooksError: String?
@@ -42,6 +49,8 @@ import OneNoteGraph
     private var servicesRequest = UUID()
     public init(vault: MarkdownVault) throws {
         self.vault = vault; notes = try vault.ledgers().sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
+        do { creationReview = try vault.creationIntents().filter { $0.createdID == nil } }
+        catch { creationJournalError = "Creation history couldn’t be read. Existing notes are available; cloud creation is blocked to avoid duplicates." }
         let recents = try vault.safeURL(".o2n/config/recent-notebooks.json")
         if FileManager.default.fileExists(atPath: recents.path) {
             do { recentNotebooks = try JSONDecoder().decode([RecentNotebook].self, from: Data(contentsOf: recents)) }
@@ -104,7 +113,7 @@ import OneNoteGraph
             message = error.localizedDescription
         }
     }
-    private func display(_ ledger: NoteLedger) throws {
+    func display(_ ledger: NoteLedger) throws {
         let disk = try vault.markdown(ledger)
         let text = ledger.externalRecoveryMarkdown != nil ? (ledger.pendingMarkdown ?? disk) : disk
         selectedID = ledger.id; source = text; replace(ledger)
@@ -169,7 +178,7 @@ import OneNoteGraph
         do {
             try signIn.signOut(); stopBackgroundRefresh(); account = nil; accountError = nil; connectedServices = []
             servicesRequest = UUID(); servicesLoading = false
-            remoteNotebookName = nil; notebooks = []; sections = []; pages = []
+            remoteNotebookName = nil; remoteAccountKey = nil; notebooks = []; sections = []; pages = []
             notebookID = nil; sectionID = nil; pageID = nil
             message = "Signed out. Notes saved on this Mac are preserved."
         } catch { accountError = "Couldn’t sign out. Your account and notes were preserved." }
@@ -208,6 +217,7 @@ import OneNoteGraph
             self.sections = sections; self.sectionID = sections.first?.id; self.pages = pages; self.pageID = nil
             self.selectedID = nil; self.source = ""; self.preview = NoteDocument(blocks: [])
             self.remoteNotebookName = notebook.name; self.message = pages.isEmpty ? "No pages in this section." : "Choose a page."
+            self.remoteAccountKey = accountKey
             return true
         } catch {
             self.message = "This notebook could not be opened. Your current notes are preserved."
@@ -249,6 +259,7 @@ import OneNoteGraph
             let identity = PageIdentity(root: root, pageID: pageID, accountKey: try await graph.authorization.identityKey())
             var ledger = try await sync.open(identity)
             ledger = try await sync.sync(ledger.id, allowPush: false); ledger.hierarchy = hierarchy
+            ledger.notebookID = self.notebookID; ledger.sectionID = self.sectionID
             try self.vault.saveLedger(ledger); try self.display(ledger)
             self.syncErrors[ledger.id] = nil; self.message = "Page opened."
         }
@@ -262,25 +273,20 @@ import OneNoteGraph
             return
         }
         let root = root
+        if let selected, selected.identity.root != "local",
+           selected.identity.root != root || (selected.notebookID != nil && selected.notebookID != notebookID) {
+            message = "Open the intended cloud notebook before adding a page."
+            return
+        }
         perform {
-            let accountKey = try await graph.authorization.identityKey()
-            let url = try graph.url(root: root, path: "sections/\(GraphClient.component(sectionID))/pages")
-            let html = "<!DOCTYPE html><html><head><title>Untitled Page</title></head><body><p></p></body></html>"
-            // POST is issued once. If opening the result fails, retain its ID in
-            // the page list so the user can retry opening without creating a duplicate.
-            let data = try await graph.request(url, method: "POST", body: Data(html.utf8), contentType: "text/html")
-            let item = try JSONDecoder().decode(GraphItem.self, from: data)
-            self.pages.append(item); self.pageID = item.id
-            let sync = NoteSync(vault: self.vault, remote: graph, diagrams: MermaidRenderer())
-            var ledger = try await sync.open(PageIdentity(root: root, pageID: item.id, accountKey: accountKey))
-            ledger.hierarchy = [notebook.name, section.name]
-            try self.vault.saveLedger(ledger); try self.display(ledger)
+            try await self.createCloudPage(graph: graph, root: root, notebook: notebook, section: section)
             self.message = "Page created in this section."
         }
     }
     public func sync() {
         guard !busy, let graph, let id = selectedID, selected?.identity.root != "local", save() else { return }
         syncingPageID = id; syncErrors[id] = nil
+        cloudActivity = "Syncing page…"; syncFailure = nil
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
         perform {
             let ledger = try await sync.sync(id); self.replace(ledger)
@@ -289,6 +295,7 @@ import OneNoteGraph
             self.preview.warnings += ledger.baseline.warnings
             self.loadedFileHash = MarkdownVault.hash(self.source)
             self.message = "Page saved."
+            self.lastSyncAt = ledger.lastSyncedAt
         }
     }
     public func cancel() { operation?.cancel(); signIn?.cancel() }
@@ -325,9 +332,10 @@ import OneNoteGraph
         guard refreshPolicy.canRefresh(now: Date(), force: forceContent) else { return }
         let sync = NoteSync(vault: vault, remote: graph, diagrams: MermaidRenderer())
         let request = UUID(); refreshRequest = request
+        refreshingPageID = id
         // Background reads must not disable editing or own foreground navigation.
         refreshTask = Task {
-            defer { if self.refreshRequest == request { self.refreshRequest = nil; self.refreshTask = nil } }
+            defer { if self.refreshRequest == request { self.refreshRequest = nil; self.refreshTask = nil; self.refreshingPageID = nil } }
             do {
                 let hint = try await graph.modificationHint(selected.identity)
                 try Task.checkCancellation()
@@ -355,6 +363,7 @@ import OneNoteGraph
     public func stopBackgroundRefresh() { refreshLoop?.cancel(); refreshLoop = nil; cancelPageRefresh() }
     private func cancelPageRefresh() {
         refreshRequest = nil; refreshTask?.cancel(); refreshTask = nil
+        refreshingPageID = nil
     }
     public func attachFile() {
         guard selectedID != nil, !busy else { return }
@@ -403,15 +412,20 @@ import OneNoteGraph
             try display(vault.adoptMarkdown(path: String(file.standardizedFileURL.path.dropFirst(prefix.count))))
         } catch { message = error.localizedDescription }
     }
-    private func perform(_ action: @escaping @MainActor () async throws -> Void) {
+    func perform(_ action: @escaping @MainActor () async throws -> Void) {
         guard !busy else { return }
         cancelPageRefresh()
         busy = true
         operation = Task {
-            defer { busy = false; operation = nil; syncingPageID = nil }
+            defer {
+                busy = false; operation = nil; syncingPageID = nil; cloudActivity = nil
+                if let pending = try? vault.creationIntents() { creationReview = pending.filter { $0.createdID == nil } }
+            }
             do { try await action() }
             catch is CancellationError { message = "Cancelled. Local content retained." }
             catch {
+                if Task.isCancelled { message = "Cancelled. Local content retained."; return }
+                if cloudActivity != nil, syncingPageID == nil { syncFailure = error.localizedDescription }
                 if let id = syncingPageID { syncErrors[id] = "We couldn’t sync this page. Your changes are saved on this Mac." }
                 if let id = self.selectedID, let ledger = try? self.vault.load(id) { self.replace(ledger) }
                 message = error.localizedDescription

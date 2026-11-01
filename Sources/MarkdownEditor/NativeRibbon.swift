@@ -54,7 +54,11 @@ struct NativeToolStyle: ButtonStyle {
                 Button { shell.searching.toggle() } label: { Label("Tell me", systemImage: "lightbulb") }.font(.system(size: 12))
                 Spacer(minLength: 12)
                 Button { shell.syncPopover.toggle() } label: {
-                    Image(systemName: shell.session.selectedID.flatMap { shell.session.syncErrors[$0] } == nil ? "checkmark.icloud" : "exclamationmark.icloud")
+                    if shell.session.cloudActivity != nil || shell.session.refreshingPageID != nil {
+                        ProgressView().controlSize(.small).frame(width: 18, height: 18)
+                    } else {
+                    Image(systemName: shell.syncStatusSymbol)
+                    }
                 }.accessibilityLabel("Page sync status").help(shell.friendlyState)
                     .popover(isPresented: $shell.syncPopover, arrowEdge: .bottom) { NativeSyncPopover(shell: shell) }
                 Menu { Button("Microsoft account…") { shell.showCloud(.account) }; Button("Open notebooks…") { shell.showCloud(.notebooks) }; Button("Share page link") {}.disabled(true) } label: {

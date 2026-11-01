@@ -12,6 +12,8 @@ public struct NoteLedger: Codable, Equatable, Identifiable, Sendable {
     public var identity: PageIdentity
     public var title: String
     public var hierarchy: [String]?
+    public var notebookID: String?
+    public var sectionID: String?
     public var relativePath: String
     public var baseline: NoteDocument
     public var baselineMarkdown: String

@@ -22,6 +22,7 @@ import MarkdownNotes
             }.background(palette.canvas).foregroundStyle(palette.ink)
         }.frame(minWidth: 960, minHeight: 600).tint(palette.accent)
             .onChange(of: session.selectedID) { _, _ in titleFocused = false; shell.followSelection() }
+            .onChange(of: session.sectionID) { _, _ in if !shell.namingCloudSection { shell.followSelection() } }
             .onChange(of: shell.titleFocusRequest) { _, request in
                 guard shell.editingSectionID == nil else { return }
                 let identity = session.selectedID
