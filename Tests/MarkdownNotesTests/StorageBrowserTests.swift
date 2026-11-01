@@ -135,3 +135,10 @@ private actor DelayedBrowse: StorageBrowsing {
     #expect(session.selectedID == id && session.source == "Keep this note\n" && session.root == root)
     #expect(session.recentNotebooks.isEmpty && !session.busy)
 }
+
+@Test func notebookPackageURLDoesNotDoubleDecodeDistinctFolderNames() async throws {
+    let transport = BrowseTransport([#"{"value":[{"id":"wrong","displayName":"Same name","links":{"oneNoteClientUrl":{"href":"onenote:https://example.sharepoint.com/Documents/Book%2Fother"}}}]}"#])
+    let client = GraphClient(authorization: BrowseAuthorization(), transport: transport)
+    let entry = StorageEntry(id: "package", name: "Same name", kind: .notebook, root: "me", webURL: URL(string: "https://example.sharepoint.com/Documents/Book%252Fother")!)
+    await #expect(throws: NotesError.self) { try await client.notebook(for: entry) }
+}

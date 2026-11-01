@@ -85,7 +85,7 @@ extension GraphClient: StorageBrowsing {
             guard let client = item.links?.oneNoteClientUrl?.href, let expected = entry.webURL else { return false }
             let normalized = client.hasPrefix("onenote:") ? String(client.dropFirst(8)) : client
             guard let url = URL(string: normalized) else { return false }
-            return url.host?.lowercased() == expected.host?.lowercased() && url.path.removingPercentEncoding == expected.path.removingPercentEncoding
+            return url.host?.lowercased() == expected.host?.lowercased() && url.path == expected.path
         }
         guard matches.count == 1, let match = matches.first else {
             throw NotesError.unsupported("This notebook could not be matched safely. Refresh the folder and try again.")
